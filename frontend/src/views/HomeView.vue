@@ -1,8 +1,7 @@
 <script setup>
+import HomeLayout from "@/components/layouts/HomeLayout.vue";
 </script>
 
 <template>
-  <main>
-    <h1 class="text-red-500">Hello</h1>
-  </main>
+    <HomeLayout />
 </template>
