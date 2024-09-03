@@ -26,6 +26,11 @@ import { RouterLink } from 'vue-router';
                     >
                         Contact
                     </RouterLink>
+                    <!-- <div class="flex flex-row gap-1 text-tertiary">
+                        <i class="pi pi-pen-to-square"></i>
+                        <i class="pi pi-times-circle"></i>
+                        <i class="pi pi-bookmark text-green-500"></i>
+                    </div> -->
                 </div>
             </div>
         </div>
