@@ -21,7 +21,7 @@ import { RouterLink } from 'vue-router';
                 </div>
                 <div class="mt-5">
                     <RouterLink 
-                        class="bg-secondary px-4 py-1 rounded text-white text-sm"
+                        class="bg-secondary px-2 py-1 rounded text-white text-sm"
                         :to="{name: 'contact', params: {id: 1}}"
                     >
                         Contact
