@@ -4,6 +4,7 @@ import Filter from "@/components/Filter.vue";
 import CardList from "@/components/CardList.vue";
 import Card from "@/components/Card.vue";
 import ItemToRetrieve from "@/components/ItemToRetrieve.vue";
+import NoItems from "../NoItems.vue";
 
 const datas = [
 {
@@ -38,11 +39,12 @@ const datas = [
         <div>
             <Navbar />
             <Filter />
-            <CardList>
+            <CardList v-if="datas.length > 0">
                 <Card v-for="data in datas" :key="data.id">
                     <ItemToRetrieve />
                 </Card>
             </CardList>
+            <NoItems v-else />
         </div>
     </main>
 </template>
