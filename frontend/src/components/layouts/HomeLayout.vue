@@ -1,6 +1,36 @@
 <script setup>
 import Navbar from "@/components/Navbar.vue";
 import Filter from "@/components/Filter.vue";
+import CardList from "@/components/CardList.vue";
+import Card from "@/components/Card.vue";
+import ItemToRetrieve from "@/components/ItemToRetrieve.vue";
+
+const datas = [
+{
+    id:1,
+    title: 'Test 1'
+},
+{
+    id:2,
+    title: 'Test 2'
+},
+{
+    id:3,
+    title: 'Test 3'
+},
+{
+    id:4,
+    title: 'Test 4'
+},
+{
+    id:5,
+    title: 'Test 5'
+},
+{
+    id:6,
+    title: 'Test 6'
+},
+]
 </script>
 
 <template>
@@ -8,6 +38,11 @@ import Filter from "@/components/Filter.vue";
         <div>
             <Navbar />
             <Filter />
+            <CardList>
+                <Card v-for="data in datas" :key="data.id">
+                    <ItemToRetrieve />
+                </Card>
+            </CardList>
         </div>
     </main>
 </template>
