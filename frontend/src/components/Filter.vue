@@ -35,7 +35,7 @@ const collapseFilter = () => collapse.value = !collapse.value;
                 </button>
                 
 
-                <div :class="`${collapse ? 'block' : 'hidden'} bg-primary h-auto mt-2 p-5`" id="filterMobileContainer">
+                <div :class="`${collapse ? 'block' : 'hidden'} bg-primary h-auto mt-2 p-5 rounded`" id="filterMobileContainer">
                     <div>
                         <div>   
                             <p class="text-white">Type</p>
@@ -46,8 +46,8 @@ const collapseFilter = () => collapse.value = !collapse.value;
                             <input type="text" class="bg-white w-full p-1 rounded">
                         </div>
                     </div>
-
                 </div>
+                
                 <button class="w-full bg-secondary mt-2 rounded md:w-10 md:h-10 md:mt-0">
                     <div class="flex flex-column p-2 justify-center gap-1 md:flex-col">
                         <i class="pi pi-search text-white md:text-[1rem]"> </i> 
