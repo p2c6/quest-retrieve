@@ -1,9 +1,9 @@
 <script setup>
-import Contact from '@/components/layouts/Contact.vue';
+import ContactForm from '@/components/layouts/ContactForm.vue';
 
 
 </script>
 
 <template>
-        <Contact />
+    <ContactForm />
 </template>

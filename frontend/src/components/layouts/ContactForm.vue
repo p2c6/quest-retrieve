@@ -12,7 +12,7 @@ import Card from '@/components/Card.vue';
                     <form action="">
                         <div class="border-b-2 mb-5">
                             <div class="flex flex-row items-center justify-center p-2 gap-x-2 text-primary">
-                                <i class="pi pi-info-circle"></i>
+                                <i class="pi pi-id-card text-secondary"></i>
                                 <h2 class="font-bold">Claim</h2>
                             </div>
                         </div>
