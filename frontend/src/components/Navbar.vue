@@ -25,10 +25,14 @@ const collapseNav = () => collapse.value = !collapse.value;
         <div :class="`bg-indigo-800`">
             <div :class="`container mx-auto text-white flex flex-col p-2 gap-2 ${collapse ? 'block' : 'hidden'} md:flex md:flex-row md:justify-end`">
                 <div>
-                Login
+                    <RouterLink :to="{name: 'login'}">
+                        Login
+                    </RouterLink>
                 </div>
                 <div>
-                    Register
+                    <RouterLink :to="{name: 'register'}">
+                        Register
+                    </RouterLink>
                 </div>
             </div>
             
