@@ -49,10 +49,16 @@ import Input from '@/components/Input.vue';
         </div>
         <div class="hidden lg:block bg-primary text-white">
             <div class="h-screen flex flex-col items-center justify-between">
-                <h1 class="text-4xl text-bold mt-4">Quest Retrieve </h1>
-                <p>The Ultimate Lost and Found Platform</p>
+                <div class="w-18 text-center">
+                    <h1 class="text-2xl font-bold mt-4">The Ultimate Lost and Found Platform</h1>
+                    <p class="text-sm">Lost something important or found an item that isn’t yours?</p>
+                </div>
+                
                 <img :src="people" alt="Illustration of people">
-
+                <div class="flex flex-row gap-1">
+                    <p>Introducing, </p>
+                    <p class="font-bold underline">QuestRetrieve.</p>
+                </div>
                 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f3f4f5" fill-opacity="1" d="M0,192L0,224L120,224L120,256L240,256L240,128L360,128L360,288L480,288L480,160L600,160L600,160L720,160L720,64L840,64L840,192L960,192L960,288L1080,288L1080,288L1200,288L1200,160L1320,160L1320,32L1440,32L1440,320L1320,320L1320,320L1200,320L1200,320L1080,320L1080,320L960,320L960,320L840,320L840,320L720,320L720,320L600,320L600,320L480,320L480,320L360,320L360,320L240,320L240,320L120,320L120,320L0,320L0,320Z"></path></svg>
             </div>
