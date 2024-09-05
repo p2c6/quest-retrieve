@@ -3,8 +3,8 @@ import Navbar from "@/components/Navbar.vue";
 import Filter from "@/components/Filter.vue";
 import CardList from "@/components/CardList.vue";
 import Card from "@/components/Card.vue";
-import ItemToRetrieve from "@/components/ItemToRetrieve.vue";
 import NoItems from "../NoItems.vue";
+import Post from "@/components/Post.vue";
 
 const datas = [
 {
@@ -40,7 +40,7 @@ const datas = [
             <Filter />
             <CardList v-if="datas.length > 0">
                 <Card v-for="data in datas" :key="data.id">
-                    <ItemToRetrieve />
+                    <Post />
                 </Card>
             </CardList>
             <NoItems v-else />
