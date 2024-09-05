@@ -38,7 +38,7 @@ import Input from '@/components/Input.vue';
                             <div class="mt-4 flex flex-row items-center gap-1">
                                 <h1 class="text-primary">Don't have an account yet?</h1> 
                                 <RouterLink :to="{name: 'register'}">
-                                    <div class="underline text-primary"> Sign up</div>
+                                    <div class="underline text-primary"> Sign-up</div>
                                 </RouterLink>
                             </div>
                             <button class="bg-secondary rounded-lg px-6 py-1 text-white mt-10 text-sm">Next</button>
