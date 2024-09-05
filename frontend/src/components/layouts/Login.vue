@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import logo from "@/assets/qr-logo.png";
-import people from "@/assets/people.png";
+import home from "@/assets/home.png";
 import Input from '@/components/Input.vue';
 
 
@@ -54,7 +54,7 @@ import Input from '@/components/Input.vue';
                     <p class="text-sm">Lost something important or found an item that isn’t yours?</p>
                 </div>
                 
-                <img :src="people" alt="Illustration of people">
+                <img :src="home" alt="Illustration of people">
                 <div class="flex flex-row gap-1 mb-10">
                     <p>Introducing, </p>
                     <p class="font-bold underline">QuestRetrieve.</p>
