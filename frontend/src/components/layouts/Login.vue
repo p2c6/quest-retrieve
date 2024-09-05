@@ -20,7 +20,7 @@ import Input from '@/components/Input.vue';
                     <img :src="logo" alt="QuestRetrieve Logo" width="250px">
                 </div>
 
-                <div class="container mx-auto w-96 mt-24">
+                <div class="container mx-auto w-auto md:w-96 mt-24">
                     <form action="">
                         <div>
                             <div class="mb-8">
