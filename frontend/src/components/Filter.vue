@@ -8,7 +8,7 @@ const collapseFilter = () => collapse.value = !collapse.value;
 
 <template>
     <div class="p-2 mt-2 md:mt-5">
-        <div class="container mx-auto flex gap-2">
+        <div class="mx-6 flex gap-2">
 <!-- 
         <div>
             <button class="px-2 py-1 border-[1.5px] border-secondary rounded text-white">
