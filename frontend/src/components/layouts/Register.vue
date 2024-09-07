@@ -15,12 +15,12 @@ import Input from '@/components/Input.vue';
                 <i class="pi pi-arrow-left text-secondary"></i>
             </RouterLink>
             
-            <div class="flex flex-col items-center mt-2">
+            <div class="flex flex-col items-center mt-1">
                 <div>
                     <img :src="logo" alt="QuestRetrieve Logo" width="250px">
                 </div>
 
-                <div class="container mx-auto w-auto mt-14">
+                <div class="container mx-auto w-auto mt-10">
                     <form action="">
                         <div>
                             <div class="mb-5">
