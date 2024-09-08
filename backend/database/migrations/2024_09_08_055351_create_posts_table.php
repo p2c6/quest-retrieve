@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('incident_date');
             $table->date('finish_transaction_date');
             $table->date('expiration_date');
-            $table->string('status', 30);
+            $table->string('status', 40);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
