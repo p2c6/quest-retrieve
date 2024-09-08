@@ -21,8 +21,10 @@ return new class extends Migration
             $table->date('finish_transaction_date');
             $table->date('expiration_date');
             $table->string('status', 40);
-            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('subcategory_id')->references('id')->on('subcategories');
         });
     }
 
