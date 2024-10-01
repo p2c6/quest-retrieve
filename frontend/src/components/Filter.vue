@@ -27,12 +27,12 @@ const collapseFilter = () => collapse.value = !collapse.value;
 
                 <input type="text" class="bg-white w-full p-2 rounded border-2 md:order-3 md:h-10 md:border-1" placeholder="I am looking for...">
 
-                <button class="w-full border-[1.5px] border-secondary mt-2 rounded md:w-10 md:h-10 md:mt-0" @click="collapseFilter">
+                <!-- <button class="w-full border-[1.5px] border-secondary mt-2 rounded md:w-10 md:h-10 md:mt-0" @click="collapseFilter">
                     <div class="flex flex-row p-2 justify-center gap-1 md:flex-col">
                         <i class="pi pi-sliders-h text-secondary md:text-[1rem]"> </i> 
                         <p class="text-secondary text-[0.8rem] md:hidden">Filter</p>
                     </div>
-                </button>
+                </button> -->
                 
 
                 <div :class="`${collapse ? 'block' : 'hidden'} bg-primary h-auto mt-2 p-5 rounded`" id="filterMobileContainer">
