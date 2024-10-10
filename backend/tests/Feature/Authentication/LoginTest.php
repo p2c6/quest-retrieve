@@ -26,7 +26,7 @@ class LoginTest extends TestCase
     }
 
     /**
-     * Test user via API.
+     * Test user login via API.
      * 
      * This test verifies that a user can be logged-in successfully via API endpoint.
      */
