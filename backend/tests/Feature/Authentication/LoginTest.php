@@ -27,11 +27,11 @@ class LoginTest extends TestCase
     }
 
     /**
-     * Test user login via API.
+     * Test user can login with valid credentials via API.
      * 
-     * This test verifies that a user can be logged-in successfully via API endpoint.
+     * This test verifies that a user can be logged-in with valid credentials via API endpoint.
      */
-    public function test_user_can_login_successfully(): void
+    public function test_user_can_login_with_valid_credentials(): void
     {
         try {
             $role = Role::where('name', 'Admin')->first();
