@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Services\Authentication;
 
 use App\Services\Contracts\LoginInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginService implements LoginInterface
 {
@@ -14,19 +16,29 @@ class LoginService implements LoginInterface
                 'email' => ['required', 'email'],
                 'password' => ['required'],
             ]);
-     
+
             if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+
                 return response()->json([
                     'user' => $request->user(),
                     'message' => 'Successfully logged in.'
                 ], 200);
             }
-    
+
             return response()->json([
                 'message' => 'The provided credentials are incorrect.'
             ], 401);
+        } catch (ValidationException $validationException) {
+            return response()->json([
+                'message' => 'Validation error.',
+                'errors' => $validationException->errors(),
+            ], 422);
         } catch (\Throwable $th) {
-            //throw $th;
+            info("Error on user log-in: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during login.'
+            ], 500);
         }
     }
 }
