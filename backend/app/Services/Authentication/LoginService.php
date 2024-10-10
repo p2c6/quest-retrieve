@@ -1,11 +1,11 @@
 <?php
 namespace App\Services\Authentication;
 
+use App\Services\Contracts\LoginInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use LoginInteface;
 
-class LoginService implements LoginInteface
+class LoginService implements LoginInterface
 {
     public function login($request) : JsonResponse
     {
