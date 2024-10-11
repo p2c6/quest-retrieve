@@ -105,5 +105,41 @@ class LoginTest extends TestCase
         }
     }
 
+    /**
+     * Test user cannot login with empty fields via API.
+     * 
+     * This test verifies that a user cannot be logged-in with empty fields via API endpoint.
+     */
+    public function test_user_cannot_login_with_empty_fields(): void
+    {
+        try {
+            $role = Role::where('name', 'Admin')->first();
 
+            if (!$role) {
+                $this->fail('Role Admin not found in the database.');
+            }
+
+            $user = User::factory()->create([
+                'password' => bcrypt('password123'),
+                'role_id' => $role->id
+            ]);
+
+            $csrf = $this->get('/sanctum/csrf-cookie');
+
+            $csrf->assertCookie('XSRF-TOKEN');
+
+            $response = $this->post('/api/v1/authentication/login', [
+                'email' => '',
+                'password' => '',
+            ]);
+
+            $response->assertCookie('laravel_session')
+                      ->assertStatus(422)
+                      ->assertJsonStructure(['errors', 'message'])
+                      ->assertJson(['message' => 'Validation error.']);
+
+        } catch (\Exception $e) {
+            $this->fail('Test login with empty fields error occured' . $e->getMessage());
+        }
+    }
 }
