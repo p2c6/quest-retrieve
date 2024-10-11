@@ -30,6 +30,7 @@ class LoginService implements LoginInterface
                 'message' => 'The provided credentials are incorrect.'
             ], 401);
         } catch (ValidationException $validationException) {
+            info("Validation Error on user log-in: " . $validationException->getMessage());
             return response()->json([
                 'message' => 'Validation error.',
                 'errors' => $validationException->errors(),
