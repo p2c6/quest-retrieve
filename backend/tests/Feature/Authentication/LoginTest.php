@@ -60,9 +60,8 @@ class LoginTest extends TestCase
                       ->assertJson(['message' => 'Successfully logged in.'])
                       ->assertSee('user');
 
-
         } catch (\Exception $e) {
-            $this->fail('An error occured' . $e->getMessage());
+            $this->fail('Test login with valid credentials error occured' . $e->getMessage());
         }
     }
 
@@ -99,9 +98,8 @@ class LoginTest extends TestCase
                       ->assertJsonStructure(['message'])
                       ->assertJson(['message' => 'The provided credentials are incorrect.']);
 
-
         } catch (\Exception $e) {
-            $this->fail('An error occured' . $e->getMessage());
+            $this->fail('Test login with invalid credentials error occured' . $e->getMessage());
         }
     }
 
