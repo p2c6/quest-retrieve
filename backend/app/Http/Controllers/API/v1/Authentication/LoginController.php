@@ -29,6 +29,8 @@ class LoginController extends Controller
     /**
      * Handle user log-in request.
      * 
+     *  @param \Illuminate\Http\Request $request The HTTP request object containing user data.
+     * 
      * @return Illuminate\Http\JsonResponse
      */
     public function login(Request $request): JsonResponse
