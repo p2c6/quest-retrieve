@@ -29,11 +29,10 @@ class LoginController extends Controller
     /**
      * Handle user log-in request.
      * 
-     *  @param \Illuminate\Http\Request $request The HTTP request object containing user data.
-     * 
-     * @return Illuminate\Http\JsonResponse
+     * @param \Illuminate\Http\Request $request The HTTP request object containing user data.
+     * @return mixed
      */
-    public function login(Request $request): JsonResponse
+    public function login(Request $request): mixed
     {
         return $this->service->login($request);
     }

@@ -11,17 +11,15 @@ class LogoutService implements LogoutInterface
     /**
      * Handle user log-out request.
      * 
-     *  @param \Illuminate\Http\Request $request The HTTP request object containing user data.
-     * 
+     * @param \Illuminate\Http\Request $request The HTTP request object containing user data.
      * @return mixed
      */
     public function logout($request) : JsonResponse
     {
         try {
-            // Log out the user using the web guard
-            Auth::guard('web')->logout(); // This is for session-based logout
+            
+            Auth::guard('web')->logout();
 
-            // Invalidate the session and regenerate token
             $request->session()->invalidate(); 
             $request->session()->regenerateToken();
             

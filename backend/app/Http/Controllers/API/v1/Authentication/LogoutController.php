@@ -30,7 +30,6 @@ class LogoutController extends Controller
      * Handle log-out request.
      * 
      * @param \Illuminate\Http\Request $request The HTTP request object containing user data.
-     * 
      * @return mixed
      */
     public function logout(Request $request): JsonResponse

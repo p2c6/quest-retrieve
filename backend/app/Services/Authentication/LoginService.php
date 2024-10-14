@@ -9,7 +9,14 @@ use Illuminate\Validation\ValidationException;
 
 class LoginService implements LoginInterface
 {
-    public function login($request) : JsonResponse
+    /**
+     * Handle user log-in request.
+     * 
+     * @param \Illuminate\Http\Request $request The HTTP request object containing user data.
+     * 
+     * @return mixed
+     */
+    public function login($request) : mixed
     {
         try {
             $credentials = $request->validate([
