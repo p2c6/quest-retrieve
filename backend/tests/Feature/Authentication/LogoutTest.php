@@ -54,12 +54,12 @@ class LogoutTest extends TestCase
         // Log out the user
         $response = $this->post('/api/v1/authentication/logout');
 
-        // Log the response for debugging
-        info('Logout Response: ', $response->json());
-
         // Check response status and JSON message
         $response->assertStatus(200)
                 ->assertJson(['message' => 'Successfully logged out.']);
+
+
+        $this->refreshApplication();
 
         // Assert the user is now a guest
         $this->assertGuest();
