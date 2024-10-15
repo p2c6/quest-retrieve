@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API\v1\Authentication;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Authentication\LoginRequest;
 use App\Services\Authentication\LoginService;
-use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -28,10 +28,10 @@ class LoginController extends Controller
     /**
      * Handle user log-in request.
      * 
-     * @param \Illuminate\Http\Request $request The HTTP request object containing user data.
+     * @param App\Http\Requests\Authentication\LoginRequest $request The HTTP request object containing user data.
      * @return mixed
      */
-    public function login(Request $request): mixed
+    public function login(LoginRequest $request): mixed
     {
         return $this->service->login($request);
     }

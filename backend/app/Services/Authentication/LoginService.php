@@ -12,19 +12,14 @@ class LoginService implements LoginInterface
     /**
      * Handle user log-in request.
      * 
-     * @param \Illuminate\Http\Request $request The HTTP request object containing user data.
+     * @param App\Http\Requests\Authentication\LoginRequest $request The HTTP request object containing user data.
      * 
      * @return mixed
      */
     public function login($request) : mixed
     {
         try {
-            $credentials = $request->validate([
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]);
-
-            if (Auth::attempt($credentials)) {
+            if (Auth::attempt($request->validated())) {
                 $request->session()->regenerate();
 
                 return response()->json([
