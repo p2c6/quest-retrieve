@@ -29,15 +29,12 @@ class RegisterService implements RegisterInterface
             
             return response()->json([
                 'message' => 'Successfully registered an account.'
-            ], 200);
+            ], 201);
         } catch (ValidationException $validationException) {
             info("Validation Error on user register: " . $validationException->getMessage());
-            return response()->json([
-                'message' => 'Validation error.',
-                'errors' => $validationException->errors(),
-            ], 422);
+            return response()->json(['errors' => $validationException->errors()], 422);
         } catch (\Throwable $th) {
-            info("Error on user log-in: " . $th->getMessage());
+            info("Error on user register: " . $th->getMessage());
             return response()->json([
                 'message' => 'An error occurred during register.'
             ], 500);
