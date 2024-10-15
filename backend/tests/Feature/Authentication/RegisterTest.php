@@ -40,7 +40,7 @@ class RegisterTest extends TestCase
 
             $csrf->assertCookie('XSRF-TOKEN');
 
-            $response = $this->post('/api/v1/authentication/register', [
+            $response = $this->postJson('/api/v1/authentication/register', [
                 'email' => 'testinguser1@gmail.com',
                 'password' => 'password1234',
                 'role_id' => $role->id
