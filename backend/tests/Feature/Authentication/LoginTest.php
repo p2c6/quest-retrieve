@@ -49,7 +49,7 @@ class LoginTest extends TestCase
 
             $csrf->assertCookie('XSRF-TOKEN');
 
-            $response = $this->post('/api/v1/authentication/login', [
+            $response = $this->postJson('/api/v1/authentication/login', [
                 'email' => $user->email,
                 'password' => 'password123',
             ]);
@@ -88,7 +88,7 @@ class LoginTest extends TestCase
 
             $csrf->assertCookie('XSRF-TOKEN');
 
-            $response = $this->post('/api/v1/authentication/login', [
+            $response = $this->postJson('/api/v1/authentication/login', [
                 'email' => $user->email,
                 'password' => 'password1234',
             ]);
