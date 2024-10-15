@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\API\v1\Authentication;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Authentication\RegisterRequest;
 use App\Services\Authentication\RegisterService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -29,10 +29,10 @@ class RegisterController extends Controller
     /**
      * Handle register request.
      * 
-     * @param Illuminate\Http\Request $request The HTTP request object containing user data.
+     * @param App\Http\Requests\Authentication\RegisterRequest $request The HTTP request object containing user data.
      * @return Illuminate\Http\JsonResponse
      */
-    public function register(Request $request): JsonResponse
+    public function register(RegisterRequest $request): JsonResponse
     {
         return $this->service->register($request);
     }
