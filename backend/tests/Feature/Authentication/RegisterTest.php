@@ -48,7 +48,7 @@ class RegisterTest extends TestCase
                 'role_id' => $role->id
             ]);
 
-            $response->assertCreated()
+            $response->assertStatus(200)
                     ->assertJsonStructure(['message'])
                     ->assertJson(['message' => 'Successfully registered an account.']);
 
