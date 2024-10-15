@@ -30,7 +30,7 @@ class RegisterTest extends TestCase
     public function test_user_can_register_with_valid_inputs_successfully(): void
     {
         try {
-            $role = Role::where('id', UserType::PublicUser)->first();
+            $role = Role::where('name', 'Admin')->first();
 
             if (!$role) {
                 $this->fail('Role Public User not found in the database.');
