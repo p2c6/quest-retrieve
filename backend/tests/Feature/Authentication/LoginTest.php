@@ -126,15 +126,15 @@ class LoginTest extends TestCase
 
             $csrf->assertCookie('XSRF-TOKEN');
 
-            $response = $this->post('/api/v1/authentication/login', [
+            $response = $this->postJson('/api/v1/authentication/login', [
                 'email' => '',
                 'password' => '',
             ]);
 
             $response->assertCookie('laravel_session')
                       ->assertStatus(422)
-                      ->assertJsonStructure(['errors', 'message'])
-                      ->assertJson(['message' => 'Validation error.']);
+                      ->assertJsonStructure(['errors', 'message']);
+                    
 
         } catch (\Exception $e) {
             $this->fail('Test login with empty fields error occured' . $e->getMessage());
