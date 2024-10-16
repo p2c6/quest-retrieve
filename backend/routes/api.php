@@ -15,20 +15,21 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
         Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
         Route::post('/register', [RegisterController::class, 'register'])->name('register');
     });
-
-    //E-mail Verification
-    Route::controller(EmailVerificationController::class)
-        ->middleware(['auth:sanctum'])
-        ->prefix('verification')
-        ->name('verification.')
-        ->group(function() {
-            Route::post('/email/verification-notification','sendEmailVerification')
-                ->middleware('throttle:6,1')->name('send');
-    });
-
 });
 
-Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class,'verify'])
-->middleware('signed')->name('verification.verify');
+ //E-mail Verification
+Route::prefix('verification')
+->controller(EmailVerificationController::class)
+->middleware(['auth:sanctum'])
+->name('verification.')
+->group(function() {
+    Route::post('/email/verification-notification','sendEmailVerification')
+        ->middleware('throttle:6,1')->name('send');
+
+    Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class,'verify'])
+    ->middleware('signed')->name('verify');
+});
+
+
 
 
