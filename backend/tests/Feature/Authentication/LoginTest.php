@@ -125,4 +125,38 @@ class LoginTest extends TestCase
                     ->assertStatus(422)
                     ->assertJsonStructure(['errors', 'message']);
     }
+
+    /**
+     * Test user cannot login with invalid email via API.
+     * 
+     * This test verifies that a user cannot be logged-in with invalid email via API endpoint.
+     */
+    public function test_user_cannot_login_with_invalid_email(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'email' => 'test112gmail.com',
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password1234',
+        ]);
+
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(422)
+                    ->assertJsonStructure(['message'])
+                    ->assertJson(['message' => 'The email field must be a valid email address.']);
+    }
 }
