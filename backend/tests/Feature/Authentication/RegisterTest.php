@@ -33,7 +33,7 @@ class RegisterTest extends TestCase
     public function test_user_can_register_with_valid_inputs(): void
     {
         try {
-            $role = Role::where('name', 'Admin')->first();
+            $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
             if (!$role) {
                 $this->fail('Role Public User not found in the database.');
@@ -67,7 +67,7 @@ class RegisterTest extends TestCase
     public function test_user_cannot_register_with_existing_email(): void
     {
         try {
-            $role = Role::where('name', 'Admin')->first();
+            $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
             if (!$role) {
                 $this->fail('Role Public User not found in the database.');
@@ -103,7 +103,7 @@ class RegisterTest extends TestCase
      */
     public function test_user_cannot_register_with_short_password(): void
     {
-            $role = Role::where('name', 'Admin')->first();
+            $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
             if (!$role) {
                 $this->fail('Role Public User not found in the database.');
@@ -130,7 +130,7 @@ class RegisterTest extends TestCase
      */
     public function test_user_cannot_register_with_invalid_email(): void
     {
-            $role = Role::where('name', 'Admin')->first();
+            $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
             if (!$role) {
                 $this->fail('Role Public User not found in the database.');
