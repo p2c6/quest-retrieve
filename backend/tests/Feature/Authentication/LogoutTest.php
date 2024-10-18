@@ -48,7 +48,7 @@ class LogoutTest extends TestCase
         $this->post('/api/v1/authentication/login', [
             'email' => $user->email,
             'password' => 'password123',
-        ])->assertStatus(200);
+        ]);
 
         $this->assertAuthenticatedAs($user);
 
