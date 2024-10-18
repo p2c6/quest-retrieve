@@ -25,7 +25,7 @@ class RegisterService implements RegisterInterface
             $user = User::create([
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'role_id' => UserType::PublicUser
+                'role_id' => UserType::PUBLIC_USER
             ]);
 
             event(new Registered($user));
