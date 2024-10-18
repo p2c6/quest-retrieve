@@ -4,9 +4,12 @@ namespace Tests\Feature\EmailVerification;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Services\EmailVerification\EmailVerificationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
+use Mockery;
 use Tests\TestCase;
 
 class EmailVerificationTest extends TestCase
@@ -59,14 +62,14 @@ class EmailVerificationTest extends TestCase
 
 
         } catch (\Exception $e) {
-            $this->fail('Test receive email verification notification error ' . $e->getMessage());
+            $this->fail('Test receive email verification notification successfully error: ' . $e->getMessage());
         }
     }
 
     /**
-     * Test user cannot receive email verification notification on failure via API.
+     * Test user cannot receive email verification notification via API.
      * 
-     * This test verifies that the user cannot receive email verification notification on failure via API endpoint.
+     * This test verifies that the user cannot receive email verification notification via API endpoint.
      */
     public function test_user_can_receive_email_verification_notification_failure(): void
     {
@@ -97,7 +100,7 @@ class EmailVerificationTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'An error occurred during sending email verification notification.']);
         } catch (\Exception $e) {
-            $this->fail('Test receive email verification notification error ' . $e->getMessage());
+            $this->fail('Test receive email verification notification failure: ' . $e->getMessage());
         }
     }
 
@@ -141,8 +144,47 @@ class EmailVerificationTest extends TestCase
                 ->assertJson(['message' => 'Successfully Verified.']);
     
         } catch (\Exception $e) {
-            $this->fail('Test verify email error occurred: ' . $e->getMessage());
+            $this->fail('Test verify email successfully error occurred: ' . $e->getMessage());
         }
     }
-    
+
+    /**
+     * Test user cannot verify email via API.
+     * 
+     * This test verifies that the user cannot verify email via API endpoint.
+     */
+    public function test_user_can_verify_email_failure(): void
+    {
+        try {
+            $role = Role::where('name', 'Admin')->first();
+
+            if (!$role) {
+                $this->fail('Role Admin not found in the database.');
+            }
+
+            $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+            $user = User::factory()->create([
+                'password' => bcrypt('password123'),
+                'role_id' => $role->id,
+                'email_verified_at' => null, 
+            ]);
+
+            $this->actingAs($user);
+
+            $invalidHash = 'invalid-hash';
+
+            $signedUrl = URL::temporarySignedRoute(
+                'verification.verify', 
+                now()->addMinutes(30),
+                ['id' => 0, $invalidHash] 
+            );
+
+            $response = $this->get($signedUrl);
+        
+            $response->assertStatus(403);
+        } catch (\Exception $e) {
+            $this->fail('Test verify email failure error occured: ' . $e->getMessage());
+        }
+    }
 }
