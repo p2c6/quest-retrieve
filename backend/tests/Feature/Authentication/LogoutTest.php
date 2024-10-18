@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Authentication;
 
+use App\Enums\UserType;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,8 +31,11 @@ class LogoutTest extends TestCase
      */
     public function test_user_can_logout_successfully(): void
     {
-        $role = Role::where('name', 'Admin')->first();
-        $this->assertNotNull($role, "Role Admin not found in the database.");
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
 
         $user = User::factory()->create([
             'password' => bcrypt('password123'),

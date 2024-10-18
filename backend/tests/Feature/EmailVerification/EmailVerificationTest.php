@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\EmailVerification;
 
+use App\Enums\UserType;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\EmailVerification\EmailVerificationService;
@@ -38,7 +39,7 @@ class EmailVerificationTest extends TestCase
      */
     public function test_user_can_receive_email_verification_notification_successfully(): void
     {
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -70,10 +71,10 @@ class EmailVerificationTest extends TestCase
      */
     public function test_user_can_receive_email_verification_notification_failure(): void
     {
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
         if (!$role) {
-            $this->fail('Role Admin not found in the database.');
+            $this->fail('Role Public User not found in the database.');
         }
 
         // Get CSRF cookie
@@ -106,10 +107,10 @@ class EmailVerificationTest extends TestCase
      */
     public function test_user_can_verify_email_successfully(): void
     {
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
         if (!$role) {
-            $this->fail('Role Admin not found in the database.');
+            $this->fail('Role Public User not found in the database.');
         }
 
         $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
@@ -145,10 +146,10 @@ class EmailVerificationTest extends TestCase
      */
     public function test_user_can_verify_email_failure(): void
     {
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
         if (!$role) {
-            $this->fail('Role Admin not found in the database.');
+            $this->fail('Role Public User not found in the database.');
         }
 
         $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');

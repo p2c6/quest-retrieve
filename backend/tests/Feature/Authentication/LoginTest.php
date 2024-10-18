@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Authentication;
 
+use App\Enums\UserType;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -33,10 +34,10 @@ class LoginTest extends TestCase
      */
     public function test_user_can_login_with_valid_credentials(): void
     {
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
         if (!$role) {
-            $this->fail('Role Admin not found in the database.');
+            $this->fail('Role Public User not found in the database.');
         }
 
         $user = User::factory()->create([
@@ -67,10 +68,10 @@ class LoginTest extends TestCase
      */
     public function test_user_cannot_login_with_invalid_credentials(): void
     {
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
         if (!$role) {
-            $this->fail('Role Admin not found in the database.');
+            $this->fail('Role Public User not found in the database.');
         }
 
         $user = User::factory()->create([
@@ -100,10 +101,10 @@ class LoginTest extends TestCase
      */
     public function test_user_cannot_login_with_empty_fields(): void
     {
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
         if (!$role) {
-            $this->fail('Role Admin not found in the database.');
+            $this->fail('Role Public User not found in the database.');
         }
 
         User::factory()->create([
