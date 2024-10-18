@@ -5,8 +5,11 @@ namespace Tests\Feature\EmailVerification;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\EmailVerification\EmailVerificationService;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 use Mockery;
@@ -73,35 +76,33 @@ class EmailVerificationTest extends TestCase
      */
     public function test_user_can_receive_email_verification_notification_failure(): void
     {
-        try {
-            $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('name', 'Admin')->first();
 
-            if (!$role) {
-                $this->fail('Role Public User not found in the database.');
-            }
+        if (!$role) {
+            $this->fail('Role Admin not found in the database.');
+        }
 
-            $csrf = $this->get('/sanctum/csrf-cookie');
+        // Get CSRF cookie
+        $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf->assertCookie('XSRF-TOKEN');
 
-            $csrf->assertCookie('XSRF-TOKEN');
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
 
-            $user = User::factory()->create([
-                'password' => bcrypt('password123'),
-                'role_id' => $role->id,
-            ]);
+        $this->actingAs($user);
 
-            $this->actingAs($user);
-
-            Mail::shouldReceive('to')
+        Notification::shouldReceive('send')
+            ->once()
+            ->with($user, Mockery::type(VerifyEmail::class))
             ->andThrow(new \Exception('Simulated email sending failure'));
 
-            $response = $this->postJson('/api/verification/email/verification-notification');
+        $response = $this->postJson('/api/verification/email/verification-notification');
 
-            $response->assertStatus(500)
-                ->assertJsonStructure(['message'])
-                ->assertJson(['message' => 'An error occurred during sending email verification notification.']);
-        } catch (\Exception $e) {
-            $this->fail('Test receive email verification notification failure: ' . $e->getMessage());
-        }
+        $response->assertStatus(500)
+            ->assertJsonStructure(['message'])
+            ->assertJson(['message' => 'An error occurred during sending email verification notification.']);
     }
 
     /**
