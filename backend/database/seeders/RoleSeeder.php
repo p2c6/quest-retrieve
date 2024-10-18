@@ -15,12 +15,15 @@ class RoleSeeder extends Seeder
     {
         $roles = [
             [
+                'id' => 1,
                 'name' => 'Admin'
             ],
             [
+                'id' => 2,
                 'name' => 'Moderator'
             ],
             [
+                'id' => 3,
                 'name' => 'User'
             ],
         ];
