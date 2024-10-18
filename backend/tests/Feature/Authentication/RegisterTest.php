@@ -45,10 +45,9 @@ class RegisterTest extends TestCase
             $response = $this->postJson('/api/v1/authentication/register', [
                 'email' => 'testinguser1@gmail.com',
                 'password' => 'password1234',
-                'role_id' => $role->id
             ]);
 
-            $response->assertStatus(200)
+            $response->assertStatus(201)
                     ->assertJsonStructure(['message'])
                     ->assertJson(['message' => 'Successfully registered an account.']);
 
