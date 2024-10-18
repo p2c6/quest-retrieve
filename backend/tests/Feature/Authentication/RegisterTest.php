@@ -32,30 +32,24 @@ class RegisterTest extends TestCase
      */
     public function test_user_can_register_with_valid_inputs(): void
     {
-        try {
-            $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
-            if (!$role) {
-                $this->fail('Role Public User not found in the database.');
-            }
-
-            $csrf = $this->get('/sanctum/csrf-cookie');
-
-            $csrf->assertCookie('XSRF-TOKEN');
-
-            $response = $this->postJson('/api/v1/authentication/register', [
-                'email' => 'testinguser1@gmail.com',
-                'password' => 'password1234',
-            ]);
-
-            $response->assertStatus(201)
-                    ->assertJsonStructure(['message'])
-                    ->assertJson(['message' => 'Successfully registered an account.']);
-
-
-        } catch (\Exception $e) {
-            $this->fail('Test register with valid inputs error occured' . $e->getMessage());
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
         }
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/register', [
+            'email' => 'testinguser1@gmail.com',
+            'password' => 'password1234',
+        ]);
+
+        $response->assertStatus(201)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Successfully registered an account.']);
     }
 
     /**
@@ -66,34 +60,30 @@ class RegisterTest extends TestCase
      */
     public function test_user_cannot_register_with_existing_email(): void
     {
-        try {
-            $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
-            if (!$role) {
-                $this->fail('Role Public User not found in the database.');
-            }
-
-            $csrf = $this->get('/sanctum/csrf-cookie');
-
-            $csrf->assertCookie('XSRF-TOKEN');
-
-            User::factory()->create([
-                'email' => 'testinguser1@gmail.com',
-                'password' => bcrypt('password123'),
-                'role_id' => $role->id
-            ]);
-
-            $response = $this->postJson('/api/v1/authentication/register', [
-                'email' => 'testinguser1@gmail.com',
-                'password' => 'password1234',
-            ]);
-
-            $response->assertStatus(422)
-                    ->assertJsonStructure(['message'])
-                    ->assertJson(['message' => 'The email has already been taken.']);
-        } catch (\Exception $e) {
-            $this->fail('Test cannot register with existing email used error occured' . $e->getMessage());
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
         }
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        User::factory()->create([
+            'email' => 'testinguser1@gmail.com',
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $response = $this->postJson('/api/v1/authentication/register', [
+            'email' => 'testinguser1@gmail.com',
+            'password' => 'password1234',
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'The email has already been taken.']);
     }
 
     /**
@@ -103,24 +93,24 @@ class RegisterTest extends TestCase
      */
     public function test_user_cannot_register_with_short_password(): void
     {
-            $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
-            if (!$role) {
-                $this->fail('Role Public User not found in the database.');
-            }
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
 
-            $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf = $this->get('/sanctum/csrf-cookie');
 
-            $csrf->assertCookie('XSRF-TOKEN');
+        $csrf->assertCookie('XSRF-TOKEN');
 
-            $response = $this->postJson('/api/v1/authentication/register', [
-                'email' => 'testinguser123@gmail.com',
-                'password' => 'pass',
-            ]);
+        $response = $this->postJson('/api/v1/authentication/register', [
+            'email' => 'testinguser123@gmail.com',
+            'password' => 'pass',
+        ]);
 
-            $response->assertStatus(422)
-                    ->assertJsonStructure(['message'])
-                    ->assertJson(['message' => 'The password field must be at least 8 characters.']);
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'The password field must be at least 8 characters.']);
     }
 
     /**
@@ -130,23 +120,23 @@ class RegisterTest extends TestCase
      */
     public function test_user_cannot_register_with_invalid_email(): void
     {
-            $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
-            if (!$role) {
-                $this->fail('Role Public User not found in the database.');
-            }
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
 
-            $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf = $this->get('/sanctum/csrf-cookie');
 
-            $csrf->assertCookie('XSRF-TOKEN');
+        $csrf->assertCookie('XSRF-TOKEN');
 
-            $response = $this->postJson('/api/v1/authentication/register', [
-                'email' => 'testinguser1234gmail.com',
-                'password' => 'password1234',
-            ]);
+        $response = $this->postJson('/api/v1/authentication/register', [
+            'email' => 'testinguser1234gmail.com',
+            'password' => 'password1234',
+        ]);
 
-            $response->assertStatus(422)
-                    ->assertJsonStructure(['message'])
-                    ->assertJson(['message' => 'The email field must be a valid email address.']);
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'The email field must be a valid email address.']);
     }
 }
