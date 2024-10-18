@@ -64,7 +64,7 @@ class RegisterTest extends TestCase
      * This test verifies that a user cannot register if the email used in registration 
      * is already exists via API endpoint.
      */
-    public function test_user_cannot_register_with_existing_email_used(): void
+    public function test_user_cannot_register_with_existing_email(): void
     {
         try {
             $role = Role::where('name', 'Admin')->first();
@@ -94,5 +94,32 @@ class RegisterTest extends TestCase
         } catch (\Exception $e) {
             $this->fail('Test cannot register with existing email used error occured' . $e->getMessage());
         }
+    }
+
+    /**
+     * Test user cannot register if the password is shorter than 8 characters via API.
+     * 
+     * This test verifies that a user cannot register if the password is shorter 8 characters.
+     */
+    public function test_user_cannot_register_with_short_password(): void
+    {
+            $role = Role::where('name', 'Admin')->first();
+
+            if (!$role) {
+                $this->fail('Role Public User not found in the database.');
+            }
+
+            $csrf = $this->get('/sanctum/csrf-cookie');
+
+            $csrf->assertCookie('XSRF-TOKEN');
+
+            $response = $this->postJson('/api/v1/authentication/register', [
+                'email' => 'testinguser123@gmail.com',
+                'password' => 'pass',
+            ]);
+
+            $response->assertStatus(422)
+                    ->assertJsonStructure(['message'])
+                    ->assertJson(['message' => 'The password field must be at least 8 characters.']);
     }
 }
