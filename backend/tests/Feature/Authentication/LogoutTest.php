@@ -30,7 +30,6 @@ class LogoutTest extends TestCase
      */
     public function test_user_can_logout_successfully(): void
     {
-        // Seed the role and create a user
         $role = Role::where('name', 'Admin')->first();
         $this->assertNotNull($role, "Role Admin not found in the database.");
 
@@ -39,7 +38,6 @@ class LogoutTest extends TestCase
             'role_id' => $role->id,
         ]);
 
-        // Simulate CSRF cookie generation
         $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
 
         // Log in the user
@@ -48,20 +46,16 @@ class LogoutTest extends TestCase
             'password' => 'password123',
         ])->assertStatus(200);
 
-        // Ensure the user is authenticated
         $this->assertAuthenticatedAs($user);
 
-        // Log out the user
         $response = $this->post('/api/v1/authentication/logout');
 
-        // Check response status and JSON message
         $response->assertStatus(200)
                 ->assertJson(['message' => 'Successfully logged out.']);
 
 
         $this->refreshApplication();
 
-        // Assert the user is now a guest
         $this->assertGuest();
     }
 

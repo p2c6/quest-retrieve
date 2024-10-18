@@ -33,36 +33,31 @@ class LoginTest extends TestCase
      */
     public function test_user_can_login_with_valid_credentials(): void
     {
-        try {
-            $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('name', 'Admin')->first();
 
-            if (!$role) {
-                $this->fail('Role Admin not found in the database.');
-            }
-
-            $user = User::factory()->create([
-                'password' => bcrypt('password123'),
-                'role_id' => $role->id
-            ]);
-
-            $csrf = $this->get('/sanctum/csrf-cookie');
-
-            $csrf->assertCookie('XSRF-TOKEN');
-
-            $response = $this->postJson('/api/v1/authentication/login', [
-                'email' => $user->email,
-                'password' => 'password123',
-            ]);
-
-            $response->assertCookie('laravel_session')
-                      ->assertStatus(200)
-                      ->assertJsonStructure(['user', 'message'])
-                      ->assertJson(['message' => 'Successfully logged in.'])
-                      ->assertSee('user');
-
-        } catch (\Exception $e) {
-            $this->fail('Test login with valid credentials error occured' . $e->getMessage());
+        if (!$role) {
+            $this->fail('Role Admin not found in the database.');
         }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(200)
+                    ->assertJsonStructure(['user', 'message'])
+                    ->assertJson(['message' => 'Successfully logged in.'])
+                    ->assertSee('user');
     }
 
     /**
@@ -72,35 +67,30 @@ class LoginTest extends TestCase
      */
     public function test_user_cannot_login_with_invalid_credentials(): void
     {
-        try {
-            $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('name', 'Admin')->first();
 
-            if (!$role) {
-                $this->fail('Role Admin not found in the database.');
-            }
-
-            $user = User::factory()->create([
-                'password' => bcrypt('password123'),
-                'role_id' => $role->id
-            ]);
-
-            $csrf = $this->get('/sanctum/csrf-cookie');
-
-            $csrf->assertCookie('XSRF-TOKEN');
-
-            $response = $this->postJson('/api/v1/authentication/login', [
-                'email' => $user->email,
-                'password' => 'password1234',
-            ]);
-
-            $response->assertCookie('laravel_session')
-                      ->assertStatus(401)
-                      ->assertJsonStructure(['message'])
-                      ->assertJson(['message' => 'The provided credentials are incorrect.']);
-
-        } catch (\Exception $e) {
-            $this->fail('Test login with invalid credentials error occured' . $e->getMessage());
+        if (!$role) {
+            $this->fail('Role Admin not found in the database.');
         }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password1234',
+        ]);
+
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(401)
+                    ->assertJsonStructure(['message'])
+                    ->assertJson(['message' => 'The provided credentials are incorrect.']);
     }
 
     /**
@@ -110,34 +100,28 @@ class LoginTest extends TestCase
      */
     public function test_user_cannot_login_with_empty_fields(): void
     {
-        try {
-            $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('name', 'Admin')->first();
 
-            if (!$role) {
-                $this->fail('Role Admin not found in the database.');
-            }
-
-            $user = User::factory()->create([
-                'password' => bcrypt('password123'),
-                'role_id' => $role->id
-            ]);
-
-            $csrf = $this->get('/sanctum/csrf-cookie');
-
-            $csrf->assertCookie('XSRF-TOKEN');
-
-            $response = $this->postJson('/api/v1/authentication/login', [
-                'email' => '',
-                'password' => '',
-            ]);
-
-            $response->assertCookie('laravel_session')
-                      ->assertStatus(422)
-                      ->assertJsonStructure(['errors', 'message']);
-                    
-
-        } catch (\Exception $e) {
-            $this->fail('Test login with empty fields error occured' . $e->getMessage());
+        if (!$role) {
+            $this->fail('Role Admin not found in the database.');
         }
+
+        User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => '',
+            'password' => '',
+        ]);
+
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(422)
+                    ->assertJsonStructure(['errors', 'message']);
     }
 }
