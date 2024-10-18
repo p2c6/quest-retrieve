@@ -30,7 +30,7 @@ class RegisterTest extends TestCase
      * 
      * This test verifies that a user can register with valid inputs successfully via API endpoint.
      */
-    public function test_user_can_register_with_valid_inputs_successfully(): void
+    public function test_user_can_register_with_valid_inputs(): void
     {
         try {
             $role = Role::where('name', 'Admin')->first();
@@ -59,7 +59,7 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * Test user can register with valid inputs successfully via API.
+     * Test user cannot register if the email used is already existing via API.
      * 
      * This test verifies that a user cannot register if the email used in registration 
      * is already exists via API endpoint.
