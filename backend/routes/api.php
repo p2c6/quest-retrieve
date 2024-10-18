@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->name('api.v1.')->group(function() {
-
     //Authentication
     Route::prefix('authentication')->name('authentiaction.')->group(function() {
         Route::post('/login', [LoginController::class, 'login'])->name('login');
@@ -19,16 +18,16 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
  //E-mail Verification
 Route::prefix('verification')
-->controller(EmailVerificationController::class)
-->middleware(['auth:sanctum'])
-->name('verification.')
-->group(function() {
-    Route::post('/email/verification-notification','sendEmailVerification')
-        ->middleware('throttle:6,1')->name('send');
+    ->controller(EmailVerificationController::class)
+    ->middleware(['auth:sanctum'])
+    ->name('verification.')
+    ->group(function() {
+        Route::post('/email/verification-notification','sendEmailVerification')
+            ->middleware('throttle:6,1')->name('send');
 
-    Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class,'verify'])
-    ->middleware('signed')->name('verify');
-});
+        Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class,'verify'])
+        ->middleware('signed')->name('verify');
+    });
 
 
 
