@@ -24,7 +24,7 @@ class RoleSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'User'
+                'name' => 'Public User'
             ],
         ];
 
