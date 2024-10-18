@@ -17,17 +17,16 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 });
 
  //E-mail Verification
-Route::prefix('verification')
-    ->controller(EmailVerificationController::class)
-    ->middleware(['auth:sanctum'])
-    ->name('verification.')
-    ->group(function() {
+Route::prefix('verification')->name('verification.')->group(function() {
+    Route::controller(EmailVerificationController::class)->group(function() {
         Route::post('/email/verification-notification','sendEmailVerification')
             ->middleware('throttle:6,1')->name('send');
 
-        Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class,'verify'])
-        ->middleware('signed')->name('verify');
+        Route::get('/email/verify/{id}/{hash}', 'verify')
+            ->middleware('signed')->name('verify');
     });
+})->middleware('auth:sanctum');
+
 
 
 
