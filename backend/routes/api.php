@@ -4,8 +4,8 @@ use App\Http\Controllers\API\v1\Authentication\EmailVerificationController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\PasswordResetController;
-use App\Http\Controllers\API\v1\Authentication\PasswordResetLinkController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
+use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +30,7 @@ Route::prefix('verification')->name('verification.')->group(function() {
     });
 })->middleware('auth:sanctum');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'sendResetPasswordLink'])->middleware('throttle:20,1'); // Allow 10 requests per minute
+Route::post('/forgot-password', [SendResetPasswordLinkController::class, 'sendResetPasswordLink'])->middleware('throttle:20,1'); // Allow 10 requests per minute
 
 Route::get('/reset-password/{token}', function ($token) {
     if (!$token) {
