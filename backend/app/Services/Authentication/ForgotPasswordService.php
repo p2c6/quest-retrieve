@@ -16,7 +16,7 @@ use Illuminate\Validation\ValidationException;
 class ForgotPasswordService
 {
     /**
-     * Handle user reset password request.
+     * Handle user send reset password link request.
      * 
      * @param Illuminate\Http\Request $request The HTTP request object containing user data.
      * 
@@ -51,8 +51,15 @@ class ForgotPasswordService
         }
     
     }
-    
-    public function resetPassword($request)
+
+    /**
+     * Handle user reset password request.
+     * 
+     * @param Illuminate\Http\Request $request The HTTP request object containing user data.
+     * 
+     * @return mixed
+     */
+    public function resetPassword($request) : mixed
     {
         $request->validate([
             'token' => 'required',
