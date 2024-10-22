@@ -151,4 +151,36 @@ class PasswordResetTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson(["errors" => ['password' => ['The password field confirmation does not match.']]]);
     }
+
+    /**
+     * Test user cannot reset password with invalid email via API.
+     * 
+     * This test verifies that the user cannot reset password with invalid email via API endpoint.
+     */
+    public function test_user_cannot_reset_password_with_invalid_email()
+    {
+        $user = User::factory()->create([
+            'email' => 'test111@gmail.com',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $plainTextToken = Str::random(60);
+
+        DB::table('password_resets')->insert([
+            'email' => 'test111@gmail.com',
+            'token' => bcrypt($plainTextToken), 
+            'created_at' => now(),
+        ]);
+
+        $response = $this->postJson('/api/reset-password', [
+            'email' => 'test111gmail.com',
+            'token' => $plainTextToken, 
+            'password' => 'newpassword123',
+            'password_confirmation' => 'newpassword1234',
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message'])
+                ->assertJson(["errors" => ['email' => ['The email field must be a valid email address.']]]);
+    }
 }
