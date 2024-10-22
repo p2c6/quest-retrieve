@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\EmailVerification;
+namespace Tests\Feature\Authentication;
 
 use App\Enums\UserType;
 use App\Models\Role;
