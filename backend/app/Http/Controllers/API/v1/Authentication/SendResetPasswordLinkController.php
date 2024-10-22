@@ -19,14 +19,14 @@ class SendResetPasswordLinkController extends Controller
     /**
      * The email verification service instance.
      * 
-     * @var EmailVerificationController
+     * @var SendResetPasswordLinkService
      */
     private $service;
     
     /**
      * EmailVerificationController contructor.
      * 
-     * @param EmailVerificationService $service The instance of EmailVerificationService.
+     * @param SendResetPasswordLinkService $service The instance of SendResetPasswordLinkService.
      */
     public function __construct(SendResetPasswordLinkService $service)
     {
