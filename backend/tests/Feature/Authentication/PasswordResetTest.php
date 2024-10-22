@@ -93,7 +93,7 @@ class PasswordResetTest extends TestCase
      * 
      * This test verifies that the user cannot reset password with invalid email via API endpoint.
      */
-    public function test_user_can_reset_password_with_invalid_email()
+    public function test_user_cannot_reset_password_with_invalid_email()
     {
         User::factory()->create([
             'email' => 'test111@gmail.com',
