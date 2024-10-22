@@ -119,4 +119,36 @@ class PasswordResetTest extends TestCase
                 ->assertJsonStructure(['email'])
                 ->assertJson(["email" => ['We can\'t find a user with that email address.']]);
     }
+
+    /**
+     * Test user cannot reset password with password mismatch via API.
+     * 
+     * This test verifies that the user cannot reset password with invalid password mismatch via API endpoint.
+     */
+    public function test_user_cannot_reset_password_with_password_mismatch()
+    {
+        $user = User::factory()->create([
+            'email' => 'test111@gmail.com',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $plainTextToken = Str::random(60);
+
+        DB::table('password_resets')->insert([
+            'email' => 'test111@gmail.com',
+            'token' => bcrypt($plainTextToken), 
+            'created_at' => now(),
+        ]);
+
+        $response = $this->postJson('/api/reset-password', [
+            'email' => $user->email,
+            'token' => $plainTextToken, 
+            'password' => 'newpassword123',
+            'password_confirmation' => 'newpassword1234',
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message'])
+                ->assertJson(["errors" => ['password' => ['The password field confirmation does not match.']]]);
+    }
 }
