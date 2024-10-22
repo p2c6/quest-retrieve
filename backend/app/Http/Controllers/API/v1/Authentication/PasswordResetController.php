@@ -58,7 +58,7 @@ class PasswordResetController extends Controller
                 event(new PasswordReset($user));
             });
 
-            if ($status === Password::RESET_LINK_SENT) {
+            if ($status === Password::PASSWORD_RESET) {
                 return response()->json(['message' => __($status)], 200);
             }
 
