@@ -2,9 +2,10 @@
 
 namespace App\Services\Authentication;
 
+use App\Services\Contracts\Authentication\EmailVerificationInterface;
 use Illuminate\Http\JsonResponse;
 
-class EmailVerificationService
+class EmailVerificationService implements EmailVerificationInterface
 {
     /**
      * Handle user send email verification notification request.
