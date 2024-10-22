@@ -6,8 +6,6 @@ use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\PasswordResetController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
 use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->name('api.v1.')->group(function() {
