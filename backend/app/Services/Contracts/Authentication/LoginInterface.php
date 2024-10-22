@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\Contracts;
+namespace App\Services\Contracts\Authentication;
 
 use Illuminate\Http\Request;
 

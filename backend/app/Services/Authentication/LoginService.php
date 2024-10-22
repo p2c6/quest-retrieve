@@ -2,7 +2,7 @@
 
 namespace App\Services\Authentication;
 
-use App\Services\Contracts\LoginInterface;
+use App\Services\Contracts\Authentication\LoginInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;

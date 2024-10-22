@@ -2,7 +2,7 @@
 
 namespace App\Services\Authentication;
 
-use App\Services\Contracts\LogoutInterface;
+use App\Services\Contracts\Authentication\LogoutInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 

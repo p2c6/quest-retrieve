@@ -4,7 +4,7 @@ namespace App\Services\Authentication;
 
 use App\Enums\UserType;
 use App\Models\User;
-use App\Services\Contracts\RegisterInterface;
+use App\Services\Contracts\Authentication\RegisterInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
