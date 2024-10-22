@@ -4,26 +4,24 @@ namespace App\Http\Controllers\API\v1\Authentication;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Authentication\ResetPasswordRequest;
-use App\Services\Authentication\ForgotPasswordService;
-use App\Services\EmailVerification\EmailVerificationService;
+use App\Services\Authentication\ResetPasswordService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
-class PasswordResetController extends Controller
+class ResetPasswordController extends Controller
 {
     /**
      * The email verification service instance.
      * 
-     * @var EmailVerificationController
+     * @var ResetPasswordController
      */
     private $service;
     
     /**
      * EmailVerificationController contructor.
      * 
-     * @param EmailVerificationService $service The instance of EmailVerificationService.
+     * @param ResetPasswordService $service The instance of ResetPasswordService.
      */
-    public function __construct(ForgotPasswordService $service)
+    public function __construct(ResetPasswordService $service)
     {
         $this->service = $service;
     }
