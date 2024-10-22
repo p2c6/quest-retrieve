@@ -91,7 +91,7 @@ class PasswordResetLinkTest extends TestCase
 
         $response->assertStatus(422)
             ->assertJsonStructure(['message'])
-            ->assertJson(['message' => 'Validation error.', 
+            ->assertJson(['message' => 'The email field is required.', 
             'errors' => [
                 'email' => ['The email field is required.']]
             ]);
@@ -130,7 +130,7 @@ class PasswordResetLinkTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonStructure(['message'])
             ->assertJson([
-                'message' => 'Validation error.', 
+                'message' => 'The email field must be a valid email address.', 
                 'errors' => [
                     'email' => ['The email field must be a valid email address.']
                 ]
