@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Authentication;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Authentication\SendResetPasswordLinkRequest;
 use App\Services\Authentication\ForgotPasswordService;
+use App\Services\Authentication\SendResetPasswordLinkService;
 use App\Services\EmailVerification\EmailVerificationService;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
-class PasswordResetLinkController extends Controller
+class SendResetPasswordLinkController extends Controller
 {
     /**
      * The email verification service instance.
@@ -27,7 +28,7 @@ class PasswordResetLinkController extends Controller
      * 
      * @param EmailVerificationService $service The instance of EmailVerificationService.
      */
-    public function __construct(ForgotPasswordService $service)
+    public function __construct(SendResetPasswordLinkService $service)
     {
         $this->service = $service;
     }
