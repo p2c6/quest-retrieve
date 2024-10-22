@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1\Authentication;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Authentication\ResetPasswordRequest;
 use App\Services\Authentication\ForgotPasswordService;
 use App\Services\EmailVerification\EmailVerificationService;
 use Illuminate\Http\JsonResponse;
@@ -33,7 +34,7 @@ class PasswordResetController extends Controller
      * @param Illuminate\Http\Request $request The HTTP request object containing user data.
      * @return Illuminate\Http\JsonResponse
      */
-    public function resetPassword(Request $request): JsonResponse
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
         return $this->service->resetPassword($request);
     }
