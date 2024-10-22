@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  */
 interface ResetPasswordInterface {
     /**
-     * Verify the email based on the request.
+     * Reset password.
      * 
      * @param  \Illuminate\Http\Request  $request  The HTTP request containing the verification data.
      * @return mixed  The result of the reset password process, which may vary based on implementation.
