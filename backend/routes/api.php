@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\API\v1\Authentication\EmailVerificationController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\PasswordResetController;
 use App\Http\Controllers\API\v1\Authentication\PasswordResetLinkController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
-use App\Http\Controllers\API\v1\EmailVerification\EmailVerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;

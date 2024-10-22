@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\v1\EmailVerification;
+namespace App\Http\Controllers\API\v1\Authentication;
 
 use App\Http\Controllers\Controller;
-use App\Services\EmailVerification\EmailVerificationService;
+use App\Services\Authentication\EmailVerificationService;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

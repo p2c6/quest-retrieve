@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\EmailVerification;
+namespace App\Services\Authentication;
 
 use Illuminate\Http\JsonResponse;
 
