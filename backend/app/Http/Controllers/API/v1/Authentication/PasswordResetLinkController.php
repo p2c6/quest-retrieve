@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1\Authentication;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Authentication\SendResetPasswordLinkRequest;
 use App\Services\Authentication\ForgotPasswordService;
 use App\Services\EmailVerification\EmailVerificationService;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -37,7 +38,7 @@ class PasswordResetLinkController extends Controller
      * @param Illuminate\Http\Request $request The HTTP request object containing user data.
      * @return Illuminate\Http\JsonResponse
      */
-    public function sendResetPasswordLink(Request $request): JsonResponse
+    public function sendResetPasswordLink(SendResetPasswordLinkRequest $request): JsonResponse
     {
         return $this->service->sendResetPasswordLink($request);
     }
