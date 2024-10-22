@@ -25,10 +25,8 @@ class ForgotPasswordService
     public function sendResetPasswordLink($request) : mixed
     {
         try {
-            $request->validate(['email' => 'required|email']);
-
             $status = Password::sendResetLink(
-            $request->only('email')
+                $request->only('email')
             );
     
     
