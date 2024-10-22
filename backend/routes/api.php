@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\PasswordResetController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
+use App\Http\Controllers\API\v1\Authentication\ResetPasswordController;
 use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +39,7 @@ Route::get('/reset-password/{token}', function ($token) {
 })->name('password.reset');
 
 
-Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 
 
 
