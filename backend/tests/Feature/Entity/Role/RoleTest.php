@@ -346,4 +346,145 @@ class RoleTest extends TestCase
                     'message' => 'Unauthenticated.', 
                 ]);
     }
+
+    /**
+     * Test user can delete role via API.
+     * 
+     * This test verifies that a user can delete role via API endpoint.
+     */
+    public function test_user_can_delete_role(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $newRole = Role::create([
+            'name' => "Sample Role"
+        ]);
+
+        $response = $this->deleteJson(route('api.v1.roles.delete', $newRole->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(200)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Successfully Role Deleted.', 
+                ]);
+    }
+
+    /**
+     * Test user cannot delete role while role was already associated to user via API.
+     * 
+     * This test verifies that a user cannot delete role while role was already associated to user via API endpoint.
+     */
+    public function test_user_cannot_delete_role_while_already_associated_to_user(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->deleteJson(route('api.v1.roles.delete', $role->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(409)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Cannot delete role. There are users associated with this role.']);
+    }
+
+    /**
+     * Test user cannot delete role while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot delete role while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_delete_role_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $response = $this->deleteJson(route('api.v1.roles.delete', $role->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
+
+    /**
+     * Test user cannot delete role if not existing via API.
+     * 
+     * This test verifies that a user cannot delete role if not existing via API endpoint.
+     */
+    public function test_user_cannot_delete_role_if_not_existing(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->deleteJson(route('api.v1.roles.delete', 0));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(404);
+    }
 }
