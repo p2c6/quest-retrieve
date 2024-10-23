@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 class RoleService
 {
     /**
-     * Handle index role.
+     * List of all roles.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
      * @return App\Http\Resources\RoleCollection
@@ -24,7 +24,7 @@ class RoleService
     }
 
     /**
-     * Handle show role.
+     * Show a single role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
      * @return App\Http\Resources\RoleResource

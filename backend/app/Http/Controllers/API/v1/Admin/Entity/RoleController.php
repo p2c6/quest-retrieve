@@ -30,7 +30,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Handle index role.
+     * List of all roles.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
      * @return  App\Http\Resources\RoleCollection
@@ -41,7 +41,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Handle show role.
+     * Show a single role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
      * @return App\Http\Resources\RoleResource
