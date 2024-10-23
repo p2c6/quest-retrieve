@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\Admin\Entity\RoleController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
@@ -16,6 +17,18 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
         Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
         Route::post('/register', [RegisterController::class, 'register'])->name('register');
     });
+
+    //Authenticated User
+    Route::middleware('auth:sanctum')->group(function() {
+        //Role
+        Route::prefix('roles')->name('roles.')->group(function() {
+            Route::post('/', [RoleController::class, 'store'])->name('store');
+            Route::get('/', [RoleController::class, 'index'])->name('index');
+            Route::get('/{role}', [RoleController::class, 'show'])->name('show');
+            Route::put('/{role}', [RoleController::class, 'update'])->name('update');
+            Route::delete('/{role}', [RoleController::class, 'delete'])->name('delete');
+        });
+    });
 });
 
  //E-mail Verification
@@ -29,13 +42,13 @@ Route::prefix('verification')->name('verification.')->group(function() {
 
 Route::post('/forgot-password', [SendResetPasswordLinkController::class, 'sendResetPasswordLink'])->middleware('throttle:20,1'); // Allow 10 requests per minute
 
+//Reset Password
 Route::get('/reset-password/{token}', function ($token) {
     if (!$token) {
         return response()->json(['error' => 'Token not provided'], 400);
     }
     return response()->json(['token' => $token], 200);
 })->name('password.reset');
-
 
 Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 
