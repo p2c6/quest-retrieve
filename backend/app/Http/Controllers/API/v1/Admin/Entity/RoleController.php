@@ -30,7 +30,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Handle show role.
+     * Handle index role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
      * @return App\Http\Resources\RoleResource
@@ -39,7 +39,6 @@ class RoleController extends Controller
     {
         return new RoleCollection(Role::paginate());
     }
-
 
     /**
      * Handle show role.
