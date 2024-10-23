@@ -72,7 +72,7 @@ class RoleService
         try {
             $role->update(['name' => $request->name]);
 
-            return response()->json(['message' => 'Successfully Role Updated.'], 201);
+            return response()->json(['message' => 'Successfully Role Updated.'], 200);
             
         } catch (ValidationException $validationException) {
             info("Validation Error on update role: " . $validationException->getMessage());
