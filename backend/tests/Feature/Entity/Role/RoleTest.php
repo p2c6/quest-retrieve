@@ -311,4 +311,39 @@ class RoleTest extends TestCase
                     ]
                 ]);
     }
+
+    /**
+     * Test user cannot update role while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot update while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_update_role_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $newRoleName = 'Old Role';
+        $updatedRoleName = 'New Role';
+
+        $newRole = Role::create([
+            'name' => $newRoleName
+        ]);
+
+        $response = $this->putJson(route('api.v1.roles.update', $newRole->id), [
+            'name' => $updatedRoleName
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
 }
