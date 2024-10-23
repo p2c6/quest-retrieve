@@ -33,11 +33,11 @@ class RoleController extends Controller
      * Handle index role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return App\Http\Resources\RoleResource
+     * @return  App\Http\Resources\RoleCollection
      */
     public function index(): RoleCollection
     {
-        return new RoleCollection(Role::paginate());
+        return $this->service->index();
     }
 
     /**
@@ -48,7 +48,7 @@ class RoleController extends Controller
      */
     public function show(Role $role): RoleResource
     {
-        return new RoleResource(Role::findOrFail($role->id));
+        return $this->service->show($role);
     }
 
     /**

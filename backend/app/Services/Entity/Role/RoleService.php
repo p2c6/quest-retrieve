@@ -2,6 +2,8 @@
 
 namespace App\Services\Entity\Role;
 
+use App\Http\Resources\RoleCollection;
+use App\Http\Resources\RoleResource;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -10,6 +12,28 @@ use Illuminate\Validation\ValidationException;
 
 class RoleService
 {
+    /**
+     * Handle index role.
+     * 
+     * @param App\Models\Role $role The model of the role which needs to be retrieved.
+     * @return App\Http\Resources\RoleCollection
+     */
+    public function index(): RoleCollection
+    {
+        return new RoleCollection(Role::paginate());
+    }
+
+    /**
+     * Handle show role.
+     * 
+     * @param App\Models\Role $role The model of the role which needs to be retrieved.
+     * @return App\Http\Resources\RoleResource
+     */
+    public function show(Role $role): RoleResource
+    {
+        return new RoleResource(Role::findOrFail($role->id));
+    }
+    
     /**
      * Handle role store request.
      * 
