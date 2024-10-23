@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\v1\Admin\Entity;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Entity\Role\StoreRoleRequest;
+use App\Http\Requests\Entity\Role\UpdateRoleRequest;
 use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
@@ -54,10 +56,10 @@ class RoleController extends Controller
     /**
      * Handle store role request.
      * 
-     * @param Illuminate\Http\Request $request The HTTP request object containing role data.
+     * @param App\Http\Requests\Entity\Role\StoreRoleRequest $request The HTTP request object containing role data.
      * @return Illuminate\Http\JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreRoleRequest $request): JsonResponse
     {
         return $this->service->store($request);
     }
@@ -70,7 +72,7 @@ class RoleController extends Controller
      * 
      * @return Illuminate\Http\JsonResponse
      */
-    public function update(Role $role, Request $request): JsonResponse
+    public function update(Role $role, UpdateRoleRequest $request): JsonResponse
     {
         return $this->service->update($role, $request);
     }
