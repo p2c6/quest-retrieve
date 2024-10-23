@@ -487,4 +487,115 @@ class RoleTest extends TestCase
         $response->assertCookie('laravel_session')
                 ->assertStatus(404);
     }
+
+    /**
+     * Test user can retrieve all roles via API.
+     * 
+     * This test verifies that a user can retrieve all roles via API endpoint.
+     */
+    public function test_user_can_retrieve_all_roles(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->getJson('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        // Log in the user
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->getJson('/api/v1/roles');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['data', 'links', 'meta']);
+    }
+
+    /**
+     * Test user can retrieve all roles via API.
+     * 
+     * This test verifies that a user can retrieve all roles via API endpoint.
+     */
+    public function test_user_cannot_retrieve_all_roles_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $response = $this->getJson('/api/v1/roles');
+
+        $response->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
+
+    /**
+     * Test user can retrieve specific role via API.
+     * 
+     * This test verifies that a user can retrieve specific role via API endpoint.
+     */
+    public function test_user_can_retrieve_specific_role(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->getJson('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->getJson('/api/v1/roles/1');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['data']);
+    }
+
+    /**
+     * Test user can retrieve specific role via API.
+     * 
+     * This test verifies that a user can retrieve specific role via API endpoint.
+     */
+    public function test_user_cannot_retrieve_specific_role_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $response = $this->getJson('/api/v1/roles/1');
+
+        $response->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
 }
