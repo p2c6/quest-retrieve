@@ -381,7 +381,7 @@ class RoleTest extends TestCase
             'name' => "Sample Role"
         ]);
 
-        $response = $this->deleteJson(route('api.v1.roles.delete', $newRole->id));
+        $response = $this->deleteJson(route('api.v1.roles.destroy', $newRole->id));
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
@@ -421,7 +421,7 @@ class RoleTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
 
-        $response = $this->deleteJson(route('api.v1.roles.delete', $role->id));
+        $response = $this->deleteJson(route('api.v1.roles.destroy', $role->id));
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(409)
@@ -442,7 +442,7 @@ class RoleTest extends TestCase
             $this->fail('Role Public User not found in the database.');
         }
 
-        $response = $this->deleteJson(route('api.v1.roles.delete', $role->id));
+        $response = $this->deleteJson(route('api.v1.roles.destroy', $role->id));
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(401)
@@ -482,7 +482,7 @@ class RoleTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
 
-        $response = $this->deleteJson(route('api.v1.roles.delete', 0));
+        $response = $this->deleteJson(route('api.v1.roles.destroy', 0));
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(404);
