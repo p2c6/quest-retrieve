@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API\v1\Admin\Entity;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Entity\Role\StoreRoleRequest;
 use App\Http\Requests\Entity\Role\UpdateRoleRequest;
-use App\Http\Resources\RoleCollection;
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\Entity\Role\RoleCollection;
+use App\Http\Resources\Entity\Role\RoleResource;
 use App\Models\Role;
 use App\Services\Entity\Role\RoleService;
 use Illuminate\Http\JsonResponse;
@@ -35,7 +35,7 @@ class RoleController extends Controller
      * List of all roles.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return  App\Http\Resources\RoleCollection
+     * @return App\Http\Resources\Entity\Role\RoleCollection
      */
     public function index(): RoleCollection
     {
@@ -46,7 +46,7 @@ class RoleController extends Controller
      * Show a single role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return App\Http\Resources\RoleResource
+     * @return App\Http\Resources\Entity\Role\RoleResource
      */
     public function show(Role $role): RoleResource
     {
