@@ -21,16 +21,12 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
     //Authenticated User
     Route::middleware('auth:sanctum')->group(function() {
-        //Role
-        Route::prefix('roles')->name('roles.')->group(function() {
-            Route::post('/', [RoleController::class, 'store'])->name('store');
-            Route::get('/', [RoleController::class, 'index'])->name('index');
-            Route::get('/{role}', [RoleController::class, 'show'])->name('show');
-            Route::put('/{role}', [RoleController::class, 'update'])->name('update');
-            Route::delete('/{role}', [RoleController::class, 'delete'])->name('delete');
-        });
-
-        Route::apiResource('categories', CategoryController::class);
+        Route::apiResources([
+            //Roles
+            'roles' => RoleController::class,
+            //Categories
+            'categories' => CategoryController::class
+        ]);
     });
 });
 
