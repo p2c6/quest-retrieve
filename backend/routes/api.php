@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\Admin\Entity\Category\CategoryController;
 use App\Http\Controllers\API\v1\Admin\Entity\RoleController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
@@ -28,6 +29,8 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
             Route::put('/{role}', [RoleController::class, 'update'])->name('update');
             Route::delete('/{role}', [RoleController::class, 'delete'])->name('delete');
         });
+
+        Route::apiResource('categories', CategoryController::class);
     });
 });
 
