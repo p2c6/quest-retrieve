@@ -83,7 +83,7 @@ class RoleController extends Controller
      * @param App\Models\Role $role The model of the role which needs to be deleted.
      * @return Illuminate\Http\JsonResponse
      */
-    public function delete(Role $role): JsonResponse
+    public function destroy(Role $role): JsonResponse
     {
         return $this->service->delete($role);
     }
