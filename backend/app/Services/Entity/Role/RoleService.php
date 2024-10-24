@@ -2,8 +2,8 @@
 
 namespace App\Services\Entity\Role;
 
-use App\Http\Resources\RoleCollection;
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\Entity\Role\RoleCollection;
+use App\Http\Resources\Entity\Role\RoleResource;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +16,7 @@ class RoleService
      * List of all roles.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return App\Http\Resources\RoleCollection
+     * @return App\Http\Resources\Entity\Role\RoleCollection
      */
     public function index(): RoleCollection
     {
@@ -27,7 +27,7 @@ class RoleService
      * Show a single role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return App\Http\Resources\RoleResource
+     * @return App\Http\Resources\Entity\Role\RoleResource
      */
     public function show(Role $role): RoleResource
     {
