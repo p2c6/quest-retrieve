@@ -3,47 +3,87 @@
 namespace App\Http\Controllers\API\v1\Admin\Entity\Category;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Entity\Category\StoreCategoryRequest;
+use App\Http\Requests\Entity\Category\UpdateCategoryRequest;
+use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategoryResource;
+use App\Models\Category;
+use App\Services\Entity\Category\CategoryService;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * The CategoryService instance.
+     * 
+     * @var CategoryService
      */
-    public function index()
+    private $service;
+
+    /**
+     * The CategoryController constructor.
+     * 
+     * @param CategoryService $service The instance of CategoryService
+     */
+    public function __construct(CategoryService $service)
     {
-        //
+        $this->service = $service;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * List of all categories.
+     * 
+     * @param App\Models\Category The model of the category which needs to be retrieved.
+     * @return  App\Http\Resources\CategoryCollection
      */
-    public function store(Request $request)
+    public function index(): CategoryCollection
     {
-        //
+        return $this->service->index();
     }
 
     /**
-     * Display the specified resource.
+     * Show a single category.
+     * 
+     * @param App\Models\Category $role The model of the category which needs to be retrieved.
+     * @return App\Http\Resources\CategoryResource
      */
-    public function show(string $id)
+    public function show(Category $role): CategoryResource
     {
-        //
+        return $this->service->show($role);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Handle store category request.
+     * 
+     * @param App\Http\Requests\Entity\Role\StoreRoleRequest $request The HTTP request object containing role data.
+     * @return Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, string $id)
+    public function store(StoreCategoryRequest $request): JsonResponse
     {
-        //
+        return $this->service->store($request);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Handle update category request.
+     * 
+     * @param App\Models\Category  The model of the category which needs to be updated.
+     * @param \Illuminate\Http\Request $request The HTTP request object containing role data.
+     * 
+     * @return Illuminate\Http\JsonResponse
      */
-    public function destroy(string $id)
+    public function update(Category $category, UpdateCategoryRequest $request): JsonResponse
     {
-        //
+        return $this->service->update($category, $request);
+    }
+
+    /**
+     * Handle delete category.
+     * 
+     * @param App\Models\Category $category The model of the category which needs to be deleted.
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function destroy(Category $category): JsonResponse
+    {
+        return $this->service->delete($category);
     }
 }
