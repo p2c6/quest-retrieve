@@ -69,9 +69,9 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store subcategory with empty role name inputs via API.
+     * Test user cannot store subcategory with empty subcategory name inputs via API.
      * 
-     * This test verifies that a user cannot store subcategory with empty category name via API endpoint.
+     * This test verifies that a user cannot store subcategory with empty subcategory name via API endpoint.
      */
     public function test_user_cannot_store_subcategory_with_empty_subcategory_name(): void
     {
