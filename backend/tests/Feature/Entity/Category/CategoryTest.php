@@ -24,6 +24,7 @@ class CategoryTest extends TestCase
         parent::setUp();
 
         $this->artisan('db:seed', ['--class' => 'RoleSeeder']);
+        $this->artisan('db:seed', ['--class' => 'CategorySeeder']);
     }
 
     /**
@@ -208,7 +209,7 @@ class CategoryTest extends TestCase
             'name' => $updatedCategoryName
         ]);
 
-        $updatedCategory = Role::find($newCategory->id);
+        $updatedCategory = Category::find($newCategory->id);
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
@@ -552,5 +553,38 @@ class CategoryTest extends TestCase
                 ->assertJson([
                     'message' => 'Unauthenticated.', 
                 ]);
+    }
+
+    /**
+     * Test user can retrieve specific category via API.
+     * 
+     * This test verifies that a user can retrieve specific category via API endpoint.
+     */
+    public function test_user_can_retrieve_specific_category(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->getJson('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->getJson('/api/v1/categories/1');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['data']);
     }
 }
