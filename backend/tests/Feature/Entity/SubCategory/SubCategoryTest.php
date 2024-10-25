@@ -314,4 +314,62 @@ class SubCategoryTest extends TestCase
                     'message' => 'Unauthenticated.', 
                 ]);
     }
+
+    /**
+     * Test user can update subcategory with valid inputs via API.
+     * 
+     * This test verifies that a user can update subcategory with valid inputs via API endpoint.
+     */
+    public function test_user_can_update_subcategory_with_valid_inputs(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $categoryName = "Category One";
+        
+        $categoryOne = Category::create([
+            'name' => $categoryName
+        ]);
+
+        $subCategoryName = "Sub Category One";
+
+        $subCategory = Subcategory::create([
+            'category_id' => $categoryOne->id,
+            'name' => $subCategoryName,
+        ]);
+
+        $updatedCategoryId = 2;
+        $updatedSubCategoryName = "Sub Category Updated";
+
+        $response = $this->putJson(route('api.v1.subcategories.update', $subCategory->id), [
+            'category_id' => $updatedCategoryId,
+            'name' => $updatedSubCategoryName
+        ]);
+
+        $updatedSubCategory = Subcategory::find($subCategory->id);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(200)
+                ->assertJson(['message' => 'Successfully Category Updated.']);
+
+        $this->assertNotEquals($categoryName, $updatedSubCategory->name, 'Sub Category Name Values should not be equals');
+        $this->assertNotEquals($categoryOne->id, $updatedCategoryId, 'Category Id Values should not be equals');
+    }
 }
