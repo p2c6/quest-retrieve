@@ -67,7 +67,7 @@ class CategoryController extends Controller
      * Handle update category request.
      * 
      * @param App\Models\Category  The model of the category which needs to be updated.
-     * @param \Illuminate\Http\Request $request The HTTP request object containing role data.
+     * @param App\Http\Requests\Entity\Category\UpdateCategoryRequest $request The HTTP request object containing role data.
      * 
      * @return Illuminate\Http\JsonResponse
      */
