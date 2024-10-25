@@ -247,4 +247,34 @@ class SubCategoryTest extends TestCase
                     ]
                 ]);
     }
+
+    /**
+     * Test user cannot store subcategory while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot store subcategory while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_store_subcategory_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $category = Category::create([
+            'name' => 'Category 1',
+        ]);
+
+        $response = $this->postJson('/api/v1/subcategories', [
+            'category_id' => $category->id,
+            'name' => 'Sample Category'
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
 }
