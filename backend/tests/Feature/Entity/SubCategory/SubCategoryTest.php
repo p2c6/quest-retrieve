@@ -249,6 +249,43 @@ class SubCategoryTest extends TestCase
     }
 
     /**
+     * Test user cannot store subcategory while category is not exists via API.
+     * 
+     * This test verifies that a user cannot store subcategory while category is not exists via API endpoint.
+     */
+    public function test_user_cannot_store_subcategory_while_category_is_not_exists(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->postJson('/api/v1/subcategories', [
+            'category_id' => 0,
+            'name' =>  "Sub Category 1"
+        ]);
+
+        $response->assertStatus(404)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Cannot store subcategory. Category not found.']);
+    }
+
+    /**
      * Test user cannot store subcategory while unauthenticated via API.
      * 
      * This test verifies that a user cannot store subcategory while unauthenticated via API endpoint.
