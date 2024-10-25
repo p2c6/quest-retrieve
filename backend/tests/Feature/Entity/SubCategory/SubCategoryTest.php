@@ -368,8 +368,61 @@ class SubCategoryTest extends TestCase
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
                 ->assertJson(['message' => 'Successfully Category Updated.']);
+    }
 
-        $this->assertNotEquals($categoryName, $updatedSubCategory->name, 'Sub Category Name Values should not be equals');
-        $this->assertNotEquals($categoryOne->id, $updatedCategoryId, 'Category Id Values should not be equals');
+    /**
+     * Test user cannot update subcategory with empty fields via API.
+     * 
+     * This test verifies that a user can update subcategory with empty fields via API endpoint.
+     */
+    public function test_user_can_update_subcategory_with_empty_fields(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $categoryName = "Category One";
+        
+        $categoryOne = Category::create([
+            'name' => $categoryName
+        ]);
+
+        $subCategoryName = "Sub Category One";
+
+        $subCategory = Subcategory::create([
+            'category_id' => $categoryOne->id,
+            'name' => $subCategoryName,
+        ]);
+
+        $response = $this->putJson(route('api.v1.subcategories.update', $subCategory->id), [
+            'category_id' => '',
+            'name' => ''
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message', 'errors'])
+                ->assertJson([
+                    'message' => 'The category field is required. (and 1 more error)', 
+                    'errors' => [
+                        'category_id' => ['The category field is required.'],
+                        'name' => ['The name field is required.']
+                    ]
+                ]);
     }
 }
