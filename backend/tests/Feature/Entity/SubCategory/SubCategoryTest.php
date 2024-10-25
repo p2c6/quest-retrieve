@@ -476,4 +476,40 @@ class SubCategoryTest extends TestCase
                     ]
                 ]);
     }
+
+    /**
+     * Test user cannot update subcategory while unauthenticated via API.
+     * 
+     * This test verifies that a user update store subcategory while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_update_subcategory_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $category = Category::create([
+            'name' => "Sample Category"
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Category"
+        ]);
+
+        $response = $this->putJson(route('api.v1.subcategories.update',$subCategory->id), [
+            'category_id' => $category->id,
+            'name' => "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio porro corporis deserunt in recusandae! Corporis, cumque, sed perferendis repellat consequatur explicabo asperiores aliquam dolores, maiores nemo harum nihil ratione dignissimos illum perspiciatis deleniti neque ab placeat praesentium earum eveniet minima maxime at! Neque reiciendis culpa distinctio alias harum consequatur nesciunt perferendis enim amet? Nobis nemo quisquam ducimus dolorum sint, voluptatum minima eum, nostrum delectus iure aliquam vero impedit enim in. Ullam rerum totam nostrum repellendus consectetur error pariatur obcaecati libero? Illo temporibus eum ullam consequatur veniam dolorum minima saepe. Accusantium incidunt laudantium sequi veniam, in temporibus libero quis, qui magnam harum tenetur nobis animi? Eius!"
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
+
 }
