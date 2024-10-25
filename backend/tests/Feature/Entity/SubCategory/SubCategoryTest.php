@@ -67,4 +67,51 @@ class SubCategoryTest extends TestCase
         $response->assertStatus(201)
                 ->assertJson(['message' => 'Successfully Subcategory Created.']);
     }
+
+    /**
+     * Test user cannot store subcategory with empty role name inputs via API.
+     * 
+     * This test verifies that a user cannot store subcategory with empty category name via API endpoint.
+     */
+    public function test_user_cannot_store_subcategory_with_empty_subcategory_name(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        // Log in the user
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => 'Category 1',
+        ]);
+
+        $response = $this->postJson('/api/v1/categories', [
+            'category_id' => $category->id,
+            'name' => ''
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message', 'errors'])
+                ->assertJson([
+                    'message' => 'The name field is required.', 
+                    'errors' => [
+                        'name' => ['The name field is required.']
+                    ]
+                ]);
+    }
 }
