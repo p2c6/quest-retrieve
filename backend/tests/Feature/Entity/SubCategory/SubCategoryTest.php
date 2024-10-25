@@ -4,6 +4,7 @@ namespace Tests\Feature\Entity\SubCategory;
 
 use App\Enums\UserType;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Role;
 use App\Models\Subcategory;
 use App\Models\User;
@@ -367,7 +368,7 @@ class SubCategoryTest extends TestCase
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
-                ->assertJson(['message' => 'Successfully Category Updated.']);
+                ->assertJson(['message' => 'Successfully Subcategory Updated.']);
     }
 
     /**
@@ -555,6 +556,55 @@ class SubCategoryTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson([
                     'message' => 'Unauthenticated.', 
+                ]);
+    }
+
+    /**
+     * Test user can delete subcategory via API.
+     * 
+     * This test verifies that a user can delete subcategory via API endpoint.
+     */
+    public function test_user_can_delete_subcategory(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+        
+        $response = $this->deleteJson(route('api.v1.subcategories.destroy', $subCategory->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(200)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Successfully Subcategory Deleted.', 
                 ]);
     }
 
