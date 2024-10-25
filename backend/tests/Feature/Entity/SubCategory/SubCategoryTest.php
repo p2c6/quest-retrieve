@@ -478,6 +478,52 @@ class SubCategoryTest extends TestCase
     }
 
     /**
+     * Test user cannot update subcategory while category is not exists via API.
+     * 
+     * This test verifies that a user cannot update subcategory while category is not exists via API endpoint.
+     */
+    public function test_user_cannot_update_subcategory_while_category_is_not_exists(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category"
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Category"
+        ]);
+
+        $response = $this->putJson(route('api.v1.subcategories.update',$subCategory->id), [
+            'category_id' => 0,
+            'name' => "SubCategory One"
+        ]);
+
+        $response->assertStatus(404)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Cannot update subcategory. Category not found.']);
+    }
+
+    /**
      * Test user cannot update subcategory while unauthenticated via API.
      * 
      * This test verifies that a user update store subcategory while unauthenticated via API endpoint.
