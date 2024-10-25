@@ -55,7 +55,7 @@ class CategoryController extends Controller
     /**
      * Handle store category request.
      * 
-     * @param App\Http\Requests\Entity\Role\StoreRoleRequest $request The HTTP request object containing role data.
+     * @param App\Http\Requests\Entity\Category\StoreCategoryRequest $request The HTTP request object containing role data.
      * @return Illuminate\Http\JsonResponse
      */
     public function store(StoreCategoryRequest $request): JsonResponse
