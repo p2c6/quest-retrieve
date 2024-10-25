@@ -28,9 +28,9 @@ class CategoryService
      * @param App\Models\Category $category The model of the category which needs to be retrieved.
      * @return App\Http\Resources\Entity\Category\CategoryResource
      */
-    public function show(Category $Category): CategoryResource
+    public function show(Category $category)
     {
-        return new CategoryResource(Category::findOrFail($Category->id));
+        return new CategoryResource(Category::findOrFail($category->id));
     }
     
     /**

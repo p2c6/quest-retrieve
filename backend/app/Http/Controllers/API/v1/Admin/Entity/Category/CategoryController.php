@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Entity\Category\StoreCategoryRequest;
 use App\Http\Requests\Entity\Category\UpdateCategoryRequest;
 use App\Http\Resources\Entity\Category\CategoryCollection;
+use App\Http\Resources\Entity\Category\CategoryResource;
 use App\Models\Category;
 use App\Services\Entity\Category\CategoryService;
 use Illuminate\Http\JsonResponse;
@@ -33,7 +34,7 @@ class CategoryController extends Controller
      * List of all categories.
      * 
      * @param App\Models\Category The model of the category which needs to be retrieved.
-     * @return  App\Http\Resources\CategoryCollection
+     * @return App\Http\Resources\Entity\Category\CategoryCollection
      */
     public function index(): CategoryCollection
     {
@@ -44,11 +45,11 @@ class CategoryController extends Controller
      * Show a single category.
      * 
      * @param App\Models\Category $role The model of the category which needs to be retrieved.
-     * @return App\Http\Resources\CategoryResource
+     * @return App\Http\Resources\Entity\Category\CategoryResource
      */
-    public function show(Category $role): CategoryResource
+    public function show(Category $category): CategoryResource
     {
-        return $this->service->show($role);
+        return $this->service->show($category);
     }
 
     /**
