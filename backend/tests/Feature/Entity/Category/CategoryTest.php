@@ -582,7 +582,11 @@ class CategoryTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
 
-        $response = $this->getJson('/api/v1/categories/1');
+        $category = Category::create([
+            'name' => 'Sample Category'
+        ]);
+
+        $response = $this->getJson(route('api.v1.categories.show', $category));
 
         $response->assertStatus(200)
                 ->assertJsonStructure(['data']);
