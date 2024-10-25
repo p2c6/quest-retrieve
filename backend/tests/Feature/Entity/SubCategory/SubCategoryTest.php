@@ -425,4 +425,55 @@ class SubCategoryTest extends TestCase
                     ]
                 ]);
     }
+
+    /**
+     * Test user cannot update subcategory with subcategory name more than 100 hundred characters via API.
+     * 
+     * This test verifies that a user cannot update subcategory with subcategory name more than 100 characters via API endpoint.
+     */
+    public function test_user_cannot_update_subcategory_with_subcategory_name_more_than_one_hundred_chars(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category"
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Category"
+        ]);
+
+        $response = $this->putJson(route('api.v1.subcategories.update',$subCategory->id), [
+            'category_id' => $category->id,
+            'name' => "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio porro corporis deserunt in recusandae! Corporis, cumque, sed perferendis repellat consequatur explicabo asperiores aliquam dolores, maiores nemo harum nihil ratione dignissimos illum perspiciatis deleniti neque ab placeat praesentium earum eveniet minima maxime at! Neque reiciendis culpa distinctio alias harum consequatur nesciunt perferendis enim amet? Nobis nemo quisquam ducimus dolorum sint, voluptatum minima eum, nostrum delectus iure aliquam vero impedit enim in. Ullam rerum totam nostrum repellendus consectetur error pariatur obcaecati libero? Illo temporibus eum ullam consequatur veniam dolorum minima saepe. Accusantium incidunt laudantium sequi veniam, in temporibus libero quis, qui magnam harum tenetur nobis animi? Eius!"
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message', 'errors'])
+                ->assertJson([
+                    'message' => 'The name field must not be greater than 100 characters.', 
+                    'errors' => [
+                        'name' => ['The name field must not be greater than 100 characters.']
+                    ]
+                ]);
+    }
 }
