@@ -375,7 +375,7 @@ class SubCategoryTest extends TestCase
      * 
      * This test verifies that a user can update subcategory with empty fields via API endpoint.
      */
-    public function test_user_can_update_subcategory_with_empty_fields(): void
+    public function test_user_cannot_update_subcategory_with_empty_fields(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
