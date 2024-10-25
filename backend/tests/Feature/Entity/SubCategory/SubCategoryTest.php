@@ -48,7 +48,6 @@ class SubCategoryTest extends TestCase
 
         $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
 
-        // Log in the user
         $this->post('/api/v1/authentication/login', [
             'email' => $user->email,
             'password' => 'password123',
@@ -56,7 +55,12 @@ class SubCategoryTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
 
+        $category = Category::create([
+            'name' => 'Category 1',
+        ]);
+
         $response = $this->post('/api/v1/subcategories', [
+            'category_id' => $category->id,
             'name' => 'Sample Category'
         ]);
 
