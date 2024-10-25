@@ -591,4 +591,30 @@ class CategoryTest extends TestCase
         $response->assertStatus(200)
                 ->assertJsonStructure(['data']);
     }
+
+    /**
+     * Test user cannot retrieve specific category while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot retrieve specific category while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_retrieve_specific_category_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $category = Category::create([
+            'name' => 'Test Category'
+        ]);
+
+        $response = $this->getJson(route('api.v1.categories.show', $category->id));
+
+        $response->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
 }
