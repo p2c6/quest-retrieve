@@ -454,7 +454,11 @@ class CategoryTest extends TestCase
             $this->fail('Role Public User not found in the database.');
         }
 
-        $response = $this->deleteJson(route('api.v1.categories.destroy', $role->id));
+        $category = Category::create([
+            'name' => 'Category 1'
+        ]);
+
+        $response = $this->deleteJson(route('api.v1.categories.destroy', $category));
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(401)
