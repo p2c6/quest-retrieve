@@ -607,5 +607,72 @@ class SubCategoryTest extends TestCase
                     'message' => 'Successfully Subcategory Deleted.', 
                 ]);
     }
+    
+
+    /**
+     * Test user cannot delete while subcategory already associated to post via API.
+     * 
+     * This test verifies that a user cannot delete subcategory while subcategory already associated to post via API endpoint.
+     */
+    public function test_user_cannot_delete_subcategory_while_already_associated_to_post(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        $subCategoryId = $subCategory->id;
+        
+        Post::create([
+            'user_id' => $user->id,
+            'subcategory_id' => $subCategoryId,
+            'name' => 'Test Post',
+            'incident_location' => 'Quezon City',
+            'incident_date' => '2024-05-06',
+            'finish_transaction_date' => '2024-05-07',
+            'expiration_date' =>  '2024-06-06',
+            'status' => 'finish',
+        ]);
+
+        $this->assertDatabaseHas('posts', [
+            'subcategory_id' => $subCategory->id,
+        ]);
+
+        $response = $this->deleteJson(route('api.v1.subcategories.destroy', $subCategory));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(409)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Cannot delete subcategory. There are posts associated with this subcategory.'
+                ]);
+    }
 
 }
