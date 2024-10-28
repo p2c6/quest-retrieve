@@ -675,4 +675,30 @@ class SubCategoryTest extends TestCase
                 ]);
     }
 
+    /**
+     * Test user cannot delete subcategory while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot delete subcategory while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_delete_subcategory_while_unauthenticated(): void
+    {
+        $category = Category::create([
+            'name' => "Category 1"
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sub Category 1"
+        ]);
+
+        $response = $this->deleteJson(route('api.v1.subcategories.destroy', $subCategory));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
+
 }
