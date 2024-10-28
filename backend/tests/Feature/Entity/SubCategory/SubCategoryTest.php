@@ -706,7 +706,7 @@ class SubCategoryTest extends TestCase
      * 
      * This test verifies that a user cannot delete subcategory if not existing via API endpoint.
      */
-    public function test_user_cannot_delete_category_if_not_existing(): void
+    public function test_user_cannot_delete_subcategory_if_not_existing(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -771,11 +771,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot retrieve all categories while unauthenticated via API.
+     * Test user cannot retrieve all subcategories while unauthenticated via API.
      * 
      * This test verifies that a user cannot retrieve all subcategories while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_retrieve_all_categories_while_unauthenticated(): void
+    public function test_user_cannot_retrieve_all_subcategories_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
