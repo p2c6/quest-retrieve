@@ -834,4 +834,35 @@ class SubCategoryTest extends TestCase
                 ->assertJsonStructure(['data']);
     }
 
+    /**
+     * Test user cannot retrieve specific subcategory while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot retrieve specific subcategory while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_retrieve_specific_subcategory_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $category = Category::create([
+            'name' => 'Sample Category'
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sub Category 1"
+        ]);
+
+        $response = $this->getJson(route('api.v1.categories.show', $subCategory));
+
+        $response->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
+
 }
