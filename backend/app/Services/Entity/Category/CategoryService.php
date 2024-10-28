@@ -90,10 +90,10 @@ class CategoryService
      * @param App\Models\Category $Category The model of the category which needs to be deleted.
      * @return Illuminate\Http\JsonResponse
      */
-    public function delete(Category $category): JsonResponse
+    public function destroy(Category $category): JsonResponse
     {
         try {
-            if ($this->categoryHasRecord($category)) {
+            if ($this->categoryHasRecord($category->id)) {
                 return response()->json(['message' => 'Cannot delete category. There are subcategories associated with this category.'], 409);
             }
             
@@ -114,13 +114,8 @@ class CategoryService
      * @param App\Models\Category $category The model of the category which needs to be checked.
      * @return bool
      */
-    public function categoryHasRecord(Category $category) : bool
+    public function categoryHasRecord($id) : bool
     {
-        
-        if (Subcategory::where('category_id', $category->id)->exists() > 0) {
-            return true;
-        }
-
-        return false;
+        return Subcategory::where('category_id', $id)->exists();
     }
 }
