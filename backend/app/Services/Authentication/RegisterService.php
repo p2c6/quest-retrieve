@@ -9,6 +9,7 @@ use App\Services\UserProfile\UserProfileService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class RegisterService implements RegisterInterface
@@ -39,6 +40,8 @@ class RegisterService implements RegisterInterface
     public function register($request) : JsonResponse
     {
         try {
+            DB::beginTransaction();
+
             $user = User::create([
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
@@ -46,6 +49,8 @@ class RegisterService implements RegisterInterface
             ]);
 
             $this->service->storeUserProfile($user->id, $request);
+
+            DB::commit();
 
             event(new Registered($user));
 
@@ -58,6 +63,8 @@ class RegisterService implements RegisterInterface
             info("Validation Error on user register: " . $validationException->getMessage());
             return response()->json(['errors' => $validationException->errors()], 422);
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             info("Error on user register: " . $th->getMessage());
             return response()->json([
                 'message' => 'An error occurred during register.'
