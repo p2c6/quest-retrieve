@@ -701,4 +701,40 @@ class SubCategoryTest extends TestCase
                 ]);
     }
 
+    /**
+     * Test user cannot delete subcategory if not existing via API.
+     * 
+     * This test verifies that a user cannot delete subcategory if not existing via API endpoint.
+     */
+    public function test_user_cannot_delete_category_if_not_existing(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->deleteJson(route('api.v1.subcategories.destroy', 0));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(404);
+    }
+
 }
