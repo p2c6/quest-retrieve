@@ -737,4 +737,37 @@ class SubCategoryTest extends TestCase
                 ->assertStatus(404);
     }
 
+    /**
+     * Test user can retrieve all subcategories via API.
+     * 
+     * This test verifies that a user can retrieve all subcategories via API endpoint.
+     */
+    public function test_user_can_retrieve_all_subcategories(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->getJson('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->getJson('/api/v1/subcategories');
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['data', 'links', 'meta']);
+    }
+
 }
