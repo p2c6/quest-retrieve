@@ -99,7 +99,7 @@ class SubCategoryService
      * @param App\Models\Subcategory $subCategory The model of the subcategory which needs to be deleted.
      * @return Illuminate\Http\JsonResponse
      */
-    public function delete(Subcategory $subCategory): JsonResponse
+    public function destroy(Subcategory $subCategory): JsonResponse
     {
         try {
             if ($this->subCategoryHasRecord($subCategory)) {

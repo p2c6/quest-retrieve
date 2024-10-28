@@ -85,6 +85,6 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subcategory): JsonResponse
     {
-        return $this->service->delete($subcategory);
+        return $this->service->destroy($subcategory);
     }
 }
