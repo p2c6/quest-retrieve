@@ -83,8 +83,8 @@ class SubcategoryController extends Controller
      * @param App\Models\Subcategory $subcategory The model of the Subcategory which needs to be deleted.
      * @return Illuminate\Http\JsonResponse
      */
-    public function destroy(Subcategory $subcategory): JsonResponse
+    public function destroy(Subcategory $subCategory): JsonResponse
     {
-        return $this->service->destroy($subcategory);
+        return $this->service->destroy($subCategory);
     }
 }

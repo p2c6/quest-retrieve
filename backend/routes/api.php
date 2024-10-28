@@ -27,9 +27,11 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
             'roles' => RoleController::class,
             //Categories
             'categories' => CategoryController::class,
-            //Subcategories
-            'subcategories' => SubCategoryController::class,
         ]);
+
+        //Subcategories
+        Route::apiResource('subcategories', SubCategoryController::class)
+            ->parameters(['subcategories' => 'subCategory']);
     });
 });
 
