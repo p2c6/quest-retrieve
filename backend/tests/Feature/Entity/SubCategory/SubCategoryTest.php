@@ -792,4 +792,46 @@ class SubCategoryTest extends TestCase
                 ]);
     }
 
+    /**
+     * Test user can retrieve specific subcategory via API.
+     * 
+     * This test verifies that a user can retrieve specific subcategory via API endpoint.
+     */
+    public function test_user_can_retrieve_specific_subcategory(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->getJson('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => 'Sample Category'
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sub Category 1"
+        ]);
+
+        $response = $this->getJson(route('api.v1.subcategories.show', $subCategory));
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['data']);
+    }
+
 }
