@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('first_name', 100)->nullable();
             $table->date('birthday')->nullable();
             $table->string('contact_no', 20)->nullable();
+            $table->string('avatar', 100)->nullable();
             $table->date('profile_date_updated', 20)->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
