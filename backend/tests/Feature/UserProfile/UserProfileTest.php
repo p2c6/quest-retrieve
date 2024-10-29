@@ -63,12 +63,22 @@ class UserProfileTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
 
+        $updatedLastName = "Does";
+        $updatedFirstName = "Jim";
+        $updatedBirthday = "2024-05-06";
+        $updatedContactNo = "09842613";
+
         $response = $this->putJson(route('api.v1.profile.update', $user->id), [
-            'last_name' => 'Does',
-            'first_name' => 'Jim',
-            'birthday' => '2024-05-06',
-            'contact_no' => '09842613'
+            'last_name' => $updatedLastName,
+            'first_name' => $updatedFirstName,
+            'birthday' => $updatedBirthday,
+            'contact_no' => $updatedContactNo
         ]);
+
+        $this->assertNotSame('Doe', $updatedLastName, 'Last Name must not equal to previous');
+        $this->assertNotSame('Rick', $updatedFirstName, 'First Name must not equal to previous');
+        $this->assertNotSame('2024-05-19', $updatedBirthday, 'Birthday must not equal to previous');
+        $this->assertNotSame('12345', $updatedContactNo, 'Contact Number must not equal to previous');
 
         $response->assertStatus(200)
                 ->assertJsonStructure(['message'])
