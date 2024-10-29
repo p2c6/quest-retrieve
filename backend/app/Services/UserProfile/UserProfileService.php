@@ -60,7 +60,7 @@ class UserProfileService
 
             return response()->json([
                 'message' => 'Successfully User Profile Updated.'
-            ], 201);
+            ], 200);
         } catch (ValidationException $validationException) {
             info("Validation Error on user profile update: " . $validationException->getMessage());
             return response()->json(['errors' => $validationException->errors()], 422);
