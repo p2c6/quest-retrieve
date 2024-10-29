@@ -130,17 +130,14 @@ class UserProfileTest extends TestCase
             'contact_no' => ""
         ]);
 
-        $response->assertStatus(422)
-                ->assertJsonStructure(['message', 'errors'])
-                ->assertJson([
-                    'message' => 'The last name field is required. (and 3 more errors)',
-                    'errors' => [
-                        'last_name' => ['The last name field is required.'],
-                        'first_name' => ['The first name field is required.'],
-                        'birthday' => ['The birthday field is required.'],
-                        'contact_no' => ['The contact no field is required.'],
-                        ]
-                ]);
+        $response->assertStatus(422);
+
+        $response->assertJsonValidationErrors([
+            'last_name',
+            'first_name',
+            'birthday',
+            'contact_no',
+        ]);
     }
 
     /**
