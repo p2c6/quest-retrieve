@@ -45,6 +45,10 @@ class RegisterTest extends TestCase
         $response = $this->postJson('/api/v1/authentication/register', [
             'email' => 'testinguser1@gmail.com',
             'password' => 'password1234',
+            'last_name' => 'Does',
+            'first_name' => 'John',
+            'birthday' => '2024-05-06',
+            'contact_no' => '09842613'
         ]);
 
         $response->assertStatus(201)
@@ -79,6 +83,10 @@ class RegisterTest extends TestCase
         $response = $this->postJson('/api/v1/authentication/register', [
             'email' => 'testinguser1@gmail.com',
             'password' => 'password1234',
+            'last_name' => 'Does',
+            'first_name' => 'John',
+            'birthday' => '2024-05-06',
+            'contact_no' => '09842613'
         ]);
 
         $response->assertStatus(422)
@@ -106,6 +114,10 @@ class RegisterTest extends TestCase
         $response = $this->postJson('/api/v1/authentication/register', [
             'email' => 'testinguser123@gmail.com',
             'password' => 'pass',
+            'last_name' => 'Does',
+            'first_name' => 'John',
+            'birthday' => '2024-05-06',
+            'contact_no' => '09842613'
         ]);
 
         $response->assertStatus(422)
@@ -133,6 +145,10 @@ class RegisterTest extends TestCase
         $response = $this->postJson('/api/v1/authentication/register', [
             'email' => 'testinguser1234gmail.com',
             'password' => 'password1234',
+            'last_name' => 'Does',
+            'first_name' => 'John',
+            'birthday' => '2024-05-06',
+            'contact_no' => '09842613'
         ]);
 
         $response->assertStatus(422)
