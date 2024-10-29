@@ -27,9 +27,9 @@ class UserProfileTest extends TestCase
     }
 
     /**
-     * Test user can register with valid inputs successfully via API.
+     * Test user can update user profile with valid inputs successfully via API.
      * 
-     * This test verifies that a user can register with valid inputs successfully via API endpoint.
+     * This test verifies that a user can update user profile with valid inputs successfully via API endpoint.
      */
     public function test_user_can_update_user_profile_with_valid_inputs(): void
     {
