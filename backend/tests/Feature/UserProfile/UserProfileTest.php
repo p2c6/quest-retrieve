@@ -142,4 +142,59 @@ class UserProfileTest extends TestCase
                         ]
                 ]);
     }
+
+    /**
+     * Test user cannot update user profile while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot update user profile while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_update_user_profile_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $updatedLastName = "Does";
+        $updatedFirstName = "Jim";
+        $updatedBirthday = "2024-05-06";
+        $updatedContactNo = "09842613";
+
+        $response = $this->putJson(route('api.v1.profile.update', $user->id), [
+            'last_name' => $updatedLastName,
+            'first_name' => $updatedFirstName,
+            'birthday' => $updatedBirthday,
+            'contact_no' => $updatedContactNo
+        ]);
+
+        $this->assertNotSame('Doe', $updatedLastName, 'Last Name must not equal to previous');
+        $this->assertNotSame('Rick', $updatedFirstName, 'First Name must not equal to previous');
+        $this->assertNotSame('2024-05-19', $updatedBirthday, 'Birthday must not equal to previous');
+        $this->assertNotSame('12345', $updatedContactNo, 'Contact Number must not equal to previous');
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
 }
