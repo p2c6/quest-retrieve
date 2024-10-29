@@ -84,4 +84,121 @@ class UserProfileTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson([ 'message' => 'Successfully User Profile Updated.']);
     }
+
+    
+    /**
+     * Test user cannot update user profile with all fields are empty via API.
+     * 
+     * This test verifies that a user cannot update user profile with all feilds are empty via API endpoint.
+     */
+    public function test_user_cannot_update_user_profile_with_all_fields_are_empty(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $response = $this->putJson(route('api.v1.profile.update', $user->id), [
+            'last_name' => "",
+            'first_name' => "",
+            'birthday' => "",
+            'contact_no' => ""
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message', 'errors'])
+                ->assertJson([
+                    'message' => 'The last name field is required. (and 3 more errors)',
+                    'errors' => [
+                        'last_name' => ['The last name field is required.'],
+                        'first_name' => ['The first name field is required.'],
+                        'birthday' => ['The birthday field is required.'],
+                        'contact_no' => ['The contact no field is required.'],
+                        ]
+                ]);
+    }
+
+    /**
+     * Test user cannot update user profile with empty last name via API.
+     * 
+     * This test verifies that a user cannot update user profile with empty last name via API endpoint.
+     */
+    public function test_user_cannot_update_user_profile_with_empty_last_name(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $updatedLastName = "";
+        $updatedFirstName = "Jim";
+        $updatedBirthday = "2024-05-06";
+        $updatedContactNo = "09842613";
+
+        $response = $this->putJson(route('api.v1.profile.update', $user->id), [
+            'last_name' => $updatedLastName,
+            'first_name' => $updatedFirstName,
+            'birthday' => $updatedBirthday,
+            'contact_no' => $updatedContactNo
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonStructure(['message', 'errors'])
+                ->assertJson([
+                    'message' => 'The last name field is required.',
+                    'errors' => [
+                        'last_name' => ['The last name field is required.'],
+                        ]
+                ]);
+    }
 }
