@@ -15,7 +15,7 @@ class UserProfileController extends Controller
     /**
      * The email verification service instance.
      * 
-     * @var UserProfileController
+     * @var UserProfileService
      */
     private $service;
     
