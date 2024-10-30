@@ -90,4 +90,65 @@ class PostTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'Successfully Post Created.']);
     }
+
+    /**
+     * Test user cannot post with all empty fields via API.
+     * 
+     * This test verifies that a user cannot post with all empty fields via API endpoint.
+     */
+    public function test_user_can_store_post_with_all_empty_fields(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        $subCategoryId = $subCategory->id;
+        
+        $response = $this->postJson(route('api.v1.posts.store'), [
+            'user_id' => $user->id,
+            'type' => "",
+            'subcategory_id' => "",
+            'incident_location' => "",
+            'incident_date' => "",
+            'finish_transaction_date' => "",
+            'expiration_date' =>  "",
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(422)
+                ->assertJsonValidationErrors([
+                'subcategory_id',
+                'type',
+                'incident_location',
+                'incident_date',
+            ]);
+    }
 }
