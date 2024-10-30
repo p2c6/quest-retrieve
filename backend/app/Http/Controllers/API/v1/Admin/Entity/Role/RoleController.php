@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\v1\Admin\Entity;
+namespace App\Http\Controllers\API\v1\Admin\Entity\Role;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Entity\Role\StoreRoleRequest;

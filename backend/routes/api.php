@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\Admin\Entity\Category\CategoryController;
-use App\Http\Controllers\API\v1\Admin\Entity\RoleController;
+use App\Http\Controllers\API\v1\Admin\Entity\Role\RoleController;
 use App\Http\Controllers\API\v1\Admin\Entity\SubCategory\SubCategoryController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
