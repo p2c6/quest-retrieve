@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('incident_location', 255);
             $table->date('incident_date');
             $table->date('finish_transaction_date');
-            $table->date('expiration_date');
+            $table->date('expiration_date')->nullable();
             $table->string('status', 40);
             $table->timestamps();
 
