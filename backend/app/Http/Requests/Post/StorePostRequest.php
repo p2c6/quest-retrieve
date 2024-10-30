@@ -26,7 +26,6 @@ class StorePostRequest extends FormRequest
             'type' => 'required|string', 
             'incident_location' => 'required|string',
             'incident_date' => 'required|date', 
-            'finish_transaction_date' => 'required|date', 
         ];
     }
 }
