@@ -3,22 +3,38 @@
 namespace App\Services\Post;
 
 use App\Enums\PostStatus;
-use App\Enums\PostType;
-use App\Enums\UserType;
 use App\Http\Requests\Post\UpdatePostRequest;
+use App\Http\Resources\Post\PostCollection;
+use App\Http\Resources\Post\PostResource;
 use App\Models\Post;
-use App\Models\User;
-use App\Services\Contracts\Authentication\RegisterInterface;
-use App\Services\UserProfile\UserProfileService;
-use Carbon\Carbon;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class PostService
 {
+    /**
+     * List of all posts.
+     * 
+     * @param App\Models\Post The model of the post which needs to be retrieved.
+     * @return App\Http\Resources\Post\PostCollection
+     */
+    public function index(): PostCollection
+    {
+        return new PostCollection(Post::paginate());
+    }
+
+    /**
+     * Show a single post.
+     * 
+     * @param App\Models\Post $post The model of the subcategory which needs to be retrieved.
+     * @return App\Http\Resources\Post\PostResource
+     */
+    public function show(Post $post): PostResource
+    {
+        return new PostResource($post);
+    }
+    
     /**
      * Handle user store post request.
      * 
