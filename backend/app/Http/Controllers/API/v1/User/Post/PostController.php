@@ -33,6 +33,7 @@ class PostController extends Controller
      * Handle store post request.
      * 
      * @param App\Http\Requests\Post\StorePostRequest $request The HTTP request object containing role data.
+     * 
      * @return Illuminate\Http\JsonResponse
      */
     public function store(StorePostRequest $request): JsonResponse
@@ -44,10 +45,24 @@ class PostController extends Controller
      * Handle update post request.
      * 
      * @param App\Http\Requests\Post\UpdatePostRequest $request The HTTP request object containing role data.
+     * @param App\Models\Post $post The model of the subcategory which needs to be updated.
+     * 
      * @return Illuminate\Http\JsonResponse
      */
     public function update(Post $post, UpdatePostRequest $request): JsonResponse
     {
         return $this->service->update($post, $request);
+    }
+
+    /**
+     * Handle delete post.
+     * 
+     * @param App\Models\Post $post The model of the subcategory which needs to be deleted.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function destroy(Post $post): JsonResponse
+    {
+        return $this->service->destroy($post);
     }
 }

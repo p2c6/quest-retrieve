@@ -90,4 +90,27 @@ class PostService
             ], 500);
         }
     }
+
+    /**
+     * Handle delete post request.
+     * 
+     * @param App\Models\Post $post The model of the post which needs to be deleted.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function destroy(Post $post): JsonResponse
+    {
+        try {
+            $post->delete();
+        
+            return response()->json([
+                'message' => 'Successfully Post Deleted.'
+            ], 200);
+        } catch (\Throwable $th) {
+            info("Error on deleting post: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during deleting post.'
+            ], 500);
+        }
+    }
 }
