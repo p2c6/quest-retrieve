@@ -23,11 +23,10 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
     //Authenticated User
     Route::middleware('auth:sanctum')->group(function() {
-        Route::apiResources([
-            'roles' => RoleController::class,
-            'categories' => CategoryController::class,
-        ]);
-
+        //Roles
+        Route::apiResource('roles', RoleController::class);
+        //Categories
+        Route::apiResource('categories', CategoryController::class);
         //Subcategories
         Route::apiResource('subcategories', SubCategoryController::class)
             ->parameters(['subcategories' => 'subCategory']);
