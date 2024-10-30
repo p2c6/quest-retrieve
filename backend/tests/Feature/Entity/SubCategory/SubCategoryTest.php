@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Entity\SubCategory;
 
+use App\Enums\PostType;
 use App\Enums\UserType;
 use App\Models\Category;
 use App\Models\Post;
@@ -652,8 +653,8 @@ class SubCategoryTest extends TestCase
         
         Post::create([
             'user_id' => $user->id,
+            'type' => PostType::LOST,
             'subcategory_id' => $subCategoryId,
-            'name' => 'Test Post',
             'incident_location' => 'Quezon City',
             'incident_date' => '2024-05-06',
             'finish_transaction_date' => '2024-05-07',
