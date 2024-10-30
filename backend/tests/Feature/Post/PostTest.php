@@ -490,7 +490,7 @@ class PostTest extends TestCase
      * 
      * This test verifies that a user cannot delete post while unauthenticated via API endpoint.
      */
-    public function test_user_can_delete_post_while_unauthenticated(): void
+    public function test_user_cannot_delete_post_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
