@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Post;
 
+use App\Enums\PostStatus;
 use App\Enums\PostType;
 use App\Enums\UserType;
 use App\Models\Category;
@@ -81,7 +82,7 @@ class PostTest extends TestCase
             'incident_date' => '2024-05-06',
             'finish_transaction_date' => '2024-05-07',
             'expiration_date' =>  '2024-06-06',
-            'status' => 'finish',
+            'status' => PostStatus::PENDING,
         ]);
 
         $response->assertCookie('laravel_session')
