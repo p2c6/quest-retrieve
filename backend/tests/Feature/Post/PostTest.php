@@ -151,4 +151,57 @@ class PostTest extends TestCase
                 'incident_date',
             ]);
     }
+
+    /**
+     * Test user cannot store post while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot store post while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_store_post_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        $subCategoryId = $subCategory->id;
+        
+        $response = $this->postJson(route('api.v1.posts.store'), [
+            'user_id' => $user->id,
+            'type' => PostType::LOST,
+            'subcategory_id' => $subCategoryId,
+            'incident_location' => 'Quezon City',
+            'incident_date' => '2024-05-06',
+            'finish_transaction_date' => '2024-05-07',
+            'expiration_date' =>  '2024-06-06',
+            'status' => PostStatus::PENDING,
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
 }
