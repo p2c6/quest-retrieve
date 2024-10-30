@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('type', 10);
             $table->unsignedBigInteger('subcategory_id');
-            $table->string('name')->nullable();
             $table->string('incident_location', 255);
             $table->date('incident_date');
             $table->date('finish_transaction_date');
