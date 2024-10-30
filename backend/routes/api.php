@@ -10,7 +10,7 @@ use App\Http\Controllers\API\v1\Authentication\ResetPasswordController;
 use App\Http\Controllers\API\v1\Authentication\SendEmailVerificationController;
 use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use App\Http\Controllers\API\v1\Authentication\VerifyController;
-use App\Http\Controllers\API\v1\User\Post\PostController\PostController;
+use App\Http\Controllers\API\v1\User\Post\PostController;
 use App\Http\Controllers\API\v1\User\UserProfile\UserProfileController;
 use Illuminate\Support\Facades\Route;
 

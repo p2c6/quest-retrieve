@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\v1\User\Post\PostController;
+namespace App\Http\Controllers\API\v1\User\Post;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserProfile\UpdateUserProfileRequest;
