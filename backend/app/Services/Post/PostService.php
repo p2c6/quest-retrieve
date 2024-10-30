@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Services\Contracts\Authentication\RegisterInterface;
 use App\Services\UserProfile\UserProfileService;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class PostService
     public function store($request) : JsonResponse
     {
         try {
-            
+            ;
             Post::create([
                 'user_id' => $request->user()->id,
                 'type' => $request->type,
@@ -35,7 +36,6 @@ class PostService
                 'incident_location' => $request->incident_location,
                 'incident_date' => $request->incident_date,
                 'finish_transaction_date' => $request->finish_transaction_date,
-                'expiration_date' =>  $request->expiration_date,
                 'status' => PostStatus::PENDING,
             ]);
             
