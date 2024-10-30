@@ -10,7 +10,8 @@ use App\Http\Controllers\API\v1\Authentication\ResetPasswordController;
 use App\Http\Controllers\API\v1\Authentication\SendEmailVerificationController;
 use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use App\Http\Controllers\API\v1\Authentication\VerifyController;
-use App\Http\Controllers\API\v1\UserProfile\UserProfileController;
+use App\Http\Controllers\API\v1\User\Post\PostController\PostController;
+use App\Http\Controllers\API\v1\User\UserProfile\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->name('api.v1.')->group(function() {
@@ -30,6 +31,8 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
         //Subcategories
         Route::apiResource('subcategories', SubCategoryController::class)
             ->parameters(['subcategories' => 'subCategory']);
+        //Post
+        Route::apiResource('posts', PostController::class);
 
         //User Profile
         Route::put('/profile/{user}', [UserProfileController::class, 'update'])->name('profile.update');
