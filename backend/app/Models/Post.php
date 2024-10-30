@@ -13,7 +13,7 @@ class Post extends Model
     protected $fillable = [
         'user_id',
         'subcategory_id',
-        'name',
+        'type',
         'incident_location',
         'incident_date',
         'finish_transaction_date',
