@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class UserProfileController extends Controller
 {
     /**
-     * The email verification service instance.
+     * The user profile service instance.
      * 
      * @var UserProfileService
      */
@@ -31,6 +31,7 @@ class UserProfileController extends Controller
 
     /**
      * Handle user profile update request.
+     * 
      * @param App\Models\User $profile The user profile needs to be updated.
      * @param App\Http\Requests\UserProfile\UpdateUserProfileRequest $request The HTTP request object containing user data.
      * 
