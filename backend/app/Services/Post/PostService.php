@@ -36,7 +36,7 @@ class PostService
                 'incident_date' => $request->incident_date,
                 'finish_transaction_date' => $request->finish_transaction_date,
                 'expiration_date' =>  $request->expiration_date,
-                'status' => PostStatus::PENDING->value,
+                'status' => PostStatus::PENDING,
             ]);
             
             
