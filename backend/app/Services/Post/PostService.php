@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Post\PostService;
+namespace App\Services\Post;
 
 use App\Enums\PostStatus;
 use App\Enums\PostType;

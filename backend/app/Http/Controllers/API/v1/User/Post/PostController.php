@@ -3,11 +3,7 @@
 namespace App\Http\Controllers\API\v1\User\Post;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserProfile\UpdateUserProfileRequest;
-use App\Models\Profile;
-use App\Models\User;
-use App\Services\Post\PostService\PostService;
-use App\Services\UserProfile\UserProfileService;
+use App\Services\Post\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
