@@ -422,9 +422,9 @@ class PostTest extends TestCase
     }
 
     /**
-     * Test user can post subcategory via API.
+     * Test user can delete post via API.
      * 
-     * This test verifies that a user can post subcategory via API endpoint.
+     * This test verifies that a user can delete post via API endpoint.
      */
     public function test_user_can_delete_post(): void
     {
@@ -486,9 +486,9 @@ class PostTest extends TestCase
     }
 
     /**
-     * Test user can post subcategory via API.
+     * Test user cannot delete post while unauthenticated via API.
      * 
-     * This test verifies that a user can post subcategory via API endpoint.
+     * This test verifies that a user cannot delete post while unauthenticated via API endpoint.
      */
     public function test_user_can_delete_post_while_unauthenticated(): void
     {
