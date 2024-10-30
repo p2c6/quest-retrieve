@@ -541,4 +541,61 @@ class PostTest extends TestCase
                     'message' => 'Unauthenticated.', 
                 ]);
     }
+
+    /**
+     * Test user cannot delete post if not existing via API.
+     * 
+     * This test verifies that a user cannot delete post if not existing via API endpoint.
+     */
+    public function test_user_cannot_delete_post_if_not_existing(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        
+        $originalType = "Lost";
+        $originalSubCategoryId = $subCategory->id;
+        $originalIncidentLocation = 'Manila City';
+        $originalIncidentDate = '2024-01-02';
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => $originalType,
+            'subcategory_id' => $originalSubCategoryId,
+            'incident_location' => $originalIncidentLocation,
+            'incident_date' => $originalIncidentDate,
+            'status' => PostStatus::PENDING
+        ]);
+        
+        $response = $this->deleteJson(route('api.v1.posts.destroy', 0));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(404);
+    }
 }
