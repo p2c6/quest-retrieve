@@ -24,9 +24,7 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
     //Authenticated User
     Route::middleware('auth:sanctum')->group(function() {
         Route::apiResources([
-            //Roles
             'roles' => RoleController::class,
-            //Categories
             'categories' => CategoryController::class,
         ]);
 
