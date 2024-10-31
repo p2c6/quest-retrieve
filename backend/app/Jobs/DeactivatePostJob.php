@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Enums\PostStatus;
+use App\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,6 +27,7 @@ class DeactivatePostJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        Post::where('expiration_date', '<' , now()->format('Y-m-d'))
+                ->update(['status' => PostStatus::DEACTIVATED]);
     }
 }
