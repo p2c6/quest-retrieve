@@ -10,6 +10,7 @@ use App\Http\Controllers\API\v1\Authentication\ResetPasswordController;
 use App\Http\Controllers\API\v1\Authentication\SendEmailVerificationController;
 use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use App\Http\Controllers\API\v1\Authentication\VerifyController;
+use App\Http\Controllers\API\v1\FileUpload\TemporaryFileUploadController;
 use App\Http\Controllers\API\v1\User\Post\PostController;
 use App\Http\Controllers\API\v1\User\UserProfile\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,12 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
         //User Profile
         Route::put('/profile/{user}', [UserProfileController::class, 'update'])->name('profile.update');
+
+        //Temporary File Upload
+        Route::prefix('temporary-file')->name('temporary-file.')->group(function() {
+            Route::post('/upload', [TemporaryFileUploadController::class, 'upload'])->name('upload');
+            Route::post('/revert', [TemporaryFileUploadController::class, 'revert'])->name('revert');
+        });
     });
 });
 
