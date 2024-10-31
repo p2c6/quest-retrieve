@@ -14,4 +14,5 @@ final class PostStatus extends Enum
     const PENDING  = "Pending";
     const ON_PROCESSING = "On Processing";
     const FINISHED = "Finished";
+    const DEACTIVATED = "Deactivated";
 }
