@@ -69,7 +69,8 @@ class TemporaryFileUploadTest extends TestCase
 
         $this->assertDatabaseHas('temporary_files', ['file_name' => $filePath .'.'. $fileExtension]);
 
-        $response->assertStatus(200)
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(200)
                     ->assertJsonStructure(['file_path']);
     }
 
@@ -106,7 +107,8 @@ class TemporaryFileUploadTest extends TestCase
             'file' => ''
         ]);
 
-        $response->assertStatus(422)
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(422)
                     ->assertJsonStructure(['message', 'errors'])
                     ->assertJson(['errors' => [
                         'file' => ['The file field is required.']
@@ -149,7 +151,8 @@ class TemporaryFileUploadTest extends TestCase
             'file' => $file
         ]);
 
-        $response->assertStatus(422)
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(422)
                     ->assertJsonStructure(['message', 'errors'])
                     ->assertJson(['errors' => [
                         'file' => ['The file field must be a file of type: jpg, jpeg, png.']
