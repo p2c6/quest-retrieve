@@ -10,7 +10,6 @@ use App\Http\Resources\Entity\Role\RoleResource;
 use App\Models\Role;
 use App\Services\Entity\Role\RoleService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {

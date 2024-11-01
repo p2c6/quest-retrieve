@@ -7,7 +7,6 @@ use App\Http\Requests\Entity\Subcategory\StoreSubcategoryRequest;
 use App\Http\Requests\Entity\Subcategory\UpdateSubcategoryRequest;
 use App\Http\Resources\Entity\Subcategory\SubcategoryCollection;
 use App\Http\Resources\Entity\Subcategory\SubcategoryResource;
-use App\Models\Post;
 use App\Models\Subcategory;
 use App\Services\Entity\Subcategory\SubCategoryService;
 use Illuminate\Http\JsonResponse;

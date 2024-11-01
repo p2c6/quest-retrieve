@@ -4,15 +4,8 @@ namespace App\Http\Controllers\API\v1\Authentication;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Authentication\SendResetPasswordLinkRequest;
-use App\Services\Authentication\ForgotPasswordService;
 use App\Services\Authentication\SendResetPasswordLinkService;
-use App\Services\EmailVerification\EmailVerificationService;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
 
 class SendResetPasswordLinkController extends Controller
 {
