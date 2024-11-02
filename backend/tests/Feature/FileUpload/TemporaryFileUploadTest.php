@@ -363,4 +363,40 @@ class TemporaryFileUploadTest extends TestCase
                     ]])
                     ->assertJsonValidationErrors(['file_path']);
     }
+
+    /**
+     * Test user cannot revert temporary file while unauthenticated via API.
+     * 
+     * This test verifies that a user cannot revert temporary file while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_revert_temporary_file_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $file = UploadedFile::fake()->image('example.jpg');
+
+        $fileExtension = $file->getClientOriginalExtension();
+
+        $response = $this->postJson(route('api.v1.temporary-file.upload'),  [
+            'file' => $file
+        ]);
+
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(401)
+                    ->assertJsonStructure(['message'])
+                    ->assertJson(['message' => 'Unauthenticated.']);
+    }
 }
