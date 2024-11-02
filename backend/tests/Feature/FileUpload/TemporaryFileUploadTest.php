@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TemporaryFileUploadTest extends TestCase
@@ -65,9 +66,17 @@ class TemporaryFileUploadTest extends TestCase
             'file' => $file
         ]);
 
-        $filePath = $response->json()['file_path'];
+        $temporaryUuidName = $response->json()['file_path'];
+        
+        $modifiedFile = "$temporaryUuidName.$fileExtension";
 
-        $this->assertDatabaseHas('temporary_files', ['file_name' => $filePath .'.'. $fileExtension]);
+        $this->assertTrue(Storage::disk('public')
+            ->exists('uploads/temporary/'.$temporaryUuidName.'/'.$modifiedFile), "The file does not exist in public storage");
+
+        $fullPath = public_path('storage/uploads/temporary/'.$temporaryUuidName.'/'.$modifiedFile);
+        $this->assertFileExists($fullPath, 'The file not found at the public storage.');
+
+        $this->assertDatabaseHas('temporary_files', ['file_name' => $modifiedFile ]);
 
         $response->assertCookie('laravel_session')
                     ->assertStatus(200)
