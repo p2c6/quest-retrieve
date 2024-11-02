@@ -248,4 +248,61 @@ class TemporaryFileUploadTest extends TestCase
                     ->assertJsonStructure(['message'])
                     ->assertJson(['message' => 'Directory And File Removed Successfully.']);
     }
+
+    /**
+     * Test user cannot revert temporary file with empty field via API.
+     * 
+     * This test verifies that a user cannot revert temporary file with empty field via API endpoint.
+     */
+    public function test_user_cannot_revert_temporary_file_with_empty_field(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $file = UploadedFile::fake()->image('example.jpg');
+
+        $fileExtension = $file->getClientOriginalExtension();
+
+        $response = $this->postJson(route('api.v1.temporary-file.upload'),  [
+            'file' => $file
+        ]);
+
+        $filePath = $response->json()['file_path'];
+
+        $fileName = "$filePath.$fileExtension";
+
+        $this->assertDatabaseHas('temporary_files', ['file_name' => $fileName]);
+
+        $response = $this->postJson(route('api.v1.temporary-file.revert'),  [
+            'file_path' => ''
+        ]);
+
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(422)
+                    ->assertJsonStructure(['message', 'errors'])
+                    ->assertJson(['message' => 'The file path field is required.' ,
+                    'errors' => [
+                        'file_path' => ['The file path field is required.']
+                    ]])
+                    ->assertJsonValidationErrors(['file_path']);
+    }
 }
