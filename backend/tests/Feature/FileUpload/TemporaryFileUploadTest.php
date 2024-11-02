@@ -66,14 +66,14 @@ class TemporaryFileUploadTest extends TestCase
             'file' => $file
         ]);
 
-        $temporaryUuidName = $response->json()['file_path'];
+        $temporaryUuidFolderName = $response->json()['file_path'];
         
-        $modifiedFile = "$temporaryUuidName.$fileExtension";
+        $modifiedFile = "$temporaryUuidFolderName.$fileExtension";
 
         $this->assertTrue(Storage::disk('public')
-            ->exists('uploads/temporary/'.$temporaryUuidName.'/'.$modifiedFile), "The file does not exist in public storage");
+            ->exists('uploads/temporary/'.$temporaryUuidFolderName.'/'.$modifiedFile), "The file does not exist in public storage");
 
-        $fullPath = public_path('storage/uploads/temporary/'.$temporaryUuidName.'/'.$modifiedFile);
+        $fullPath = public_path('storage/uploads/temporary/'.$temporaryUuidFolderName.'/'.$modifiedFile);
         $this->assertFileExists($fullPath, 'The file not found at the public storage.');
 
         $this->assertDatabaseHas('temporary_files', ['file_name' => $modifiedFile ]);
