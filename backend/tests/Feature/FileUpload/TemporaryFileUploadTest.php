@@ -240,17 +240,24 @@ class TemporaryFileUploadTest extends TestCase
             'file' => $file
         ]);
 
-        $filePath = $response->json()['file_path'];
+        $temporaryUuidFolderName = $response->json()['file_path'];
+        
+        $modifiedFile = "$temporaryUuidFolderName.$fileExtension";
 
-        $fileName = "$filePath.$fileExtension";
 
-        $this->assertDatabaseHas('temporary_files', ['file_name' => $fileName]);
+        $this->assertDatabaseHas('temporary_files', ['file_name' => $modifiedFile]);
 
         $response = $this->postJson(route('api.v1.temporary-file.revert'),  [
-            'file_path' => $filePath
+            'file_path' => $temporaryUuidFolderName
         ]);
 
-        $this->assertDatabaseMissing('temporary_files', ['file_name' => $fileName]);
+        $this->assertTrue(!Storage::disk('public')
+            ->exists('uploads/temporary/'.$temporaryUuidFolderName.'/'.$modifiedFile), "The file exist in public storage");
+
+        $fullPath = public_path('storage/uploads/temporary/'.$temporaryUuidFolderName.'/'.$modifiedFile);
+        $this->assertFileDoesNotExist($fullPath, 'The file found at the public storage.');
+
+        $this->assertDatabaseMissing('temporary_files', ['file_name' => $modifiedFile]);
 
         $response->assertCookie('laravel_session')
                     ->assertStatus(200)
