@@ -193,4 +193,59 @@ class TemporaryFileUploadTest extends TestCase
                     ->assertJsonStructure(['message'])
                     ->assertJson(['message' => 'Unauthenticated.']);
     }
+
+    /**
+     * Test user can revert temporary file with valid input via API.
+     * 
+     * This test verifies that a user can revert temporary file with valid input via API endpoint.
+     */
+    public function test_user_can_revert_temporary_file_with_valid_input(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $response = $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $file = UploadedFile::fake()->image('example.jpg');
+
+        $fileExtension = $file->getClientOriginalExtension();
+
+        $response = $this->postJson(route('api.v1.temporary-file.upload'),  [
+            'file' => $file
+        ]);
+
+        $filePath = $response->json()['file_path'];
+
+        $fileName = "$filePath.$fileExtension";
+
+        $this->assertDatabaseHas('temporary_files', ['file_name' => $fileName]);
+
+        $response = $this->postJson(route('api.v1.temporary-file.revert'),  [
+            'file_path' => $filePath
+        ]);
+
+        $this->assertDatabaseMissing('temporary_files', ['file_name' => $fileName]);
+
+        $response->assertCookie('laravel_session')
+                    ->assertStatus(200)
+                    ->assertJsonStructure(['message'])
+                    ->assertJson(['message' => 'Directory And File Removed Successfully.']);
+    }
 }
