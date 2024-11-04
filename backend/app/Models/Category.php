@@ -13,8 +13,8 @@ class Category extends Model
         'name'
     ];
 
-    public function subcategories()
+    public function subcategory()
     {
-        return $this->hasMany(Subcategory::class);
+        return $this->hasOne(Subcategory::class);
     }
 }
