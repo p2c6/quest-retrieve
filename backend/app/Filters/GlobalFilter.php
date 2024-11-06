@@ -4,6 +4,7 @@ namespace App\Filters;
 
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use DateTime;
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -13,23 +14,88 @@ class GlobalFilter implements Filter
     {
         
         $query->where(function ($query) use ($value) {
-            if ($this->isDate($value)) {
-                $date = Carbon::parse($value);
+            if (is_array($value) || $this->isDate($value)) {
+                    $filterDateValue = $value;
+                    $formattedDate = null;
 
-                $count = count(explode(" ", $value));
-            
-                $month = $date->format('n');
-                $day = $date->format('j');
-                $year = $date->format('Y');
+                    if (is_array($filterDateValue)) {
+                        $formattedDate = implode(" " , $filterDateValue);
 
-                $this->applyDateCondition($query, $month, $day, $year, $count);
-            }
-            
-            $query->orWhere('type', 'like', "%$value%")
+                    } else {
+                        $formattedDate = $filterDateValue;
+                    }
+
+                    $sanitizedDate = $this->filterDate($formattedDate); 
+                    
+                    $month = $day = $year = null;
+                    
+                    if ($this->hasMonth($sanitizedDate)) {
+                        $date = Carbon::createFromFormat('F', $sanitizedDate);
+                        $month = $date->format('n');
+                    }
+
+                    if ($this->hasMonthAndDay($sanitizedDate)) {
+                        $date = Carbon::createFromFormat('F j', $sanitizedDate);
+                        $month = $date->format('n');
+                        $day = $date->format('j');
+                        
+                    }
+
+                    if ($this->hasMonthDayAndYear($sanitizedDate)) {
+                        $date = Carbon::createFromFormat('F j Y', $sanitizedDate);
+                        $month = $date->format('n');
+                        $day = $date->format('j');
+                        $year = $date->format('Y');
+                    }
+                    
+                    $this->applyDateCondition($query, $month, $day, $year);
+            } else {    
+                $query->orWhere('type', 'like', "%$value%")
                 ->orWhere('status', 'like', "%$value%")
                 ->orWhere('incident_location', 'like', "%$value%");
+            }
 
         });
+    }
+
+    private function hasMonth($date)
+    {
+        try {
+            $date = Carbon::createFromFormat('F', $date);
+            return true;
+        } catch (InvalidFormatException $e) {
+            return false;
+        }
+    }
+
+    
+    private function hasMonthAndDay($date)
+    {
+        try {
+            $date = Carbon::createFromFormat('F j', $date);
+            return true;
+        } catch (InvalidFormatException $e) {
+            return false;
+        }
+    }
+
+
+    private function hasMonthDayAndYear($date)
+    {
+        try {
+            $date = Carbon::createFromFormat('F j Y', $date);
+            return true;
+        } catch (InvalidFormatException $e) {
+            return false;
+        }
+    }
+
+
+    private function filterDate($date): string
+    {
+        $filteredDate = implode(' ', array_values(array_filter(explode(' ', $date))));
+
+        return $filteredDate;
     }
 
     private function isDate($string): bool
@@ -42,17 +108,17 @@ class GlobalFilter implements Filter
         }
     }
 
-    private function applyDateCondition($query, $month, $day, $year, $count): void
+    private function applyDateCondition($query, $month, $day, $year): void
     {
-        if ($count == 1) {
+        if ($month !== null && $day === null && $year === null) {
             $this->applyMonthFilter($query, $month);
         }
 
-        if ($count == 2) {
+        if ($month !== null && $day !== null && $year === null) {
             $this->applyMonthWithDayFilter($query, $month, $day);
         }
 
-        if ($count == 3) {
+        if ($month !== null && $day !== null && $year !== null) {
             $this->applyFullDateFilter($query, $month, $day, $year);
         }
     }
