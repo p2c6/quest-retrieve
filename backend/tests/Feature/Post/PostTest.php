@@ -96,7 +96,7 @@ class PostTest extends TestCase
      * 
      * This test verifies that a user cannot post with all empty fields via API endpoint.
      */
-    public function test_user_can_store_post_with_all_empty_fields(): void
+    public function test_user_cannot_store_post_with_all_empty_fields(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
