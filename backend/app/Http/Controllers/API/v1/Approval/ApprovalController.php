@@ -26,4 +26,20 @@ class ApprovalController extends Controller
         
         return new PostCollection($posts);
     }
+
+    public function approve(Post $post)
+    {
+        try {
+            $post->update([
+                'status' => PostStatus::ON_PROCESSING
+            ]);
+
+            return response()->json(['message' => 'Successfully Post Approved'], 200);
+        } catch(\Throwable $th) {
+            info("Error on post approve: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during post approve.'
+            ], 500);
+        }
+    }
 }

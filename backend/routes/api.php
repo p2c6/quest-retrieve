@@ -51,6 +51,7 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
         //For Approval
         Route::prefix('approval/posts')->name('for-approval.')->group(function() {
             Route::get('/', [ApprovalController::class, 'index'])->name('index');
+            Route::put('/{post}/approve', [ApprovalController::class, 'approve'])->name('index');
         });
     });
 });
