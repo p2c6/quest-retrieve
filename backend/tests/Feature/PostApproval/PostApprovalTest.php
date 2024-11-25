@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Approval;
+namespace Tests\Feature\PostApproval;
 
 use App\Enums\PostStatus;
 use App\Enums\PostType;
@@ -13,7 +13,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ApprovalPostTest extends TestCase
+class PostApprovalTest extends TestCase
 {
     use RefreshDatabase;
 
