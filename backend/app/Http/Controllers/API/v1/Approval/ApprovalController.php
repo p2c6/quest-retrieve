@@ -42,4 +42,20 @@ class ApprovalController extends Controller
             ], 500);
         }
     }
+
+    public function reject(Post $post)
+    {
+        try {
+            $post->update([
+                'status' => PostStatus::REJECT
+            ]);
+
+            return response()->json(['message' => 'Successfully Post Rejected'], 200);
+        } catch(\Throwable $th) {
+            info("Error on post reject: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during post reject.'
+            ], 500);
+        }
+    }
 }
