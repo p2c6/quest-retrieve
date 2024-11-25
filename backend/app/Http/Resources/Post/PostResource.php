@@ -22,7 +22,8 @@ class PostResource extends JsonResource
             'user' => new UserResource($this->user),
             'subcategory_name' => $this->subcategory ? $this->subcategory->name : null,
             'incident_location' => $this->incident_location,
-            'incident_date' => $this->formatDate($this->incident_date)
+            'incident_date' => $this->formatDate($this->incident_date),
+            'status' => $this->status,
         ];
     }
 
