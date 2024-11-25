@@ -15,7 +15,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class ApprovalController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $posts = QueryBuilder::for(Post::class)
             ->allowedFilters([
