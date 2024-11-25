@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Post;
 
+use App\Http\Resources\UserResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,6 +19,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type, 
+            'user' => new UserResource($this->user),
             'subcategory_name' => $this->subcategory ? $this->subcategory->name : null,
             'incident_location' => $this->incident_location,
             'incident_date' => $this->formatDate($this->incident_date)
