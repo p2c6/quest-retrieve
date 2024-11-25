@@ -14,7 +14,7 @@ use App\Http\Resources\Post\PostCollection;
 use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\AllowedFilter;
 
-class ApprovalController extends Controller
+class PostApprovalController extends Controller
 {
     /**
      * List of all posts for approval.

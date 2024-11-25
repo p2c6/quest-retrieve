@@ -3,7 +3,7 @@
 use App\Http\Controllers\API\v1\Admin\Entity\Category\CategoryController;
 use App\Http\Controllers\API\v1\Admin\Entity\Role\RoleController;
 use App\Http\Controllers\API\v1\Admin\Entity\SubCategory\SubCategoryController;
-use App\Http\Controllers\API\v1\Approval\ApprovalController;
+use App\Http\Controllers\API\v1\Approval\PostApprovalController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
@@ -50,9 +50,9 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
         //For Approval
         Route::prefix('approval/posts')->name('for-approval.')->group(function() {
-            Route::get('/', [ApprovalController::class, 'index'])->name('index');
-            Route::put('/{post}/approve', [ApprovalController::class, 'approve'])->name('approve');
-            Route::put('/{post}/reject', [ApprovalController::class, 'reject'])->name('reject');
+            Route::get('/', [PostApprovalController::class, 'index'])->name('index');
+            Route::put('/{post}/approve', [PostApprovalController::class, 'approve'])->name('approve');
+            Route::put('/{post}/reject', [PostApprovalController::class, 'reject'])->name('reject');
         });
     });
 });
