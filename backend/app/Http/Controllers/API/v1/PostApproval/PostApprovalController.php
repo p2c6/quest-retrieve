@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\v1\Approval;
+namespace App\Http\Controllers\API\v1\PostApproval;
 
 use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;

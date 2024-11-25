@@ -3,7 +3,6 @@
 use App\Http\Controllers\API\v1\Admin\Entity\Category\CategoryController;
 use App\Http\Controllers\API\v1\Admin\Entity\Role\RoleController;
 use App\Http\Controllers\API\v1\Admin\Entity\SubCategory\SubCategoryController;
-use App\Http\Controllers\API\v1\Approval\PostApprovalController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\API\v1\Authentication\SendEmailVerificationController;
 use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use App\Http\Controllers\API\v1\Authentication\VerifyController;
 use App\Http\Controllers\API\v1\FileUpload\TemporaryFileUploadController;
+use App\Http\Controllers\API\v1\PostApproval\PostApprovalController;
 use App\Http\Controllers\API\v1\User\Post\PostController;
 use App\Http\Controllers\API\v1\User\UserProfile\UserProfileController;
 use Illuminate\Support\Facades\Route;
