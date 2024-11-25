@@ -11,11 +11,17 @@ use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Filters\GlobalFilter;
 use App\Http\Resources\Post\PostCollection;
+use Illuminate\Http\JsonResponse;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class ApprovalController extends Controller
 {
-    public function index()
+    /**
+     * List of all posts for approval.
+     * 
+     * @return App\Http\Resources\Post\PostCollection
+     */
+    public function index(): PostCollection
     {
         $posts = QueryBuilder::for(Post::class)
             ->allowedFilters([
@@ -27,7 +33,13 @@ class ApprovalController extends Controller
         return new PostCollection($posts);
     }
 
-    public function approve(Post $post)
+    /**
+     * Handle approve post.
+     * 
+     * @param App\Models\Post $post The model of the post which needs to be updated.
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function approve(Post $post) : JsonResponse
     {
         try {
             $post->update([
@@ -43,7 +55,13 @@ class ApprovalController extends Controller
         }
     }
 
-    public function reject(Post $post)
+    /**
+     * Handle reject post.
+     * 
+     * @param App\Models\Post $post The model of the post which needs to be updated.
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function reject(Post $post) : JsonResponse
     {
         try {
             $post->update([
