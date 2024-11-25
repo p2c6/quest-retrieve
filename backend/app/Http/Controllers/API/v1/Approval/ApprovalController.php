@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1\Approval;
 
+use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
@@ -9,19 +10,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Filters\GlobalFilter;
+use App\Http\Resources\Post\PostCollection;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class ApprovalController extends Controller
 {
     public function index(Request $request)
     {
-         $posts = QueryBuilder::for(Post::class)
-            ->allowedIncludes('profile')
+        $posts = QueryBuilder::for(Post::class)
             ->allowedFilters([
                 AllowedFilter::custom('search', new GlobalFilter),
             ])
-            ->get();
+            ->where('status', PostStatus::PENDING)
+            ->paginate(10);
         
-        return response()->json($posts);
+        return new PostCollection($posts);
     }
 }

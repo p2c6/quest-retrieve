@@ -51,8 +51,14 @@ class GlobalFilter implements Filter
                     $this->applyDateCondition($query, $month, $day, $year);
             } else {    
                 $query->orWhere('type', 'like', "%$value%")
-                ->orWhere('status', 'like', "%$value%")
+                // ->orWhere('status', 'like', "%$value%")
                 ->orWhere('incident_location', 'like', "%$value%");
+                
+                $query->orWhereHas('user.profile', function ($subQuery) use ($value) {
+                    $subQuery->where('first_name', 'like', "%$value%")
+                    ->orWhere('last_name', 'like', "%$value%");
+                    $subQuery->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%$value%"]);
+                });
             }
 
         });
