@@ -50,9 +50,11 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
         //For Approval
         Route::prefix('approval/posts')->name('for-approval.')->group(function() {
-            Route::get('/', [PostApprovalController::class, 'index'])->name('index');
-            Route::put('/{post}/approve', [PostApprovalController::class, 'approve'])->name('approve');
-            Route::put('/{post}/reject', [PostApprovalController::class, 'reject'])->name('reject');
+            Route::middleware('not_public_user')->group(function() {
+                Route::get('/', [PostApprovalController::class, 'index'])->name('index');
+                Route::put('/{post}/approve', [PostApprovalController::class, 'approve'])->name('approve');
+                Route::put('/{post}/reject', [PostApprovalController::class, 'reject'])->name('reject');
+            });
         });
     });
 });
