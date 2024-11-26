@@ -304,7 +304,7 @@ class PostApprovalTest extends TestCase
      * 
      * This test verifies that a public user cannot approve post via API endpoint.
      */
-    public function test_public_user_cannot_post_approval_list(): void
+    public function test_public_user_cannot_access_post_approval_list(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
