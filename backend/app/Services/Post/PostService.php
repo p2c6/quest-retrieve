@@ -6,9 +6,11 @@ use App\Enums\PostStatus;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Resources\Post\PostCollection;
 use App\Http\Resources\Post\PostResource;
+use App\Mail\ClaimRequested;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class PostService
@@ -126,6 +128,29 @@ class PostService
             info("Error on deleting post: " . $th->getMessage());
             return response()->json([
                 'message' => 'An error occurred during deleting post.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Handle claim post request.
+     * 
+     * @param App\Models\Post $post The model of the post which needs to be deleted.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function claim(Post $post, $request)
+    {
+        try {
+            Mail::to($post->user->email)->send(new ClaimRequested($post, $request));
+            
+            return response()->json([
+                'message' => 'Successfully Claim Requested.'
+            ], 200);
+        } catch (\Throwable $th) {
+            info("Error on deleting post: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during claiming post.'
             ], 500);
         }
     }

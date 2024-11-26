@@ -9,6 +9,7 @@ use App\Http\Resources\Post\PostCollection;
 use App\Http\Resources\Post\PostResource;
 use App\Models\Post;
 use App\Services\Post\PostService;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class PostController extends Controller
@@ -87,5 +88,17 @@ class PostController extends Controller
     public function destroy(Post $post): JsonResponse
     {
         return $this->service->destroy($post);
+    }
+
+    /**
+     * Handle claim post.
+     * 
+     * @param App\Models\Post $post The model of the post which needs to be posted.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function claim(Post $post, Request $request)
+    {   
+        return $this->service->claim($post, $request);
     }
 }

@@ -25,4 +25,9 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }
