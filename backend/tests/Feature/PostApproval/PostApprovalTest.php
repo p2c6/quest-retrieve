@@ -34,13 +34,59 @@ class PostApprovalTest extends TestCase
     }
 
     /**
-     * Test user can approve post via API.
+     * Test admin can approve post via API.
      * 
-     * This test verifies that a user can approve post via API endpoint.
+     * This test verifies that an admin can approve post via API endpoint.
      */
-    public function test_user_can_approve_post(): void
+    public function test_admin_can_approve_post(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $post = Post::where('status', PostStatus::PENDING)->first();
+
+        $updatedStatus = PostStatus::ON_PROCESSING;
+        
+        $response = $this->putJson(route('api.v1.for-approval.approve', $post->id), [
+            'status' => $updatedStatus
+        ]);
+
+        $this->assertNotEquals($post->status, $updatedStatus);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(200)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Successfully Post Approved']);
+    }
+
+    /**
+     * Test moderator can approve post via API.
+     * 
+     * This test verifies that a moderator can approve post via API endpoint.
+     */
+    public function test_moderator_can_approve_post(): void
+    {
+        $role = Role::where('id', UserType::MODERATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -121,11 +167,57 @@ class PostApprovalTest extends TestCase
     }
 
     /**
-     * Test user can reject post via API.
+     * Test admin can reject post via API.
      * 
-     * This test verifies that a user can reject post via API endpoint.
+     * This test verifies that an admin can reject post via API endpoint.
      */
-    public function test_user_can_reject_post(): void
+    public function test_admin_can_reject_post(): void
+    {
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $post = Post::where('status', PostStatus::PENDING)->first();
+
+        $updatedStatus = PostStatus::REJECT;
+        
+        $response = $this->putJson(route('api.v1.for-approval.reject', $post->id), [
+            'status' => $updatedStatus
+        ]);
+
+        $this->assertNotEquals($post->status, $updatedStatus);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(200)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Successfully Post Rejected']);
+    }
+
+    /**
+     * Test moderator can reject post via API.
+     * 
+     * This test verifies that a moderator can reject post via API endpoint.
+     */
+    public function test_moderator_can_reject_post(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
