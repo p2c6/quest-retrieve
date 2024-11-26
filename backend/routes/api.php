@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\v1\Admin\Entity\Category\CategoryController;
 use App\Http\Controllers\API\v1\Admin\Entity\Role\RoleController;
 use App\Http\Controllers\API\v1\Admin\Entity\SubCategory\SubCategoryController;
+use App\Http\Controllers\API\v1\Admin\Entity\User\UserController;
 use App\Http\Controllers\API\v1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\v1\Authentication\RegisterController;
@@ -26,6 +27,9 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
     //Authenticated User
     Route::middleware('auth:sanctum')->group(function() {
+        //User
+        Route::apiResource('users', UserController::class);
+        
         //Roles
         Route::apiResource('roles', RoleController::class);
 
