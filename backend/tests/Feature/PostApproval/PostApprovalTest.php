@@ -40,7 +40,7 @@ class PostApprovalTest extends TestCase
      */
     public function test_user_can_approve_post(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -86,7 +86,7 @@ class PostApprovalTest extends TestCase
      */
     public function test_user_cannot_approve_post_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -127,7 +127,7 @@ class PostApprovalTest extends TestCase
      */
     public function test_user_can_reject_post(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -173,7 +173,7 @@ class PostApprovalTest extends TestCase
      */
     public function test_user_cannot_reject_post_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
