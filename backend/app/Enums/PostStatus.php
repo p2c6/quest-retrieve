@@ -15,5 +15,5 @@ final class PostStatus extends Enum
     const ON_PROCESSING = "On Processing";
     const FINISHED = "Finished";
     const DEACTIVATED = "Deactivated";
-    const REJECT = "Reject";
+    const REJECT = "Rejected";
 }
