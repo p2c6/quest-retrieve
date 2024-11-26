@@ -12,6 +12,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use App\Filters\GlobalFilter;
 use App\Http\Resources\Post\PostCollection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class PostApprovalController extends Controller
@@ -41,7 +42,12 @@ class PostApprovalController extends Controller
      */
     public function approve(Post $post) : JsonResponse
     {
+        
         try {
+            if (! Gate::allows('approve-post', $post)) {
+                return response()->json(['message' => 'You are not allowed to access this action'], 403);
+            }
+            
             $post->update([
                 'status' => PostStatus::ON_PROCESSING
             ]);
