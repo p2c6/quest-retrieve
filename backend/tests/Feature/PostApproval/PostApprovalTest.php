@@ -71,7 +71,9 @@ class PostApprovalTest extends TestCase
             'status' => $updatedStatus
         ]);
 
-        $this->assertNotEquals($post->status, $updatedStatus);
+        $updatedPost = Post::where('id', $post->id)->first();
+
+        $this->assertNotEquals($post->status, $updatedPost->status);
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
@@ -117,7 +119,9 @@ class PostApprovalTest extends TestCase
             'status' => $updatedStatus
         ]);
 
-        $this->assertNotEquals($post->status, $updatedStatus);
+        $updatedPost = Post::where('id', $post->id)->first();
+
+        $this->assertNotEquals($post->status, $updatedPost->status);
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
@@ -155,8 +159,6 @@ class PostApprovalTest extends TestCase
         $response = $this->putJson(route('api.v1.for-approval.approve', $post->id), [
             'status' => $updatedStatus
         ]);
-
-        $this->assertNotEquals($post->status, $updatedStatus);
 
         $response->assertCookie('laravel_session')
         ->assertStatus(401)
@@ -204,7 +206,9 @@ class PostApprovalTest extends TestCase
             'status' => $updatedStatus
         ]);
 
-        $this->assertNotEquals($post->status, $updatedStatus);
+        $updatedPost = Post::where('id', $post->id)->first();
+
+        $this->assertNotEquals($post->status, $updatedPost->status);
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
@@ -250,7 +254,9 @@ class PostApprovalTest extends TestCase
             'status' => $updatedStatus
         ]);
 
-        $this->assertNotEquals($post->status, $updatedStatus);
+        $updatedPost = Post::where('id', $post->id)->first();
+
+        $this->assertNotEquals($post->status, $updatedPost->status);
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
@@ -288,8 +294,6 @@ class PostApprovalTest extends TestCase
         $response = $this->putJson(route('api.v1.for-approval.reject', $post->id), [
             'status' => $updatedStatus
         ]);
-
-        $this->assertNotEquals($post->status, $updatedStatus);
 
         $response->assertCookie('laravel_session')
         ->assertStatus(401)
@@ -336,8 +340,6 @@ class PostApprovalTest extends TestCase
         $response = $this->putJson(route('api.v1.for-approval.approve', $post->id), [
             'status' => $updatedStatus
         ]);
-
-        $this->assertNotEquals($post->status, $updatedStatus);
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(403);
