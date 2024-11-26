@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Filters\GlobalFilter;
 use App\Http\Resources\Post\PostCollection;
+use App\Services\PostApproval\PostApprovalService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -18,20 +19,30 @@ use Spatie\QueryBuilder\AllowedFilter;
 class PostApprovalController extends Controller
 {
     /**
+     * The post approval service instance.
+     * 
+     * @var PostApprovalService
+     */
+    private $service;
+    
+    /**
+     * PostApprovalController contructor.
+     * 
+     * @param PostApprovalService $service The instance of PostApprovalService.
+     */
+    public function __construct(PostApprovalService $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
      * List of all posts for approval.
      * 
      * @return App\Http\Resources\Post\PostCollection
      */
     public function index(): PostCollection
     {
-        $posts = QueryBuilder::for(Post::class)
-            ->allowedFilters([
-                AllowedFilter::custom('search', new GlobalFilter),
-            ])
-            ->where('status', PostStatus::PENDING)
-            ->paginate(10);
-        
-        return new PostCollection($posts);
+        return $this->service->index();
     }
 
     /**
@@ -42,23 +53,7 @@ class PostApprovalController extends Controller
      */
     public function approve(Post $post) : JsonResponse
     {
-        
-        try {
-            if (! Gate::allows('approve-post', $post)) {
-                return response()->json(['message' => 'You are not allowed to access this action'], 403);
-            }
-
-            $post->update([
-                'status' => PostStatus::ON_PROCESSING
-            ]);
-
-            return response()->json(['message' => 'Successfully Post Approved'], 200);
-        } catch(\Throwable $th) {
-            info("Error on post approve: " . $th->getMessage());
-            return response()->json([
-                'message' => 'An error occurred during post approve.'
-            ], 500);
-        }
+        return $this->service->approve($post);
     }
 
     /**
@@ -69,22 +64,6 @@ class PostApprovalController extends Controller
      */
     public function reject(Post $post) : JsonResponse
     {
-        try {
-            if (! Gate::allows('reject-post', $post)) {
-                return response()->json(['message' => 'You are not allowed to access this action'], 403);
-            }
-            
-
-            $post->update([
-                'status' => PostStatus::REJECT
-            ]);
-
-            return response()->json(['message' => 'Successfully Post Rejected'], 200);
-        } catch(\Throwable $th) {
-            info("Error on post reject: " . $th->getMessage());
-            return response()->json([
-                'message' => 'An error occurred during post reject.'
-            ], 500);
-        }
+        return $this->service->reject($post);
     }
 }
