@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\Entity\User\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -37,10 +38,14 @@ class UserController extends Controller
      * 
      * @param App\Models\User $user The model of the user which needs to be retrieved.
      * 
-     * @return App\Http\Resources\UserCollection
+     * @return App\Http\Resources\UserCollection|Illuminate\Http\JsonResponse
      */
-    public function index(): UserCollection
+    public function index(): JsonResponse|UserCollection
     {
+        if(Gate::denies('viewAny', User::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->index();
     }
 
@@ -49,10 +54,14 @@ class UserController extends Controller
      * 
      * @param App\Models\User $user The model of the user which needs to be retrieved.
      * 
-     * @return App\Http\Resources\UserResource
+     * @return App\Http\Resources\UserResource|Illuminate\Http\JsonResponse
      */
-    public function show(User $user): UserResource
+    public function show(User $user): UserResource|JsonResponse
     {
+        if(Gate::denies('view', $user)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->show($user);
     }
 
@@ -65,6 +74,10 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): JsonResponse
     {
+        if(Gate::denies('create', User::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->store($request);
     }
 
@@ -78,6 +91,10 @@ class UserController extends Controller
      */
     public function update(User $user, UpdateUserRequest $request): JsonResponse
     {
+        if(Gate::denies('update', $user)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->update($user, $request);
     }
 

@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Enums\UserType;
 use App\Models\Post;
 use App\Models\User;
+use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -20,7 +21,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        User::class => UserPolicy::class,
     ];
 
     /**
@@ -30,6 +31,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->gates();
         $this->verifyEmailNotification();
+        Gate::policy(User::class, UserPolicy::class);
     }
 
     public function verifyEmailNotification()
