@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +22,11 @@ class Post extends Model
         'expiration_date',
         'status',
     ];
+
+    public function getIncidentDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('F j, Y');
+    }
 
     public function user(): BelongsTo
     {
