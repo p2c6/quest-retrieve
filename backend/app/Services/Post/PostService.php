@@ -7,6 +7,7 @@ use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Resources\Post\PostCollection;
 use App\Http\Resources\Post\PostResource;
 use App\Mail\ClaimRequested;
+use App\Mail\PostCreated;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +48,7 @@ class PostService
     public function store($request) : JsonResponse
     {
         try {
-            Post::create([
+            $post = Post::create([
                 'user_id' => $request->user()->id,
                 'type' => $request->type,
                 'subcategory_id' => $request->subcategory_id,
@@ -55,7 +56,8 @@ class PostService
                 'incident_date' => $request->incident_date,
                 'status' => PostStatus::PENDING,
             ]);
-            
+
+            Mail::to(auth()->user()->email)->send(new PostCreated($post));
             
             return response()->json([
                 'message' => 'Successfully Post Created.'
