@@ -255,4 +255,65 @@ class UserTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'Successfully User Updated.']);
     }
+
+    /**
+     * Test admin cannot update user with all empty fields via API.
+     * 
+     * This test verifies that an admin cannot update user with all empty fields via API endpoint.
+     */
+    public function test_admin_cannot_update_user_with_all_empty_fields(): void
+    {
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $originalEmail = 'test001@gmail.com';
+        $originalPassword = 'password1234';
+        $originalRole = UserType::MODERATOR;
+
+        $user = User::create([
+            'email' => $originalEmail,
+            'password' => $originalPassword,
+            'role_id' => $originalRole,
+        ]);
+
+        $updatedEmail = '';
+        $updatedPassword = '';
+        $updatedRole = '';
+        
+        $response = $this->putJson(route('api.v1.users.update', $user->id), [
+            'email' => $updatedEmail, 
+            'password' => $updatedPassword, 
+            'password_confirmation' => $updatedPassword, 
+            'role_id' => $updatedRole
+        ]);
+
+        $this->assertNotSame($originalEmail, $updatedEmail, 'Email must not equal to previous');
+        $this->assertNotSame($originalPassword, $updatedPassword, 'Password must not equal to previous');
+        $this->assertNotSame($originalRole, $updatedRole, 'Role must not equal to previous');
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(422)
+                ->assertJsonValidationErrors([
+                'email',
+                'password',
+                'role_id',
+        ]);
+    }
 }
