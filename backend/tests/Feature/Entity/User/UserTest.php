@@ -76,7 +76,7 @@ class UserTest extends TestCase
      * 
      * This test verifies that an admin cannot store user with all empty fields via API endpoint.
      */
-    public function test_admin_can_store_user_with_all_empty_fields(): void
+    public function test_admin_cannot_store_user_with_all_empty_fields(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
