@@ -378,4 +378,58 @@ class UserTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'You are not allowed to access this action']);
     }
+
+    /**
+     * Test user cannot update user while unauthenticated inputs via API.
+     * 
+     * This test verifies that a user cannot update user while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_update_user_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $originalEmail = 'test001@gmail.com';
+        $originalPassword = 'password1234';
+        $originalRole = UserType::MODERATOR;
+
+        $user = User::create([
+            'email' => $originalEmail,
+            'password' => $originalPassword,
+            'role_id' => $originalRole,
+        ]);
+
+        $updatedEmail = 'test000@gmail.com';
+        $updatedPassword = 'password123';
+        $updatedRole = UserType::PUBLIC_USER;
+        
+        $response = $this->putJson(route('api.v1.users.update', $user->id), [
+            'email' => $updatedEmail, 
+            'password' => $updatedPassword, 
+            'password_confirmation' => $updatedPassword, 
+            'role_id' => $updatedRole
+        ]);
+
+        $this->assertNotSame($originalEmail, $updatedEmail, 'Email must not equal to previous');
+        $this->assertNotSame($originalPassword, $updatedPassword, 'Password must not equal to previous');
+        $this->assertNotSame($originalRole, $updatedRole, 'Role must not equal to previous');
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
+    
 }
