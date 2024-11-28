@@ -120,7 +120,7 @@ class UserTest extends TestCase
     /**
      * Test other user type is unauthorize to store new user via API.
      * 
-     * This test verifies that an admin can store user with valid inputs via API endpoint.
+     * This test verifies that other user type is unauthorize to store new user via API endpoint.
      */
     public function test_other_user_type_is_unauthorize_to_store_new_user(): void
     {
