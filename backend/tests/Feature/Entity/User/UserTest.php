@@ -490,7 +490,7 @@ class UserTest extends TestCase
      */
     public function test_admin_cannot_delete_user_while_already_associated_to_post(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
