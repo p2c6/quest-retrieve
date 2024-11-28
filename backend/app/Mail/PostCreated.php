@@ -29,7 +29,7 @@ class PostCreated extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Post Created',
+            subject: 'QuestRetrieve - Post Created',
             from: 'donotreply@questretrieve.com',
             replyTo: [
                 new Address($this->post->user->email, $this->post->user->profile->full_name),
