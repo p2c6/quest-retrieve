@@ -71,6 +71,44 @@ class UserTest extends TestCase
     }
 
     /**
+     * Test other user type is unauthorize to get all users via API.
+     * 
+     * This test verifies that other user type is unauthorize to get all users via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_get_all_users(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        
+        $response = $this->getJson(route('api.v1.users.index'));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    /**
      * Test user cannot get all users while unauthenticated via API.
      * 
      * This test verifies that user cannot get all users while unauthenticated via API endpoint.
