@@ -107,6 +107,10 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
+        if(Gate::denies('delete', $user)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->delete($user);
     }
 }
