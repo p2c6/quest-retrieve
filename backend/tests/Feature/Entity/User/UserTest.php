@@ -2,8 +2,14 @@
 
 namespace Tests\Feature\User;
 
+use App\Enums\PostStatus;
+use App\Enums\PostType;
 use App\Enums\UserType;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Profile;
 use App\Models\Role;
+use App\Models\Subcategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -475,5 +481,71 @@ class UserTest extends TestCase
                 ->assertStatus(200)
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'Successfully User Deleted.']);
+    }
+
+    /**
+     * Test admin cannot delete while user already associated to post via API.
+     * 
+     * This test verifies that an admin cannot delete user while user already associated to post via API endpoint.
+     */
+    public function test_admin_cannot_delete_user_while_already_associated_to_post(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        $subCategoryId = $subCategory->id;
+        
+        Post::create([
+            'user_id' => $user->id,
+            'type' => PostType::LOST,
+            'subcategory_id' => $subCategoryId,
+            'incident_location' => 'Quezon City',
+            'incident_date' => '2024-05-06',
+            'finish_transaction_date' => '2024-05-07',
+            'expiration_date' =>  '2024-06-06',
+            'status' => PostStatus::PENDING,
+        ]);
+
+        $this->assertDatabaseHas('posts', [
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->deleteJson(route('api.v1.users.destroy', $user->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(409)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Cannot delete user. There are posts associated with this user.'
+                ]);
     }
 }
