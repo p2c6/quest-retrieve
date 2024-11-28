@@ -672,7 +672,7 @@ class PostTest extends TestCase
 
         Mail::fake();
 
-        Mail::to($user->email)->send(new PostCreated($post))
+        Mail::to($user->email)->send(new PostCreated($post));
 
         Mail::assertSent(PostCreated::class, function (PostCreated $mail) use ($user) {
             return $mail->hasSubject('QuestRetrieve - Post Created') &&
