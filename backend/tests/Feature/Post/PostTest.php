@@ -6,6 +6,7 @@ use App\Enums\PostStatus;
 use App\Enums\PostType;
 use App\Enums\UserType;
 use App\Mail\PostCreated;
+use App\Mail\PostDeactivated;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Role;
@@ -676,6 +677,77 @@ class PostTest extends TestCase
 
         Mail::assertSent(PostCreated::class, function (PostCreated $mail) use ($user) {
             return $mail->hasSubject('QuestRetrieve - Post Created') &&
+            $mail->hasReplyTo($user->email) &&
+            $mail->hasFrom('donotreply@questretrieve.com');
+        });
+    }
+
+    /**
+     * Test app can send post deactivated mail upon app scheduler check via API.
+     * 
+     * This test verifies that the app can send post deactivated mail upon app scheduler check via API endpoint.
+     */
+    public function test_app_can_send_post_deactivated_mail_upon_app_scheduler_check(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+            'email_verified_at' => now(),
+        ]);
+
+        $user->profile()->create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        $subCategoryId = $subCategory->id;
+        
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => PostType::LOST,
+            'subcategory_id' => $subCategoryId,
+            'incident_location' => 'Quezon City',
+            'incident_date' => '2024-05-06',
+            'finish_transaction_date' => '2024-05-07',
+            'expiration_date' =>  '2024-11-27',
+            'status' => PostStatus::DEACTIVATED,
+        ]);
+
+        Mail::fake();
+
+        Mail::to($user->email)->send(new PostDeactivated($post));
+
+        Mail::assertSent(PostDeactivated::class, function (PostDeactivated $mail) use ($user) {
+            return $mail->hasSubject('QuestRetrieve - Post Deactivated') &&
             $mail->hasReplyTo($user->email) &&
             $mail->hasFrom('donotreply@questretrieve.com');
         });
