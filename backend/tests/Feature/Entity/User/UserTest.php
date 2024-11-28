@@ -593,4 +593,44 @@ class UserTest extends TestCase
                     ->assertJsonStructure(['message'])
                     ->assertJson(['message' => 'You are not allowed to access this action']);
     }
+
+    /**
+     * Test user cannot delete user while unauthenticated via API.
+     * 
+     * This test verifies that user cannot delete user while unauthenticated via API endpoint.
+     */
+    public function test_user_cannot_delete_user_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $newUser = User::create([
+            'email' => 'test000@gmail.com', 
+            'password' => 'password123', 
+            'password_confirmation' => 'password123', 
+            'role_id' => UserType::PUBLIC_USER
+        ]);
+        
+        $response = $this->deleteJson(route('api.v1.users.destroy', $newUser->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(401)
+                ->assertJsonStructure(['message'])
+                ->assertJson([
+                    'message' => 'Unauthenticated.', 
+                ]);
+    }
 }
