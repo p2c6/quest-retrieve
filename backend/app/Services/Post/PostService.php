@@ -47,7 +47,6 @@ class PostService
     public function store($request) : JsonResponse
     {
         try {
-            ;
             Post::create([
                 'user_id' => $request->user()->id,
                 'type' => $request->type,
