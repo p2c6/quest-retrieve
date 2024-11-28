@@ -116,4 +116,47 @@ class UserTest extends TestCase
                 'role_id',
         ]);
     }
+
+    /**
+     * Test other user type is unauthorize to store new user via API.
+     * 
+     * This test verifies that an admin can store user with valid inputs via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_store_new_user(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        
+        $response = $this->postJson(route('api.v1.users.store'), [
+            'email' => 'test000@gmail.com', 
+            'password' => 'password123', 
+            'password_confirmation' => 'password123', 
+            'role_id' => UserType::PUBLIC_USER
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
 }
