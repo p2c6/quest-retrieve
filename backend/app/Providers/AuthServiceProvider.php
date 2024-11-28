@@ -31,7 +31,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->gates();
         $this->verifyEmailNotification();
-        Gate::policy(User::class, UserPolicy::class);
     }
 
     public function verifyEmailNotification()
