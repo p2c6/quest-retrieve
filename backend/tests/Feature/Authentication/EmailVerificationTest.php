@@ -3,8 +3,10 @@
 namespace Tests\Feature\Authentication;
 
 use App\Enums\UserType;
+use App\Mail\Welcome;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\Authentication\VerifyService;
 use App\Services\EmailVerification\EmailVerificationService;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Mail\Mailer;
@@ -173,5 +175,49 @@ class EmailVerificationTest extends TestCase
         $response = $this->get($signedUrl);
     
         $response->assertStatus(403);
+    }
+
+    /**
+     * Test app can send weelcome email via API.
+     * 
+     * This test verifies that the app can send welcome mail via API endpoint.
+     */
+    public function test_app_can_send_welcome_mail_upon_email_verification(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'email' => 'test000@test.com',
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user);
+
+        $user->profile()->create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        Mail::fake();
+
+        $service = new VerifyService();
+        $service->sendWelcomeMail($user->email);
+
+        Mail::assertSent(Welcome::class, function (Welcome $mail) use ($user) {
+            return $mail->hasSubject('QuestRetrieve - Welcome') &&
+            $mail->hasReplyTo($user->email) &&
+            $mail->hasFrom('donotreply@questretrieve.com');
+        });
     }
 }
