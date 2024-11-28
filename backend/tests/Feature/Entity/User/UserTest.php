@@ -171,7 +171,7 @@ class UserTest extends TestCase
      * 
      * This test verifies that user cannot store  new user while unauthenticated via API endpoint.
      */
-    public function test_usser_cannot_store_user_while_unauthenticated(): void
+    public function test_user_cannot_store_user_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
