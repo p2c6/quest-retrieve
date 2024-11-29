@@ -20,12 +20,12 @@ import { RouterLink } from 'vue-router';
                     <p>August 31, 2024</p>
                 </div>
                 <div class="mt-5">
-                    <RouterLink 
+                    <div 
                         class="bg-secondary px-2 py-1 rounded text-white text-sm"
-                        :to="{name: 'contact', params: {id: 1}}"
+                       
                     >
                         Contact
-                    </RouterLink>
+                    </div>
                     <!-- <div class="flex flex-row gap-1 text-tertiary">
                         <i class="pi pi-pen-to-square"></i>
                         <i class="pi pi-times-circle"></i>
