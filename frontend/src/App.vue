@@ -6,7 +6,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <Navbar v-if="route.path !== '/login' && route.path !== '/register'" />
+  <!-- <Navbar v-if="route.path !== '/login' && route.path !== '/register'" /> -->
   <RouterView />
 </template>
 
