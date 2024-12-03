@@ -29,7 +29,7 @@ const collapseNav = () => collapse.value = !collapse.value;
                     <div>
                         {{ store.user.first_name }}  {{ store.user.last_name }}
                     </div>
-                    <div>
+                    <div @click="store.logout">
                         Logout
                     </div>
                 </div>
