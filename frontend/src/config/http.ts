@@ -14,4 +14,15 @@ const webClient = axios.create({
     ...baseConfig 
 });
 
+apiClient.interceptors.request.use((config) => {
+
+    if (config.method !== "GET") {
+        webClient.get('/sanctum/csrf-cookie')
+    }
+    
+    return config;
+})
+
+
+
 export { apiClient, webClient };
