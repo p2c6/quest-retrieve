@@ -15,6 +15,7 @@ use App\Http\Controllers\API\v1\FileUpload\TemporaryFileUploadController;
 use App\Http\Controllers\API\v1\PostApproval\PostApprovalController;
 use App\Http\Controllers\API\v1\User\Post\PostController;
 use App\Http\Controllers\API\v1\User\UserProfile\UserProfileController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->name('api.v1.')->group(function() {
@@ -27,6 +28,11 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
     //Authenticated User
     Route::middleware('auth:sanctum')->group(function() {
+        //Get Current User
+        Route::get('/user', function(Request $request) {
+            return $request->user();
+        });
+        
         //User
         Route::apiResource('users', UserController::class);
         
