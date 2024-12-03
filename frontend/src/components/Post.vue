@@ -20,10 +20,7 @@ import { RouterLink } from 'vue-router';
                     <p>August 31, 2024</p>
                 </div>
                 <div class="mt-5">
-                    <div 
-                        class="bg-secondary px-2 py-1 rounded text-white text-sm"
-                       
-                    >
+                    <div class="bg-secondary px-2 py-1 rounded text-white text-sm w-16">
                         Contact
                     </div>
                     <!-- <div class="flex flex-row gap-1 text-tertiary">
