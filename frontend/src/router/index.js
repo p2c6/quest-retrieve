@@ -16,7 +16,10 @@ router.beforeEach(async (to, from, next) => {
 
   await authStore.getUser();
 
-  if (authStore.user && !authStore.user.email_verified_at && to.name === 'home') {
+  const notYetVerified = authStore.user && !authStore.user.email_verified_at;
+  const forbbidenRoutes = ['home', 'register', 'login'];
+
+  if (notYetVerified && forbbidenRoutes.includes(to.name)) {
     return next({name: 'email.verification'})
   }
 
