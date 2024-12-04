@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { apiClient } from "@/config/http";
+import { apiClient, webClient } from "@/config/http";
 import type { UserLogin, UserRegistration } from "@/types";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -93,6 +93,20 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    const verifyEmail = async(url: string): Promise<any> => {
+        try {
+            const response = await webClient.get(url);
+
+            if (response.status === 200) {
+                await getUser();
+                return router.push({name: 'home'})
+            }
+        } catch(error) {
+            console.log(error)
+        }
+        
+    }
+
     return {
         /*
             @Variables
@@ -107,5 +121,6 @@ export const useAuthStore = defineStore('auth', () => {
         register,
         logout,
         getUser,
+        verifyEmail
     }
 })

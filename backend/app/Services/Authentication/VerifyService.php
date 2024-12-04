@@ -25,7 +25,7 @@ class VerifyService implements VerifyInterface
 
             $request->fulfill();
 
-            $this->sendWelcomeMail($request->email);
+            $this->sendWelcomeMail($request->user()->email);
 
             DB::commit();
 
