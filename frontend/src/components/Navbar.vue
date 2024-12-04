@@ -25,9 +25,9 @@ const collapseNav = () => collapse.value = !collapse.value;
             </div>
         </div>
         <div :class="`bg-indigo-800`">
-                <div :class="`mx-6 text-white flex flex-col p-2 gap-2 ${collapse ? 'block' : 'hidden'} md:flex md:flex-row md:justify-end`" v-if="store.user?.first_name">
+                <div :class="`mx-6 text-white flex flex-col p-2 gap-2 ${collapse ? 'block' : 'hidden'} md:flex md:flex-row md:justify-end`" v-if="store.user?.email_verified_at && store.user?.profile?.first_name">
                     <div class="hover:cursor-pointer">
-                        {{ store.user.first_name }}  {{ store.user.last_name }}
+                        {{ store.user?.profile?.first_name }}  {{ store.user?.profile?.last_name }}
                     </div>
                     <div class="hover:cursor-pointer" @click="store.logout">
                         Logout
