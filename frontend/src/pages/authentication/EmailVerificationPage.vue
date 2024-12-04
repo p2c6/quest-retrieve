@@ -34,9 +34,10 @@ onBeforeUnmount(() => {
                                 <h1 class="text-primary font-medium text-lg">E-mail Verification</h1>
                             </div>
                             <div>
-                                <p class="text-gray-400">We have sent an e-mail verification link on your e-mail. Please check your e-mail to verify your account and in order to proceed.</p>
+                                <p class="text-gray-400">We have sent an e-mail verification link to your e-mail. Please check your e-mail and click the link provided in the e-mail to complete your account registration.</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-5"></div>
+                            <p class="mt-1 text-red-400 text-xs">Note: If you do not receive the e-mail within a few minutes, click the button below to resend email verification.</p>
                             <button v-if="authStore.isLoading" class="bg-secondary rounded-lg px-6 py-1 text-white mt-10 text-sm opacity-50 cursor-not-allowed" disabled>
                                 <div role="status" v-if="authStore.isLoading">
                                     <svg aria-hidden="true" class="w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
