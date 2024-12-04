@@ -30,11 +30,11 @@ onBeforeUnmount(() => {
                 <div class="container mx-auto w-auto md:w-96 mt-24">
                     <form @submit.prevent="authStore.login(credentials)">
                         <div>
-                            <div class="mb-8">
+                            <div class="mb-6">
                                 <h1 class="text-primary font-medium text-lg">E-mail Verification</h1>
                             </div>
                             <div>
-                                <p>We have sent an e-mail verification link on your e-mail to verify. Please check your e-mail.</p>
+                                <p class="text-gray-400">We have sent an e-mail verification link on your e-mail. Please check your e-mail to verify your account and in order to proceed.</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-5"></div>
                             <button v-if="authStore.isLoading" class="bg-secondary rounded-lg px-6 py-1 text-white mt-10 text-sm opacity-50 cursor-not-allowed" disabled>
@@ -45,8 +45,8 @@ onBeforeUnmount(() => {
                                     </svg>
                                 </div>
                             </button>
-                            <button v-else class="bg-secondary rounded-lg px-6 py-1 text-white mt-5 text-sm">
-                                Next
+                            <button v-else class="bg-secondary rounded-lg px-6 py-1 text-white mt-5 text-sm w-full">
+                                Resend Email Verification
                             </button>
                         </div>
                     </form>
