@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { apiClient } from "@/config/http";
-import type { LoginCredentials } from "@/types";
+import type { UserLogin } from "@/types";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -24,7 +24,7 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    const login = async(credentials: LoginCredentials): Promise<any> => {
+    const login = async(credentials: UserLogin): Promise<any> => {
         isLoading.value = true;
         errors.value = null;
         try { 
