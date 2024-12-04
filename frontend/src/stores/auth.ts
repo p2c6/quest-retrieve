@@ -7,7 +7,7 @@ import { useRouter } from "vue-router";
 
 export const useAuthStore = defineStore('auth', () => {
     const router = useRouter();
-    const user = ref(null);
+    const user = ref<object | null>(null);
     const isLoading = ref<boolean | null>(null);
     const errors = ref(null);
 
@@ -55,7 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
             const response = await apiClient.post('/authentication/register', payload);
 
             if (response.status === 201) {
-                console.log('resp', response)
+                router.push({name: 'email.verification'})
             }
 
         } catch(error: any) {
