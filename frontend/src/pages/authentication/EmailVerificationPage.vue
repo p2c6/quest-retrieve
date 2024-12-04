@@ -2,17 +2,11 @@
 import { RouterLink } from 'vue-router';
 import logo from "@/assets/qr-logo.png";
 import home from "@/assets/home.png";
-import Input from '@/components/Input.vue';
 import { useAuthStore } from "@/stores/auth";
-import { onBeforeUnmount, reactive } from 'vue';
+import { onBeforeUnmount } from 'vue';
 
 
 const authStore = useAuthStore();
-
-const credentials = reactive({
-    email: '',
-    password: ''
-});
 
 onBeforeUnmount(() => {
     authStore.errors = null;
