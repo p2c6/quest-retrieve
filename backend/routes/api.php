@@ -30,7 +30,11 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
     Route::middleware('auth:sanctum')->group(function() {
         //Get Current User
         Route::get('/user', function(Request $request) {
-            return $request->user()->profile;
+            $user = auth()->user();
+            if ($user) {
+                $user->load('profile');
+            }
+            return $user; 
         });
         
         //User
