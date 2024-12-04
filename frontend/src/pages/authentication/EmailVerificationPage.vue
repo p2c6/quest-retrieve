@@ -34,7 +34,7 @@ onBeforeUnmount(() => {
                                 <h1 class="text-primary font-medium text-lg">E-mail Verification</h1>
                             </div>
                             <div>
-                                <p class="text-gray-400">We have sent an e-mail verification link to your e-mail. Please check your e-mail and click the link provided in the e-mail to complete your account registration.</p>
+                                <p class="text-gray-400 text-sm md:text-md">We have sent an e-mail verification link to your e-mail. Please check your e-mail and click the link provided in the e-mail to complete your account registration.</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-5"></div>
                             <p class="mt-1 text-red-400 text-xs">Note: If you do not receive the e-mail within a few minutes, click the button below to resend email verification.</p>
