@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const login = async(credentials: LoginCredentials): Promise<any> => {
         isLoading.value = true;
+        errors.value = null;
         try { 
             const response = await apiClient.post('/authentication/login', credentials);
 
@@ -36,7 +37,8 @@ export const useAuthStore = defineStore('auth', () => {
 
         } catch(error: any) {
             if (error.status === 422) {
-                console.log('validation error');
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors;
                 return;
             }
             
@@ -74,6 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
         */
         user,
         isLoading,
+        errors,
         /*
             @Functions
         */
