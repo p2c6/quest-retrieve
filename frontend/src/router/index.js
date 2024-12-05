@@ -22,6 +22,10 @@ router.beforeEach(async (to, from, next) => {
   if (notYetVerified && forbbidenRoutes.includes(to.name)) {
     return next({name: 'email.verification'})
   }
+
+  if (!notYetVerified && to.name === "verify.email") {
+    return next({name: 'home' });
+  }
   
   next();
 });
