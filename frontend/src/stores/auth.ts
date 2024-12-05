@@ -81,7 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const logout = async(): Promise<void> => {
         isLoading.value = true;
-        
+
         try { 
             const response = await apiClient.post('/authentication/logout');
 
@@ -103,6 +103,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const verifyEmail = async(url: string): Promise<any> => {
+        isLoading.value = true;
+
         try {
             const response = await webClient.get(url);
 
@@ -112,6 +114,8 @@ export const useAuthStore = defineStore('auth', () => {
             }
         } catch(error) {
             console.log(error)
+        } finally {
+            isLoading.value = false;
         }
         
     }
