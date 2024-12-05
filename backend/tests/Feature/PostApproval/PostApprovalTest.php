@@ -386,4 +386,50 @@ class PostApprovalTest extends TestCase
         $response->assertCookie('laravel_session')
                 ->assertStatus(403);
     }
+
+    /**
+     * Test public user cannot reject post via API.
+     * 
+     * This test verifies that a public user cannot reject post via API endpoint.
+     */
+    public function test_public_user_cannot_reject_post(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $post = Post::where('status', PostStatus::PENDING)->first();
+
+        $updatedStatus = PostStatus::REJECT;
+        
+        $response = $this->putJson(route('api.v1.for-approval.reject', $post->id), [
+            'status' => $updatedStatus
+        ]);
+
+        $updatedPost = Post::where('id', $post->id)->first();
+
+        $this->assertEquals($post->status, $updatedPost->status);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403);
+    }
 }
