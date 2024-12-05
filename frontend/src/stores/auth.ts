@@ -119,6 +119,22 @@ export const useAuthStore = defineStore('auth', () => {
         
     }
 
+    const resendEmailVerificationLink = async():Promise<any> => {
+        isLoading.value = true;
+
+        try {
+            const response = await webClient.post('/api/verification/email/verification-notification');
+
+            if (response.status === 200) {
+                console.log('response', response.data);
+            }
+        } catch (error) {
+            console.log("Resend email verification error: " , error)
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
     return {
         /*
             @Variables
@@ -133,6 +149,7 @@ export const useAuthStore = defineStore('auth', () => {
         register,
         logout,
         getUser,
-        verifyEmail
+        verifyEmail,
+        resendEmailVerificationLink
     }
 })

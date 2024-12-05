@@ -46,7 +46,7 @@ onBeforeUnmount(() => {
                                     </svg>
                                 </div>
                             </button>
-                            <button v-else class="bg-secondary rounded-lg px-6 py-1 text-white mt-5 text-sm w-full">
+                            <button v-else class="bg-secondary rounded-lg px-6 py-1 text-white mt-5 text-sm w-full" @click="authStore.resendEmailVerificationLink">
                                 Resend Email Verification
                             </button>
                         </div>
