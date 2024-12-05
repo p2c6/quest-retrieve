@@ -4,7 +4,7 @@ import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { RouterLink } from 'vue-router';
 import logo from "@/assets/qr-logo.png";
-import help from "@/assets/help.png";
+import verify from "@/assets/verify.png";
 
 const route = useRoute();
 const store = useAuthStore();
@@ -53,7 +53,7 @@ onMounted(() => {
                     <div class="text-center mt-5">
                         <h1 class="text-lg font-bold">QuestRetrieve: Turning lost and found into a community-powered solution</h1>
                     </div>
-                    <img :src="help" alt="Illustration of people">
+                    <img :src="verify" alt="Illustration of people">
     
                     <p  class="w-auto mb-10"> Where every item has a story, and every story finds its way home.</p>
     
