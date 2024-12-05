@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const getUser = async():Promise<void> => {
         isLoading.value = true;
+
         try {
             const { data } = await apiClient.get('/user')
             console.log('data', data)
@@ -27,6 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
     const login = async(payload: UserLogin): Promise<any> => {
         isLoading.value = true;
         errors.value = null;
+
         try { 
             const response = await apiClient.post('/authentication/login', payload);
 
@@ -56,6 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
     const register = async(payload: UserRegistration): Promise<any> => {
         isLoading.value = true;
         errors.value = null;
+
         try { 
             const response = await apiClient.post('/authentication/register', payload);
 
@@ -78,6 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const logout = async(): Promise<void> => {
         isLoading.value = true;
+        
         try { 
             const response = await apiClient.post('/authentication/logout');
 
