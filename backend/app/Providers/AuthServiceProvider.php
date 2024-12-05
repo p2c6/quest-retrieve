@@ -47,6 +47,10 @@ class AuthServiceProvider extends ServiceProvider
 
     public function gates()
     {
+        Gate::define('view-posts', function (User $user, Post $post) {
+            return in_array($user->role_id, [UserType::ADMINISTRATOR, UserType::MODERATOR]);
+        });
+
         Gate::define('approve-post', function (User $user, Post $post) {
             return in_array($user->role_id, [UserType::ADMINISTRATOR, UserType::MODERATOR]);
         });

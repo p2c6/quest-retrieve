@@ -304,9 +304,9 @@ class PostApprovalTest extends TestCase
     }
 
     /**
-     * Test public user cannot approve post via API.
+     * Test public user cannot access post approval list via API.
      * 
-     * This test verifies that a public user cannot approve post via API endpoint.
+     * This test verifies that a public user cannot access post approval list via API endpoint.
      */
     public function test_public_user_cannot_access_post_approval_list(): void
     {
@@ -334,12 +334,8 @@ class PostApprovalTest extends TestCase
         $this->assertAuthenticatedAs($user);
 
         $post = Post::where('status', PostStatus::PENDING)->first();
-
-        $updatedStatus = PostStatus::ON_PROCESSING;
         
-        $response = $this->putJson(route('api.v1.for-approval.approve', $post->id), [
-            'status' => $updatedStatus
-        ]);
+        $response = $this->getJson(route('api.v1.for-approval.index'));
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(403);
