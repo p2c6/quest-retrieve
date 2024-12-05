@@ -44,10 +44,6 @@ class PostApprovalService
     {
         
         try {
-            if (! Gate::allows('approve-post', $post)) {
-                return response()->json(['message' => 'You are not allowed to access this action'], 403);
-            }
-
             $post->update([
                 'status' => PostStatus::ON_PROCESSING
             ]);
@@ -70,11 +66,6 @@ class PostApprovalService
     public function reject(Post $post) : JsonResponse
     {
         try {
-            if (! Gate::allows('reject-post', $post)) {
-                return response()->json(['message' => 'You are not allowed to access this action'], 403);
-            }
-            
-
             $post->update([
                 'status' => PostStatus::REJECT
             ]);

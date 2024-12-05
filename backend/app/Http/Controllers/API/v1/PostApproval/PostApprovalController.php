@@ -53,6 +53,10 @@ class PostApprovalController extends Controller
      */
     public function approve(Post $post) : JsonResponse
     {
+        if (! Gate::allows('approve-post', $post)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->approve($post);
     }
 
@@ -64,6 +68,10 @@ class PostApprovalController extends Controller
      */
     public function reject(Post $post) : JsonResponse
     {
+        if (! Gate::allows('reject-post', $post)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+        
         return $this->service->reject($post);
     }
 }
