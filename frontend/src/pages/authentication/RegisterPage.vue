@@ -23,8 +23,9 @@ const formData = reactive({
 <div class="bg-white">
     <div class="grid grid-cols-1 lg:grid-cols-2 h-auto">
         <div class="mx-6 mt-6">
-        
-                <i class="pi pi-arrow-left text-secondary"></i>
+                <RouterLink :to="{name: 'login'}">
+                    <i class="pi pi-arrow-left text-secondary"></i>
+                </RouterLink>
             
             <div class="flex flex-col items-center mt-1">
                 <div>
