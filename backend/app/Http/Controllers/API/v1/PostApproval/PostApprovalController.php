@@ -42,7 +42,7 @@ class PostApprovalController extends Controller
      */
     public function index(): PostCollection
     {
-        if (! Gate::allows('view-posts', Post::class)) {
+        if (Gate::denies('view-posts', Post::class)) {
             return response()->json(['message' => 'You are not allowed to access this action'], 403);
         }
 
@@ -57,7 +57,7 @@ class PostApprovalController extends Controller
      */
     public function approve(Post $post) : JsonResponse
     {
-        if (! Gate::allows('approve-post', $post)) {
+        if (Gate::denies('approve-post', $post)) {
             return response()->json(['message' => 'You are not allowed to access this action'], 403);
         }
 
@@ -72,7 +72,7 @@ class PostApprovalController extends Controller
      */
     public function reject(Post $post) : JsonResponse
     {
-        if (! Gate::allows('reject-post', $post)) {
+        if (Gate::denies('reject-post', $post)) {
             return response()->json(['message' => 'You are not allowed to access this action'], 403);
         }
 
