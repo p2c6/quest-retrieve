@@ -1,13 +1,13 @@
 import { defineStore } from "pinia"
 import { apiClient, webClient } from "@/config/http";
-import type { UserLogin, UserRegistration } from "@/types";
+import type { User, UserLogin, UserRegistration } from "@/types";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 
 export const useAuthStore = defineStore('auth', () => {
     const router = useRouter();
-    const user = ref<object | null>(null);
+    const user = ref<User | null>(null);
     const isLoading = ref<boolean | null>(null);
     const errors = ref(null);
 
