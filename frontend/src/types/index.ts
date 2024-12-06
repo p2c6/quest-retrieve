@@ -16,6 +16,12 @@ export type UserForgotPassword = {
     email: string;
 }
 
+export type UserResetPassword = {
+    email: string;
+    password: string;
+    password_confirmation: string;
+}
+
 export type Profile =  {
     id: number;
     first_name: string;

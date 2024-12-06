@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { apiClient, webClient } from "@/config/http";
-import type { User, UserForgotPassword, UserLogin, UserRegistration } from "@/types";
+import type { User, UserForgotPassword, UserLogin, UserRegistration, UserResetPassword } from "@/types";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -10,6 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
     const isLoading = ref<boolean | null>(null);
     const errors = ref(null);
+    const message = ref(null);
 
     const getUser = async():Promise<void> => {
         isLoading.value = true;
@@ -158,12 +159,35 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    const resetPassword = async(payload: UserResetPassword):Promise<any> => {
+        isLoading.value = true;
+
+        try {
+            const response = await webClient.post('/api/reset-password', payload);
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+            }
+        } catch (error: any) {
+            if (error.status === 422) {
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors ?? error.response.data;
+                return;
+            }
+
+            console.log("Reset password error: " , error)
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
     return {
         /*
             @Variables
         */
         user,
         isLoading,
+        message,
         errors,
         /*
             @Functions
@@ -175,5 +199,6 @@ export const useAuthStore = defineStore('auth', () => {
         verifyEmail,
         resendEmailVerificationLink,
         forgotPassword,
+        resetPassword,
     }
 })
