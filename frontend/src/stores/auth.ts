@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
             console.log('data', data)
             user.value = data
         } catch(error) {
+            user.value = null;
             console.log('Getting user error: ', error)
         } finally {
             isLoading.value = false;
