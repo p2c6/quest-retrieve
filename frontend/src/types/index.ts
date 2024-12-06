@@ -12,6 +12,10 @@ export type UserRegistration = {
     contact_no: string;
 }
 
+export type UserForgotPassword = {
+    email: string;
+}
+
 export type Profile =  {
     id: number;
     first_name: string;
