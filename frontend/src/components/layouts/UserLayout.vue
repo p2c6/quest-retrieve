@@ -9,7 +9,15 @@ const store = useAuthStore();
 const isLoading = ref(true);
 
 const showNavbar = computed(() => {
-    const excludedPaths = ["/login", "/register", "/email-verification", "/verify-email", "/reset-password"];
+    const excludedPaths = [
+                            "/login", 
+                            "/register", 
+                            "/email-verification", 
+                            "/verify-email", 
+                            "/forgot-password",
+                            "/reset-password",
+                        ];
+
     return !excludedPaths.includes(route.path);
 });
 
