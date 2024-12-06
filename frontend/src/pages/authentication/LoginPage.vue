@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
                                 <button class="bg-secondary rounded-lg px-6 py-1 text-white text-sm">
                                     Next
                                 </button>
-                                <RouterLink :to="{name: 'reset.forgot'}">
+                                <RouterLink :to="{name: 'password.forgot'}">
                                     <p class="text-xs text-primary font-semibold">Forgot Password?</p>
                                 </RouterLink>
                             </div>
