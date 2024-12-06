@@ -31,7 +31,7 @@ onBeforeUnmount(() => {
                     <img :src="logo" alt="QuestRetrieve Logo" width="250px">
                 </div>
 
-                <div class="container mx-auto w-auto md:w-96 mt-24">
+                <div class="container mx-auto w-auto md:w-96 mt-16">
                     <form @submit.prevent="authStore.login(formData)">
                         <div>
                             <div class="mb-6">
