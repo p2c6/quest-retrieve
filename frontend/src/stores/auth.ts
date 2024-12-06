@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { apiClient, webClient } from "@/config/http";
-import type { User, UserLogin, UserRegistration } from "@/types";
+import type { User, UserForgotPassword, UserLogin, UserRegistration } from "@/types";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -136,6 +136,28 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    const forgotPassword = async(payload: UserForgotPassword):Promise<any> => {
+        isLoading.value = true;
+
+        try {
+            const response = await webClient.post('/api/forgot-password', payload);
+
+            if (response.status === 200) {
+                console.log('response', response.data);
+            }
+        } catch (error: any) {
+            if (error.status === 422) {
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors;
+                return;
+            }
+
+            console.log("Forgot password error: " , error)
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
     return {
         /*
             @Variables
@@ -151,6 +173,7 @@ export const useAuthStore = defineStore('auth', () => {
         logout,
         getUser,
         verifyEmail,
-        resendEmailVerificationLink
+        resendEmailVerificationLink,
+        forgotPassword,
     }
 })
