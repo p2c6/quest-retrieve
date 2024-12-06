@@ -2,6 +2,7 @@ import LoginPage from "@/pages/authentication/LoginPage.vue";
 import RegisterPage from "@/pages/authentication/RegisterPage.vue";
 import EmailVerificationPage from "@/pages/authentication/EmailVerificationPage.vue";
 import VerifyEmailPage from "@/pages/authentication/VerifyEmailPage.vue";
+import ResetPasswordPage from "@/pages/authentication/ResetPasswordPage.vue";
 import HomePage from "@/pages/user/home/HomePage.vue";
 import UserLayout from '@/components/layouts/UserLayout.vue';
 
@@ -34,6 +35,11 @@ export default [
         path: "/verify-email",
         name: "verify.email",
         component: VerifyEmailPage,
+      },
+      {
+        path: "/reset-password",
+        name: "reset.password",
+        component: ResetPasswordPage,
       },
     ],
   },
