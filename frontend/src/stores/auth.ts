@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
     const router = useRouter();
     const user = ref<User | null>(null);
     const isLoading = ref<boolean | null>(null);
-    const errors = ref(null);
+    const errors = ref<any | null>(null);
     const message = ref(null);
 
     const getUser = async():Promise<void> => {
@@ -45,6 +45,14 @@ export const useAuthStore = defineStore('auth', () => {
             }
 
         } catch(error: any) {
+            if (error.status === 401) {
+                console.log('Authentication error', error);
+                const authError = {
+                    data: error.response?.data
+                };
+                errors.value = authError;
+            }
+
             if (error.status === 422) {
                 console.log('Validation error', error);
                 errors.value = error.response.data.errors;
