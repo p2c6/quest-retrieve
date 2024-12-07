@@ -27,6 +27,10 @@ router.beforeEach(async (to, from, next) => {
     return next({name: 'home'})
   }
 
+  if (authenticatedUser && authenticatedUser.email_verified_at &&  to.name === "register") {
+    return next({name: 'home'})
+  }
+
   if(!notYetVerified && to.name === "email.verification") {
     return next({name: 'home'})
   }
