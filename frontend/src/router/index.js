@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import userRoutes from "./user";
 import { useAuthStore } from '@/stores/auth';
+import authGuard from "@/guard/auth";
 
 const routes = [
   ...userRoutes
@@ -15,30 +16,16 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
 
   await authStore.getUser();
-  const authenticatedUser = authStore.user;
-  const notYetVerified = authenticatedUser && !authenticatedUser.email_verified_at;
-  const forbbidenRoutes = ['home', 'register', 'login'];
+  const authUser = authStore.user;
 
-  if (notYetVerified && forbbidenRoutes.includes(to.name)) {
-    return next({name: 'email.verification'})
+  const redirection = authGuard(to.name, authUser);
+
+  if (redirection) {
+    next(redirection);
+  } else {
+    next();
   }
 
-  if (authenticatedUser && authenticatedUser.email_verified_at &&  to.name === "login") {
-    return next({name: 'home'})
-  }
-
-  if (authenticatedUser && authenticatedUser.email_verified_at &&  to.name === "register") {
-    return next({name: 'home'})
-  }
-
-  if(!notYetVerified && to.name === "email.verification") {
-    return next({name: 'home'})
-  }
-
-  if (!notYetVerified && to.name === "verify.email") {
-    return next({name: 'home' });
-  }
-  
   next();
 });
 

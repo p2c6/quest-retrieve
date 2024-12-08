@@ -36,10 +36,6 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (response.status === 200) {
                 await getUser();
-
-                if (!user.value?.email_verified_at) {
-                    router.push({name: 'email.verification'});
-                }
                 
                 router.push({name: 'home'});
             }
