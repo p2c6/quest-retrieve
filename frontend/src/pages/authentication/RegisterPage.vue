@@ -73,8 +73,8 @@ const formData = reactive({
                                 <input type="password" v-model="formData.password" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.password" class="text-red-500 text-xs">{{ authStore.errors.password[0] }}</p>
                             </div>
-                            <div class="border-t-[1.1px] border-gray w-full mt-4"></div>
-                            <div class="mt-4 flex flex-row items-center gap-1">
+                            <div class="border-t-[1.1px] border-gray w-full mt-2"></div>
+                            <div class="mt-2 flex flex-row items-center gap-1">
                                 <h1 class="text-primary">Already have an account?</h1> 
 
                                     <div class="underline text-primary"> Log-in</div>
