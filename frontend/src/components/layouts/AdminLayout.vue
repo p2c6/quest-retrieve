@@ -1,12 +1,11 @@
 <script setup>
-import { RouterView, useRoute } from 'vue-router';
-import { computed, onBeforeMount, onMounted, onUnmounted, ref, Teleport } from 'vue';
+import { RouterView } from 'vue-router';
+import Navbar from "@/components/Navbar.vue";
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, Teleport, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import Sidebar from '@/components/Sidebar.vue';
 import logo from "@/assets/qr-logo.png";
 
-
-const route = useRoute();
 const store = useAuthStore();
 const isLoading = ref(true);
 const screenWidth = ref(window.innerWidth);
@@ -44,7 +43,13 @@ const isMobile = computed(() => {
     </div>
     <div v-else>
         <div class="flex flex-col min-h-screen md:flex-row">
-            <Teleport to="#sidebar-mobile" :disabled="!isMobile">
+            <div v-if="!isMobile">
+                <div :class="`w-full h-full md:w-64 bg-primary text-white p-4 ${collapse ? 'block' : 'hidden'} md:block`">
+                    <Sidebar />
+                </div>
+            </div>
+
+            <Teleport to="#sidebar-mobile" v-if="isMobile">
                 <div :class="`w-full md:w-64 bg-primary text-white p-4 ${collapse ? 'block' : 'hidden'} md:block`">
                     <Sidebar />
                 </div>
@@ -79,9 +84,7 @@ const isMobile = computed(() => {
                     </div>
                 </div>
 
-                <div id="sidebar-mobile">
-
-                </div>
+                <div id="sidebar-mobile"></div>
                 
                 <div class="mt-5">
                     <div class="px-5">
