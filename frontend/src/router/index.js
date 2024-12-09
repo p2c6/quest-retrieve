@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import userRoutes from "./user";
+import adminRoutes from "./admin";
 import { useAuthStore } from '@/stores/auth';
 import authGuard from "@/guard/auth";
 
 const routes = [
-  ...userRoutes
+  ...userRoutes,
+  ...adminRoutes
 ];
 
 const router = createRouter({
