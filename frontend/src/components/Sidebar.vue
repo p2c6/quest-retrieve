@@ -17,7 +17,7 @@ const collapseSubItems = (parent) => {
 </script>
 
 <template>
-        <div>
+        <div class="text-sm md:text-md">
             <ul class="text-white">
                 <li class="my-2">
                     <div class="list-item-parent">
@@ -31,7 +31,7 @@ const collapseSubItems = (parent) => {
                         <h4 id="list-main-item">System Configuration</h4>
                         <i class="pi pi-angle-down text-xs ml-auto"></i>
                     </div>
-                    <ul :class="`ml-8 ${systemConfigurationSubItems ? 'block' : 'hidden'}`">
+                    <ul :class="`list-item-child ml-8 ${systemConfigurationSubItems ? 'block' : 'hidden'}`">
                         <li>Category</li>
                         <li>Roles</li>
                         <li>Subcategory</li>
@@ -43,7 +43,7 @@ const collapseSubItems = (parent) => {
                         <h4>User Management</h4>
                         <i class="pi pi-angle-down text-xs ml-auto"></i>
                     </div>
-                    <ul :class="`ml-8 ${userManagementSubItems ? 'block' : 'hidden'}`">
+                    <ul :class="`list-item-child ml-8 ${userManagementSubItems ? 'block' : 'hidden'}`">
                         <li>Roles</li>
                         <li>Users</li>
                     </ul>
@@ -55,5 +55,13 @@ const collapseSubItems = (parent) => {
 <style lang="css" scoped>
     .list-item-parent {
         @apply p-2 w-full flex items-center gap-2 hover:bg-blue-800 rounded cursor-pointer;
+    }
+
+    .list-item-child li {
+        @apply my-2
+    }
+
+    .list-item-child li:hover {
+        @apply text-blue-400 cursor-pointer;
     }
 </style>
