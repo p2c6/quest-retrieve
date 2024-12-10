@@ -71,9 +71,9 @@ const isMobile = computed(() => {
                         <img :src="logo" alt="QuestRetrieve Logo" width="150px">
 
                         <div class="relative flex justify-evenly items-center gap-1 text-xs w-48 md:w-50 mt-2 md:text-md">
-                            <div class="flex items-center gap-3" @click="collapseDropDown">
+                            <div class="flex items-center gap-3 cursor-pointer" @click="collapseDropDown">
                                 <img src="https://i.pravatar.cc/150?img=11" alt="" class="w-5 h-5 rounded-full">
-                                <p class="text-gray-400 font-semibold cursor-pointer hidden md:block"> John Doe </p>
+                                <p class="text-gray-400 font-semibold hidden md:block"> John Doe </p>
                                 <i class="text-secondary pi pi-angle-down px-1"></i>
                             </div>
 
