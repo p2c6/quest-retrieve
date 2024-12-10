@@ -18,6 +18,10 @@ const collapse = ref(false);
 
 const collapseSideNav = () => collapse.value = !collapse.value
 
+const isDropdownOpen = ref(false);
+
+const collapseDropDown = () => isDropdownOpen.value = !isDropdownOpen.value
+
 onBeforeMount(async() => {
     await store.getUser();
     isLoading.value = false;
@@ -66,14 +70,14 @@ const isMobile = computed(() => {
 
                         <img :src="logo" alt="QuestRetrieve Logo" width="150px">
 
-                        <div class="relative flex justify-evenly items-center gap-1 text-xs w-26 md:w-50 mt-2 md:text-md">
-                            <div class="flex items-center gap-3">
+                        <div class="relative flex justify-evenly items-center gap-1 text-xs w-48 md:w-50 mt-2 md:text-md">
+                            <div class="flex items-center gap-3" @click="collapseDropDown">
                                 <img src="https://i.pravatar.cc/150?img=11" alt="" class="w-5 h-5 rounded-full">
                                 <p class="text-gray-400 font-semibold cursor-pointer hidden md:block"> John Doe </p>
                                 <i class="text-secondary pi pi-angle-down px-1"></i>
                             </div>
 
-                            <div class="absolute top-10 -right-3 md:right-2 hidden">
+                            <div :class="`absolute top-10 -right-3 md:right-2 ${isDropdownOpen ? 'block' : 'hidden'}`">
                                 <div class="px-16 bg-white h-auto text-black shadow-2xl flex flex-col gap-1">
                                         <div class="p-2">Account</div>
                                         <div class="p-2">Account</div>
