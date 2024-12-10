@@ -40,6 +40,6 @@
 
 <style lang="css" scoped>
     .list-item-parent {
-        @apply p-2 w-full flex items-center gap-2 hover:bg-blue-800 rounded;
+        @apply p-2 w-full flex items-center gap-2 hover:bg-blue-800 rounded cursor-pointer;
     }
 </style>
