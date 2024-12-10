@@ -78,9 +78,9 @@ const isMobile = computed(() => {
                             </div>
 
                             <div :class="`absolute top-10 -right-3 md:right-2 ${isDropdownOpen ? 'block' : 'hidden'}`">
-                                <div class="px-16 bg-white h-auto text-black shadow-2xl flex flex-col gap-1">
-                                        <div class="p-2">Account</div>
-                                        <div class="p-2">Account</div>
+                                <div class="w-48 bg-white h-auto text-center text-black shadow-2xl flex flex-col gap-1">
+                                    <div class="p-2 cursor-pointer hover:bg-gray-300">Account</div>
+                                    <div class="p-2 cursor-pointer hover:bg-gray-300">Account</div>
                                 </div>
                             </div>
                         </div>
