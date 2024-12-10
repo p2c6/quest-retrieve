@@ -8,35 +8,27 @@ import logo from "@/assets/qr-logo.png";
 
 const store = useAuthStore();
 const isLoading = ref(true);
-const screenWidth = ref(window.innerWidth);
-
-const updateScreenWidth = () => {
-    screenWidth.value = window.innerWidth;
-};
-
 const collapse = ref(false);
-
-const collapseSideNav = () => collapse.value = !collapse.value
-
 const isDropdownOpen = ref(false);
 
-const collapseDropDown = () => isDropdownOpen.value = !isDropdownOpen.value
+const collapseSideNav = () => {
+    if (isDropdownOpen.value) {
+        isDropdownOpen.value = false;
+    }
 
+    collapse.value = !collapse.value
+}
+
+const collapseDropDown = () => {
+    if (collapse.value) {
+        collapse.value = false;
+    }
+
+    isDropdownOpen.value = !isDropdownOpen.value
+}
 onBeforeMount(async() => {
     await store.getUser();
     isLoading.value = false;
-})
-
-onMounted(() => {
-    window.addEventListener('resize', updateScreenWidth);
-});
-
-onUnmounted(() => {
-    window.removeEventListener('resize', updateScreenWidth);
-})
-
-const isMobile = computed(() => {
-    return screenWidth.value < 768
 })
 
 </script>
@@ -47,17 +39,11 @@ const isMobile = computed(() => {
     </div>
     <div v-else>
         <div class="flex flex-col min-h-screen md:flex-row">
-            <div v-if="!isMobile">
+            <div class="hidden md:block">
                 <div :class="`w-full h-full md:w-64 bg-primary text-white p-4 ${collapse ? 'block' : 'hidden'} md:block`">
                     <Sidebar />
                 </div>
             </div>
-
-            <Teleport to="#sidebar-mobile" v-if="isMobile">
-                <div :class="`w-full md:w-64 bg-primary text-white p-4 ${collapse ? 'block' : 'hidden'} md:block`">
-                    <Sidebar />
-                </div>
-            </Teleport>
     
             <div class="flex-1 bg-gray-100">
 
@@ -88,7 +74,11 @@ const isMobile = computed(() => {
                     </div>
                 </div>
 
-                <div id="sidebar-mobile"></div>
+                <div class="block md:hidden">
+                    <div :class="`w-full md:w-64 bg-primary text-white p-4 ${collapse ? 'block' : 'hidden'} md:block`">
+                        <Sidebar />
+                    </div>
+                </div>
                 
                 <div class="mt-5">
                     <div class="px-5">
