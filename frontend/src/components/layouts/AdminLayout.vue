@@ -50,7 +50,7 @@ onBeforeMount(async() => {
                 <div class="bg-white text-white p-4">
                     <div class="flex justify-between items-center">
 
-                        <div class="block mt-2 md:hidden" @click="collapseSideNav">
+                        <div class="block mt-2 hover:cursor-pointer md:hidden" @click="collapseSideNav">
                             <i class="text-indigo-800 pi pi-bars"></i> 
                         </div>
 
