@@ -19,7 +19,7 @@ class CategoryService
      */
     public function index(): CategoryCollection
     {
-        return new CategoryCollection(Category::paginate());
+        return new CategoryCollection(Category::paginate(5));
     }
 
     /**
