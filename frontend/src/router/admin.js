@@ -1,5 +1,6 @@
-import DashboardPage from "@/pages/admin/dashboard/DashboardPage.vue";
 import AdminLayout from '@/components/layouts/AdminLayout.vue';
+import DashboardPage from "@/pages/admin/dashboard/DashboardPage.vue";
+import CategoryPage from "@/pages/admin/system_configuration/category/CategoryPage.vue";
 
 export default [
   {
@@ -10,6 +11,11 @@ export default [
         path: "",
         name: "dashboard",
         component: DashboardPage,
+      },
+      {
+        path: "category",
+        name: "category",
+        component: CategoryPage,
       },
     ],
   },
