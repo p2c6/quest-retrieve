@@ -90,6 +90,32 @@ export const useCategoryStore = defineStore('category', () => {
 
     }
 
+    const deleteCategory = async(id: string | number) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.delete(`/categories/${id}`)
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+                
+                getAllCategories()
+
+                router.push({name: 'category.list'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 409) {
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors;
+                return;
+            }
+
+            console.log("Error on deleting category: ", error)
+        }
+
+    }
+
     return {
         categories,
         message,
@@ -99,5 +125,6 @@ export const useCategoryStore = defineStore('category', () => {
         getCategory,
         storeCategory,
         updateCategory,
+        deleteCategory,
     }
 });
