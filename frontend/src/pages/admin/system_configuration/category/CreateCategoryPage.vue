@@ -20,7 +20,7 @@ const formData = reactive({
                 <div class="flex justify-around">
                     <div class="w-full">
                         <p class="md:text-left text-primary font-medium">Create Category</p>
-                        <p class="text-tertiary md:text-left text-xs md:text-sm">Listing of all categories.</p>
+                        <p class="text-tertiary md:text-left text-xs md:text-sm">You are about to create category.</p>
                     </div>
                     <div>
                         <RouterLink :to="{name: 'category.list'}">
