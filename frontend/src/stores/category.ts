@@ -27,6 +27,23 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
+    const getCategory = async(id: string | number) => {
+        isLoading.value = true;
+
+        try {
+            const response = await apiClient.get(`/categories/${id}`);
+            
+            if (response.status === 200) {
+                return response.data.data;
+            }
+
+        } catch(error) {
+            console.log("Error fetching categories: ", error);
+        } finally {
+            isLoading.value = null;
+        }
+    }
+
     const storeCategory = async(payload: any) => {
         isLoading.value = false;
 
@@ -50,12 +67,37 @@ export const useCategoryStore = defineStore('category', () => {
 
     }
 
+    const updateCategory = async(payload: any) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.put(`/categories/${payload.id}`, payload)
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+                router.push({name: 'category.list'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 422) {
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors;
+                return;
+            }
+
+            console.log("Error on updating category: ", error)
+        }
+
+    }
+
     return {
         categories,
         message,
         errors,
         isLoading,
         getAllCategories,
+        getCategory,
         storeCategory,
+        updateCategory,
     }
 });

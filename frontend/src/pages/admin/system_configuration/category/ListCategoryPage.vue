@@ -73,7 +73,9 @@ onBeforeUnmount(() => {
                                     {{ category.name }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    <RouterLink :to="{name: 'category.edit', params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                        Edit
+                                    </RouterLink>
                                 </td>
                             </tr>
                         </tbody>
