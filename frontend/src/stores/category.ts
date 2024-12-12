@@ -54,6 +54,7 @@ export const useCategoryStore = defineStore('category', () => {
         categories,
         message,
         errors,
+        isLoading,
         getAllCategories,
         storeCategory,
     }
