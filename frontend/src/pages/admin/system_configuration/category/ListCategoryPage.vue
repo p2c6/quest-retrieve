@@ -23,7 +23,9 @@ onBeforeMount(async() => {
                     <p class="text-tertiary md:text-left text-xs md:text-sm">Listing of all categories.</p>
                 </div>
                 <div>
-                    <button class="bg-secondary text-white px-2 py-1 rounded text-sm">Create</button>
+                    <RouterLink :to="{name: 'category.create'}">
+                        <button class="bg-secondary text-white px-2 py-1 rounded text-sm">Create</button>
+                    </RouterLink>
                 </div>
             </div>
             <div class="w-full mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
