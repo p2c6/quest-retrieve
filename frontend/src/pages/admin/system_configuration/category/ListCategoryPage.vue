@@ -26,7 +26,7 @@ onBeforeMount(async() => {
                     <button class="bg-secondary text-white px-2 py-1 rounded text-sm">Create</button>
                 </div>
             </div>
-            <div class="w-full mt-2 relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="w-full mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
