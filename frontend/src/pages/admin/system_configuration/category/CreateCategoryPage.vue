@@ -3,6 +3,7 @@ import Card from '@/components/Card.vue';
 import Table from '@/components/Table.vue';
 import { useCategoryStore } from '@/stores/category';
 import { reactive } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const categoryStore = useCategoryStore();
 
@@ -22,7 +23,9 @@ const formData = reactive({
                         <p class="text-tertiary md:text-left text-xs md:text-sm">Listing of all categories.</p>
                     </div>
                     <div>
-                        <button class="bg-secondary text-white px-2 py-1 rounded text-sm">Back</button>
+                        <RouterLink :to="{name: 'category.list'}">
+                            <button class="bg-secondary text-white px-2 py-1 rounded text-sm">Back</button>
+                        </RouterLink>
                     </div>
                 </div>
                 <div class="mt-5">
