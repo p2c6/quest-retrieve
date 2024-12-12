@@ -1,13 +1,11 @@
 <script setup>
 import { RouterView, useRoute } from 'vue-router'
-import Navbar from './components/Navbar.vue';
 const route = useRoute();
 
 </script>
 
 <template>
-  <!-- <Navbar v-if="route.path !== '/login' && route.path !== '/register'" /> -->
-   <div id="modal-container" class="relative"></div>
+  <div id="modal-container" class="relative"></div>
   <RouterView />
 </template>
 
