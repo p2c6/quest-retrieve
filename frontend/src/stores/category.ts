@@ -13,17 +13,44 @@ export const useCategoryStore = defineStore('category', () => {
 
         try {
             const response = await apiClient.get(`/categories?page=${page}`);
-
-            console.log('res', response.data)
-
+            
             categories.value =  response.data;
+
+            isLoading.value = false;
+
         } catch(error) {
             console.log("Error fetching categories: ", error)
+        } finally {
+            isLoading.value = null;
         }
+    }
+
+    const storeCategory = async(payload: any) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.post('/categories', payload)
+
+            if (response.status === 201) {
+                console.log("Created category");
+            }
+
+        } catch(error: any) {
+            if (error.status == 422) {
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors;
+                return;
+            }
+
+            console.log("Error on storing category: ", error)
+        }
+
     }
 
     return {
         categories,
+        errors,
         getAllCategories,
+        storeCategory,
     }
 });
