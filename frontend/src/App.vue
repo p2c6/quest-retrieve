@@ -7,6 +7,7 @@ const route = useRoute();
 
 <template>
   <!-- <Navbar v-if="route.path !== '/login' && route.path !== '/register'" /> -->
+   <div id="modal-container" class="relative"></div>
   <RouterView />
 </template>
 
