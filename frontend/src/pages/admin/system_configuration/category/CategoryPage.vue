@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router';
 </script>
 
 <template>
-    <div class="container grid grid-cols-1">
+    <div class="relative container grid grid-cols-1 w-full">
         <RouterView />
     </div>
 </template>
