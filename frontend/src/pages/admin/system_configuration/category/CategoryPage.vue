@@ -8,13 +8,18 @@ import Table from '@/components/Table.vue';
 <template>
     <div class="container grid grid-cols-1">
         <div class="p-2">
-            <div>
-            </div>
             <Card class="p-5 flex flex-row mt-2">
                 <div class="overflow-x-auto w-full">
-                    <p class="text-center md:text-left text-primary font-medium">Category List</p>
-                    <p class="text-tertiary text-center md:text-left text-xs md:text-sm">Listing of all categories.</p>
-                    <Table />
+                    <div class="flex justify-around">
+                        <div class="w-full">
+                            <p class="md:text-left text-primary font-medium">Category List</p>
+                            <p class="text-tertiary md:text-left text-xs md:text-sm">Listing of all categories.</p>
+                        </div>
+                        <div>
+                            <button class="bg-secondary text-white px-2 py-1 rounded text-sm">Create</button>
+                        </div>
+                    </div>
+                        <Table />
                 </div>
             </Card>
         </div>
