@@ -1,6 +1,6 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { useCategoryStore } from '@/stores/category';
 import { RouterView } from 'vue-router';
@@ -9,6 +9,10 @@ const categoryStore = useCategoryStore();
 
 onBeforeMount(async() => {
     await categoryStore.getAllCategories();
+})
+
+onBeforeUnmount(() => {
+    categoryStore.message = null;
 })
 
 
