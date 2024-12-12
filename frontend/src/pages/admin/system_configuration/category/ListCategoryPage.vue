@@ -117,10 +117,10 @@ onBeforeUnmount(() => {
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
                                         <RouterLink :to="{name: 'category.edit', params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                            Edit
+                                            <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
                                         </RouterLink>
                                         <div class="text-red-500 cursor-pointer" @click="openDeleteCategoryConfirmation(category.id)">
-                                            Delete
+                                            <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
                                         </div>
                                     </div>
                                 </td>
