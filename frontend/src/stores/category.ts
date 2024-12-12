@@ -1,8 +1,10 @@
 import { apiClient } from "@/config/http";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 export const useCategoryStore = defineStore('category', () => {
+    const router = useRouter();
     const categories = ref({});
     const isLoading = ref<boolean | null>(null);
     const errors = ref<any | null>(null);
@@ -19,7 +21,7 @@ export const useCategoryStore = defineStore('category', () => {
             isLoading.value = false;
 
         } catch(error) {
-            console.log("Error fetching categories: ", error)
+            console.log("Error fetching categories: ", error);
         } finally {
             isLoading.value = null;
         }
@@ -32,7 +34,8 @@ export const useCategoryStore = defineStore('category', () => {
             const response = await apiClient.post('/categories', payload)
 
             if (response.status === 201) {
-                console.log("Created category");
+                message.value = response.data.message;
+                router.push({name: 'category.list'});
             }
 
         } catch(error: any) {
@@ -49,6 +52,7 @@ export const useCategoryStore = defineStore('category', () => {
 
     return {
         categories,
+        message,
         errors,
         getAllCategories,
         storeCategory,
