@@ -1,11 +1,27 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, watch } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { useCategoryStore } from '@/stores/category';
-import { RouterView } from 'vue-router';
 
 const categoryStore = useCategoryStore();
+
+const isModalOpen = ref(false);
+const categoryId = ref(null);
+
+const openDeleteCategoryConfirmation = (id) => {
+    isModalOpen.value = true;
+    categoryId.value = id;
+}
+
+const confirmDeleteCategory = (id) => {
+    categoryStore.deleteCategory(id)
+    isModalOpen.value = false;
+}
+
+const closeModal = () => {
+    isModalOpen.value = false;
+}
 
 onBeforeMount(async() => {
     await categoryStore.getAllCategories();
@@ -15,11 +31,36 @@ onBeforeUnmount(() => {
     categoryStore.message = null;
 })
 
-
 </script>
 
 <template>
-    <Card class="p-5 flex flex-row mt-2">
+    <Teleport to="#modal-container">
+        <div :class="`fixed inset-0 z-10 flex items-center justify-center ${isModalOpen ? 'block' : 'hidden'}`">
+            <div class="absolute inset-0 bg-slate-950 opacity-40"></div>
+            <div id="modal-card" class="relative w-80 h-40 bg-white z-20 rounded-2xl">
+                <div id="modal-header" class="w-full py-2">
+                    <div class="flex justify-end mr-5">
+                        <i class="pi pi-times text-gray-500 cursor-pointer" @click="closeModal"></i>
+                    </div>
+
+                </div>
+                <div id="modal-body" class="flex items-center justify-center px-4">
+                    <div class="flex-1">
+                        <div class="flex flex-col justify-center gap-2">
+                            <p class="font-semibold text-md text-primary">Delete category?</p>
+                            <p class="text-xs text-gray-400">You are about to delete this category</p>
+                            <div class="flex gap-1 mt-2">
+                                <button class="w-36 h-8 bg-gray-200 rounded text-sm" @click="closeModal">Cancel</button>
+                                <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeleteCategory(categoryId)">Yes,delete it</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </Teleport>
+    <Card class="p-5 flex flex-row mt-2  w-full">
         <div class="overflow-x-auto w-full">
             <div class="flex justify-around">
                 <div class="w-full">
@@ -65,6 +106,7 @@ onBeforeUnmount(() => {
                                 <th scope="col" class="px-6 py-3">
                                     <span class="sr-only">Edit</span>
                                 </th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -73,9 +115,14 @@ onBeforeUnmount(() => {
                                     {{ category.name }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    <RouterLink :to="{name: 'category.edit', params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                        Edit
-                                    </RouterLink>
+                                    <div class="flex gap-2">
+                                        <RouterLink :to="{name: 'category.edit', params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                            Edit
+                                        </RouterLink>
+                                        <div class="text-red-500 cursor-pointer" @click="openDeleteCategoryConfirmation(category.id)">
+                                            Delete
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
