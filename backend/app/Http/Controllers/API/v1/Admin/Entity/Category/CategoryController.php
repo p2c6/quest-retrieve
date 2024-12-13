@@ -10,6 +10,7 @@ use App\Http\Resources\Entity\Category\CategoryResource;
 use App\Models\Category;
 use App\Services\Entity\Category\CategoryService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -33,12 +34,12 @@ class CategoryController extends Controller
     /**
      * List of all categories.
      * 
-     * @param App\Models\Category The model of the category which needs to be retrieved.
+     * @param Illuminate\Http\Request $request The HTTP request object containing user data.
      * @return App\Http\Resources\Entity\Category\CategoryCollection
      */
-    public function index(): CategoryCollection
+    public function index(Request $request): CategoryCollection
     {
-        return $this->service->index();
+        return $this->service->index($request->query('keyword'));
     }
 
     /**

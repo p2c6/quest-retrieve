@@ -15,10 +15,15 @@ class CategoryService
     /**
      * List of all categories.
      * 
+     * @param Illuminate\Http\Request $request The HTTP request object containing user data.
      * @return App\Http\Resources\Entity\Category\CategoryCollection
      */
-    public function index(): CategoryCollection
+    public function index($keyword): CategoryCollection
     {
+        if ($keyword != null) {
+            return new CategoryCollection(Category::where('name', 'LIKE', "%{$keyword}%")->paginate(5));
+        }
+
         return new CategoryCollection(Category::paginate(5));
     }
 
