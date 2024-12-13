@@ -73,6 +73,16 @@ onBeforeUnmount(() => {
                     </RouterLink>
                 </div>
             </div>
+            <div class="flex justify-center relative mt-2 md:justify-end">
+                <label class="relative block w-full md:w-48">
+                    <span class="sr-only">Search</span>
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                        <i class="text-gray-400 pi pi-search cursor-pointer"> </i>
+
+                    </span>
+                    <input class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-1 pl-9 pr-3 shadow-sm sm:text-sm md:py-2" placeholder="Search for anything..." type="text" name="search"/>
+                </label>
+            </div>
             <div class="w-full mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div v-if="categoryStore.message" class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mb-5" role="alert">
                         <div class="flex">
