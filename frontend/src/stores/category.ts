@@ -1,11 +1,12 @@
 import { apiClient } from "@/config/http";
+import type { DeleteCategory, GetCategory, StoreCategory, UpdateCategory } from "@/types/category-types";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 export const useCategoryStore = defineStore('category', () => {
     const router = useRouter();
-    const categories = ref({});
+    const categories = ref<object>({});
     const isLoading = ref<boolean | null>(null);
     const errors = ref<any | null>(null);
     const message = ref(null);
@@ -27,7 +28,7 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
-    const getCategory = async(id: string | number) => {
+    const getCategory = async(id: GetCategory) => {
         isLoading.value = true;
 
         try {
@@ -44,7 +45,7 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
-    const storeCategory = async(payload: any) => {
+    const storeCategory = async(payload: StoreCategory) => {
         isLoading.value = false;
 
         try {
@@ -67,7 +68,7 @@ export const useCategoryStore = defineStore('category', () => {
 
     }
 
-    const updateCategory = async(payload: any) => {
+    const updateCategory = async(payload: UpdateCategory) => {
         isLoading.value = false;
 
         try {
@@ -90,7 +91,7 @@ export const useCategoryStore = defineStore('category', () => {
 
     }
 
-    const deleteCategory = async(id: string | number) => {
+    const deleteCategory = async(id: DeleteCategory) => {
         isLoading.value = false;
 
         try {
