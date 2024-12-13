@@ -62,14 +62,14 @@ onBeforeUnmount(() => {
     </Teleport>
     <Card class="p-5 flex flex-row mt-2  w-full">
         <div class="overflow-x-auto w-full">
-            <div class="flex justify-around">
-                <div class="w-full">
-                    <p class="md:text-left text-primary font-medium">Category List</p>
-                    <p class="text-tertiary md:text-left text-xs md:text-sm">Listing of all categories.</p>
+            <div class="flex flex-col gap-2 justify-between items-center md:flex-row">
+                <div class="text-center md:text-left">
+                    <p class="text-primary font-medium">Category List</p>
+                    <p class="text-tertiary text-xs md:text-sm">Listing of all categories.</p>
                 </div>
-                <div>
-                    <RouterLink :to="{name: 'category.create'}">
-                        <button class="bg-secondary text-white px-2 py-1 rounded text-sm">Create</button>
+                <div class="w-full md:w-16">
+                    <RouterLink :to="{ name: 'category.create' }">
+                    <button class="bg-secondary text-white px-2 py-1 rounded text-sm w-full">Create</button>
                     </RouterLink>
                 </div>
             </div>
