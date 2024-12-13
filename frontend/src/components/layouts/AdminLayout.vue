@@ -63,7 +63,7 @@ onBeforeMount(async() => {
                                 <i class="text-secondary pi pi-angle-down px-1"></i>
                             </div>
 
-                            <div :class="`absolute top-10 -right-3 md:-right-2 ${isDropdownOpen ? 'block' : 'hidden'}`">
+                            <div :class="`absolute z-10 top-10 -right-3 md:-right-2 ${isDropdownOpen ? 'block' : 'hidden'}`">
                                 <div class="w-28 md:w-48 bg-white h-auto text-center text-black shadow-2xl flex flex-col gap-1">
                                     <div class="p-2 cursor-pointer hover:bg-gray-300">Account</div>
                                     <div class="p-2 cursor-pointer hover:bg-gray-300">Account</div>

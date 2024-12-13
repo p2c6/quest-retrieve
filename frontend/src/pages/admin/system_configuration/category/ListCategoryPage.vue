@@ -35,7 +35,7 @@ onBeforeUnmount(() => {
 
 <template>
     <Teleport to="#modal-container">
-        <div :class="`fixed inset-0 z-10 flex items-center justify-center ${isModalOpen ? 'block' : 'hidden'}`">
+        <div :class="`fixed inset-0 z-20 flex items-center justify-center ${isModalOpen ? 'block' : 'hidden'}`">
             <div class="absolute inset-0 bg-slate-950 opacity-40"></div>
             <div id="modal-card" class="relative w-80 h-40 bg-white z-20 rounded-2xl">
                 <div id="modal-header" class="w-full py-2">
