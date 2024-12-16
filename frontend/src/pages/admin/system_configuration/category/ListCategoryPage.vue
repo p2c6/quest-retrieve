@@ -38,6 +38,7 @@ onBeforeMount(async() => {
 
 onBeforeUnmount(() => {
     categoryStore.message = null;
+    categoryStore.keyword = null;
 })
 
 
