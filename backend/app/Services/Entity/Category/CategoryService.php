@@ -22,7 +22,7 @@ class CategoryService
     public function index($keyword): JsonResponse
     {
         $category = QueryBuilder::for(Category::class)
-        ->allowedFilters(['name'])
+        ->allowedFilters('name')
         ->paginate(5)
         ->appends($keyword);
 
