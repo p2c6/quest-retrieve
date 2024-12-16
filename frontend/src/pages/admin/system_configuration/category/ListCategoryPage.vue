@@ -1,6 +1,6 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, reactive, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { useCategoryStore } from '@/stores/category';
 
@@ -40,9 +40,6 @@ onBeforeUnmount(() => {
     categoryStore.message = null;
 })
 
-onBeforeUpdate(() => {
-    console.log('mount again...')
-})
 
 </script>
 
