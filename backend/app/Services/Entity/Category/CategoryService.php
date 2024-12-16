@@ -9,6 +9,7 @@ use App\Models\Subcategory;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoryService
 {
@@ -16,15 +17,16 @@ class CategoryService
      * List of all categories.
      * 
      * @param Illuminate\Http\Request $request The HTTP request object containing user data.
-     * @return App\Http\Resources\Entity\Category\CategoryCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index($keyword): CategoryCollection
+    public function index($keyword): JsonResponse
     {
-        if ($keyword != null) {
-            return new CategoryCollection(Category::where('name', 'LIKE', "%{$keyword}%")->paginate(5));
-        }
+        $category = QueryBuilder::for(Category::class)
+        ->allowedFilters(['name'])
+        ->paginate(5)
+        ->appends($keyword);
 
-        return new CategoryCollection(Category::paginate(5));
+        return response()->json($category);
     }
 
     /**

@@ -35,9 +35,9 @@ class CategoryController extends Controller
      * List of all categories.
      * 
      * @param Illuminate\Http\Request $request The HTTP request object containing user data.
-     * @return App\Http\Resources\Entity\Category\CategoryCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(Request $request): CategoryCollection
+    public function index(Request $request): JsonResponse
     {
         return $this->service->index($request->query('keyword'));
     }
