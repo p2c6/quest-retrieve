@@ -1,6 +1,6 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { useCategoryStore } from '@/stores/category';
 
@@ -8,6 +8,10 @@ const categoryStore = useCategoryStore();
 
 const isModalOpen = ref(false);
 const categoryId = ref(null);
+
+const formData = reactive({
+    'keyword': ''
+})
 
 const openDeleteCategoryConfirmation = (id) => {
     isModalOpen.value = true;
@@ -23,12 +27,21 @@ const closeModal = () => {
     isModalOpen.value = false;
 }
 
+const search = async() => {
+    categoryStore.keyword = formData.keyword;
+    await categoryStore.getAllCategories();
+}
+
 onBeforeMount(async() => {
     await categoryStore.getAllCategories();
 })
 
 onBeforeUnmount(() => {
     categoryStore.message = null;
+})
+
+onBeforeUpdate(() => {
+    console.log('mount again...')
 })
 
 </script>
@@ -80,7 +93,7 @@ onBeforeUnmount(() => {
                         <i class="text-gray-400 pi pi-search cursor-pointer"> </i>
 
                     </span>
-                    <input class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-1 pl-9 pr-3 shadow-sm sm:text-sm md:py-2" placeholder="Search for anything..." type="text" name="search"/>
+                    <input @keyup.enter="search" v-model="formData.keyword" class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-1 pl-9 pr-3 shadow-sm sm:text-sm md:py-2" placeholder="Search for anything..." type="text" name="search"/>
                 </label>
             </div>
             <div class="w-full mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">

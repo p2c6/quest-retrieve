@@ -10,12 +10,13 @@ export const useCategoryStore = defineStore('category', () => {
     const isLoading = ref<boolean | null>(null);
     const errors = ref<any | null>(null);
     const message = ref(null);
+    const keyword = ref(null);
 
     const getAllCategories = async(page = 1) => {
         isLoading.value = true;
 
         try {
-            const response = await apiClient.get(`/categories?page=${page}`);
+            const response = await apiClient.get(`/categories?page=${page}&filter[name]=${keyword.value ?? ""}`);
             
             categories.value =  response.data;
 
@@ -122,6 +123,7 @@ export const useCategoryStore = defineStore('category', () => {
         message,
         errors,
         isLoading,
+        keyword,
         getAllCategories,
         getCategory,
         storeCategory,
