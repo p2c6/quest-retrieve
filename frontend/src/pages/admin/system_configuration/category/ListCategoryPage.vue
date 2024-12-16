@@ -1,6 +1,6 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, watch } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { useCategoryStore } from '@/stores/category';
 
