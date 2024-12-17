@@ -13,6 +13,9 @@ const formData = reactive({
     'keyword': ''
 })
 
+let typingTimer;
+const typingDelay = 1000;
+
 const openDeleteCategoryConfirmation = (id) => {
     isModalOpen.value = true;
     categoryId.value = id;
@@ -29,7 +32,10 @@ const closeModal = () => {
 
 const search = async() => {
     categoryStore.keyword = formData.keyword;
-    await categoryStore.getAllCategories();
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(async() => {
+        await categoryStore.getAllCategories();
+    }, typingDelay)
 }
 
 onBeforeMount(async() => {
@@ -91,7 +97,7 @@ onBeforeUnmount(() => {
                         <i class="text-gray-400 pi pi-search cursor-pointer"> </i>
 
                     </span>
-                    <input @keyup.enter="search" v-model="formData.keyword" class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-1 pl-9 pr-3 shadow-sm sm:text-sm md:py-2" placeholder="Search for anything..." type="text" name="search"/>
+                    <input @input="search" v-model="formData.keyword" class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-1 pl-9 pr-3 shadow-sm sm:text-sm md:py-2" placeholder="Search for anything..." type="text" name="search"/>
                 </label>
             </div>
             <div class="w-full mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
