@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import userRoutes from "./user";
 import adminRoutes from "./admin";
 import { useAuthStore } from '@/stores/auth';
-import authGuard from "@/guard/auth";
+import ROLE from '@/constants/user-role';
 
 const routes = [
   ...userRoutes,
@@ -16,17 +16,81 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
-
+  
   await authStore.getUser();
   const authUser = authStore.user;
 
-  const redirection = authGuard(to.name, authUser);
+  const isAdmin = authUser?.role_id === ROLE.IS_ADMIN;
+  const isPublicUser = authUser?.role_id === ROLE.IS_PUBLIC_USER;
 
-  if (redirection) {
-    next(redirection);
-  } else {
-    next();
+  const authVerifiedUserRestrictedRoutes = ['login', 'register', 'password.forgot', 'email.verification'];
+  
+  if (authUser && authUser.email_verified_at && authVerifiedUserRestrictedRoutes.includes(to.name) ) {
+    return next({ name: 'home' });
   }
+
+  if (authUser && authUser.email_verified_at && to.name == "password.reset" && !to.query.token ) {
+    return next({ to: '/' });
+  }
+
+  
+  const guestRoutes = [
+    'register',
+    'login',
+    'password.forgot',
+  ];
+
+  if (!authUser && guestRoutes.includes(to.name)) {
+    return next();
+  }
+
+  //IF PUBLIC USER AND NOT YET VERIFIED AND TRIES TO ACCESS THE HOME WHILE AUTHENTICATED
+  if (authUser && !authUser.email_verified_at && isPublicUser && to.path == "/") {
+    return next({name: 'email.verification'})
+  }
+
+  const unverifiedUserRestrictedRoutes = [
+    'login',
+    'register',
+    'password.forgot',
+    'password.reset'
+  ];
+
+  //IF AUTHENTICATED BUT NOT VERIFIED YET AND ACCESS UNVERIFIED RESTRICTED ROUTES
+  if (authUser && !authUser.email_verified_at && isPublicUser && unverifiedUserRestrictedRoutes.includes(to.name)) {
+    return next({name: 'email.verification'})
+  }
+
+  const requiresLogin = ['email.verification'];
+
+  // IF NOT AUTHENTICATED AND ACCESS ROUTES THAT REQUIRES TO LOG IN
+  if (!authUser && requiresLogin.includes(to.name)) {
+    return next({name: 'login'})
+  }
+
+  const restrictedForPublicUsers = [
+    'dashboard',
+    'category.list',
+    'category.create',
+    'category.edit',
+  ];
+
+  //IF NOT AUTHENTICATED USER AND ACCESS ADMIN ROUTES
+  if (!authUser && restrictedForPublicUsers.includes(to.name)) {
+    return next({ name: 'login' });
+  }
+
+  //IF PUBLIC USER AND ACCESS ADMIN ROUTES
+  if (authUser && isPublicUser && restrictedForPublicUsers.includes(to.name)) {
+    return next({name: 'home'})
+  }
+
+  if (isAdmin && to.path == "/") {
+    return next({name: 'dashboard'})
+  }
+
+  next();
+
 });
 
 export default router;
