@@ -49,7 +49,7 @@ router.beforeEach(async (to, from, next) => {
     return next({name: 'email.verification'})
   }
 
-  const unverifiedUserRestrictedRoutes = [
+  const authUnverifiedUserRestrictedRoutes = [
     'login',
     'register',
     'password.forgot',
@@ -57,7 +57,7 @@ router.beforeEach(async (to, from, next) => {
   ];
 
   //IF AUTHENTICATED BUT NOT VERIFIED YET AND ACCESS UNVERIFIED RESTRICTED ROUTES
-  if (authUser && !authUser.email_verified_at && isPublicUser && unverifiedUserRestrictedRoutes.includes(to.name)) {
+  if (authUser && !authUser.email_verified_at && isPublicUser && authUnverifiedUserRestrictedRoutes.includes(to.name)) {
     return next({name: 'email.verification'})
   }
 
