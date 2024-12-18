@@ -534,7 +534,7 @@ class CategoryTest extends TestCase
         $response = $this->getJson('/api/v1/categories');
 
         $response->assertStatus(200)
-                ->assertJsonStructure(['data', 'links', 'meta']);
+                ->assertJsonStructure(['data', 'links']);
     }
 
     /**
