@@ -116,6 +116,21 @@ onBeforeUnmount(() => {
                             </div>
                         </div>
                     </div>
+                    <div v-if="categoryStore.errors && categoryStore.errors.message" class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md mb-5" role="alert">
+                        <div class="flex">
+                            <div class="py-1">
+                                <svg class="w-6 h-6 text-red-500 dark:text-white mr-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
+                                </svg>
+
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm">Error</p>
+                                <div class="text-xs flex gap-1">{{ categoryStore.errors.message }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div role="status" v-if="categoryStore.isLoading" class="flex items-center justify-center mt-10">
                         <div class="flex flex-col items-center justify-center gap-5">
                             <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
