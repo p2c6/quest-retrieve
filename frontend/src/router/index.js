@@ -76,6 +76,9 @@ router.beforeEach(async (to, from, next) => {
     'subcategory.list',
     'subcategory.create',
     'subcategory.edit',
+    'role.list',
+    'role.create',
+    'role.edit',
   ];
 
   //IF NOT AUTHENTICATED USER AND ACCESS ADMIN ROUTES
