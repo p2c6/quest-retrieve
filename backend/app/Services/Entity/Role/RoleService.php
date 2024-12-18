@@ -94,7 +94,7 @@ class RoleService
     public function delete(Role $role): JsonResponse
     {
         try {
-            if (User::where('role_id', $role->id)->exists() > 0) {
+            if (User::where('role_id', $role->id)->exists()) {
                 return response()->json(['message' => 'Cannot delete role. There are users associated with this role.'], 409);
             }
             
