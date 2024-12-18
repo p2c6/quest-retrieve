@@ -42,7 +42,11 @@ const collapseSubItems = (parent) => {
                                 Category
                             </li>
                         </RouterLink> 
-                        <li>Subcategory</li>
+                        <RouterLink :to="{name: 'subcategory.list'}">
+                            <li>
+                                Subcategory
+                            </li>
+                        </RouterLink> 
                         <li>Roles</li>
                     </ul>
                 </li>
