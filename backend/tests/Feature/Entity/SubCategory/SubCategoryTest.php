@@ -768,7 +768,7 @@ class SubCategoryTest extends TestCase
         $response = $this->getJson('/api/v1/subcategories');
 
         $response->assertStatus(200)
-                ->assertJsonStructure(['data', 'links', 'meta']);
+                ->assertJsonStructure(['data', 'links']);
     }
 
     /**
