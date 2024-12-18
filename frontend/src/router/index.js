@@ -73,6 +73,9 @@ router.beforeEach(async (to, from, next) => {
     'category.list',
     'category.create',
     'category.edit',
+    'subcategory.list',
+    'subcategory.create',
+    'subcategory.edit',
   ];
 
   //IF NOT AUTHENTICATED USER AND ACCESS ADMIN ROUTES
