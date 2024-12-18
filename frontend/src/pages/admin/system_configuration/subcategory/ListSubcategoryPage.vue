@@ -22,6 +22,9 @@ const openDeleteSubcategoryConfirmation = (id) => {
 }
 
 const confirmDeleteSubcategory = (id) => {
+    subcategoryStore.message = null;
+    subcategoryStore.errors = null;
+
     subcategoryStore.deleteSubcategory(id)
     isModalOpen.value = false;
 }
