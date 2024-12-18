@@ -30,6 +30,18 @@ class CategoryService
     }
 
     /**
+     * List of all categories for dropdown.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function dropdownCategories(): JsonResponse
+    {
+        $category = Category::get(['id', 'name']);
+
+        return response()->json($category);
+    }
+
+    /**
      * Show a single category.
      * 
      * @param App\Models\Category $category The model of the category which needs to be retrieved.

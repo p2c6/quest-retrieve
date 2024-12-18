@@ -87,4 +87,14 @@ class CategoryController extends Controller
     {
         return $this->service->destroy($category);
     }
+
+    /**
+     * List of all categories for dropdown.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function dropdownCategories(): JsonResponse
+    {
+        return $this->service->dropdownCategories();
+    }
 }
