@@ -109,7 +109,7 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
         } catch(error: any) {
             if (error.status == 409) {
                 console.log('Validation error', error);
-                errors.value = error.response.data.errors;
+                errors.value = error.response.data;
                 return;
             }
 
