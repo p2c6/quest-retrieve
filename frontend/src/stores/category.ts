@@ -11,6 +11,7 @@ export const useCategoryStore = defineStore('category', () => {
     const errors = ref<any | null>(null);
     const message = ref(null);
     const keyword = ref(null);
+    const categoriesDropdown = ref(null);
 
     const getAllCategories = async(page = 1) => {
         isLoading.value = true;
@@ -19,6 +20,23 @@ export const useCategoryStore = defineStore('category', () => {
             const response = await apiClient.get(`/categories?page=${page}&filter[name]=${keyword.value ?? ""}`);
             
             categories.value =  response.data;
+
+            isLoading.value = false;
+
+        } catch(error) {
+            console.log("Error fetching categories: ", error);
+        } finally {
+            isLoading.value = null;
+        }
+    }
+
+    const getAllCategoriesDropdown = async() => {
+        isLoading.value = true;
+
+        try {
+            const response = await apiClient.get(`/categories/dropdown`);
+            
+            categoriesDropdown.value =  response.data;
 
             isLoading.value = false;
 
@@ -124,10 +142,13 @@ export const useCategoryStore = defineStore('category', () => {
         errors,
         isLoading,
         keyword,
+        categoriesDropdown,
+        
         getAllCategories,
         getCategory,
         storeCategory,
         updateCategory,
         deleteCategory,
+        getAllCategoriesDropdown
     }
 });
