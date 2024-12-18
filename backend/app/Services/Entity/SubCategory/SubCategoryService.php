@@ -2,6 +2,7 @@
 
 namespace App\Services\Entity\SubCategory;
 
+use App\Filters\FilterSubcategory;
 use App\Http\Resources\Entity\SubCategory\SubCategoryCollection;
 use App\Http\Resources\Entity\SubCategory\SubCategoryResource;
 use App\Models\Category;
@@ -9,6 +10,8 @@ use App\Models\Post;
 use App\Models\Subcategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class SubCategoryService
 {
@@ -16,10 +19,27 @@ class SubCategoryService
      * List of all subcategories.
      * 
      * @return App\Http\Resources\Entity\SubCategory\SubCategoryCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): SubCategoryCollection
+    public function index($keyword): JsonResponse
     {
-        return new SubCategoryCollection(Subcategory::paginate());
+        $category = QueryBuilder::for(Subcategory::class)
+        ->select(
+            'id', 
+            'category_id', 
+            'name'
+        )
+        ->with(['category' => function($q) {
+            $q->select('id', 'name');
+        }])
+        ->allowedIncludes('category')
+        ->allowedFilters([
+            AllowedFilter::custom('keyword', new FilterSubcategory)
+        ])
+        ->paginate(5)
+        ->appends($keyword);
+
+        return response()->json($category);
     }
 
     /**
