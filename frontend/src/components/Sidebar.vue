@@ -42,8 +42,8 @@ const collapseSubItems = (parent) => {
                                 Category
                             </li>
                         </RouterLink> 
-                        <li>Roles</li>
                         <li>Subcategory</li>
+                        <li>Roles</li>
                     </ul>
                 </li>
                 <li class="my-2">
