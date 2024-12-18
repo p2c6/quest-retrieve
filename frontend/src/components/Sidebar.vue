@@ -56,7 +56,11 @@ const collapseSubItems = (parent) => {
                         <i class="pi pi-angle-down text-xs ml-auto"></i>
                     </div>
                     <ul :class="`list-item-child ml-8 ${userManagementSubItems ? 'block' : 'hidden'}`">
-                        <li>Roles</li>
+                        <RouterLink :to="{name: 'role.list'}">
+                            <li>
+                                Roles
+                            </li>
+                        </RouterLink> 
                         <li>Users</li>
                     </ul>
                 </li>
