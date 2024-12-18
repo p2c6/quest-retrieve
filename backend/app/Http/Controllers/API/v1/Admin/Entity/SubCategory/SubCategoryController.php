@@ -10,6 +10,7 @@ use App\Http\Resources\Entity\Subcategory\SubcategoryResource;
 use App\Models\Subcategory;
 use App\Services\Entity\Subcategory\SubCategoryService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class SubcategoryController extends Controller
 {
@@ -34,11 +35,11 @@ class SubcategoryController extends Controller
      * List of all categories.
      * 
      * @param App\Models\Subcategory The model of the subcategory which needs to be retrieved.
-     * @return App\Http\Resources\Entity\Subcategory\SubcategoryCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): SubcategoryCollection
+    public function index(Request $request): JsonResponse
     {
-        return $this->service->index();
+        return $this->service->index($request->query('keyword'));
     }
 
     /**
