@@ -12,6 +12,8 @@ import RolePage from '@/pages/admin/user_management/role/RolePage.vue';
 import ListRolePage from '@/pages/admin/user_management/role/ListRolePage.vue';
 import CreateRolePage from '@/pages/admin/user_management/role/CreateRolePage.vue';
 import EditRolePage from '@/pages/admin/user_management/role/EditRolePage.vue';
+import ListUserPage from '@/pages/admin/user_management/user/ListUserPage.vue';
+import CreateUserPage from '@/pages/admin/user_management/user/CreateUserPage.vue';
 
 export default [
   {
@@ -82,6 +84,27 @@ export default [
           {
             path: "edit/:id",
             name: "role.edit",
+            component: EditRolePage,
+          },
+        ],
+      },
+      {
+        path: "users",
+        component: RolePage,
+        children: [
+          {
+            path: "",
+            name: "users.list",
+            component: ListUserPage,
+          },
+          {
+            path: "create",
+            name: "users.create",
+            component: CreateUserPage,
+          },
+          {
+            path: "edit/:id",
+            name: "users.edit",
             component: EditRolePage,
           },
         ],
