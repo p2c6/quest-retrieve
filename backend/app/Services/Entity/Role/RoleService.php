@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class RoleService
 {
@@ -16,11 +17,16 @@ class RoleService
      * List of all roles.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return App\Http\Resources\Entity\Role\RoleCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): RoleCollection
+    public function index($keyword): JsonResponse
     {
-        return new RoleCollection(Role::paginate());
+        $roles = QueryBuilder::for(Role::class)
+        ->allowedFilters('name')
+        ->paginate(5)
+        ->appends($keyword);
+
+        return response()->json($roles);
     }
 
     /**

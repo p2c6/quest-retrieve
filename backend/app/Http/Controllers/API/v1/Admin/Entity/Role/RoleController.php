@@ -10,6 +10,7 @@ use App\Http\Resources\Entity\Role\RoleResource;
 use App\Models\Role;
 use App\Services\Entity\Role\RoleService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -34,11 +35,11 @@ class RoleController extends Controller
      * List of all roles.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return App\Http\Resources\Entity\Role\RoleCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): RoleCollection
+    public function index(Request $request): JsonResponse
     {
-        return $this->service->index();
+        return $this->service->index($request->query('keyword'));
     }
 
     /**
