@@ -41,6 +41,8 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
         Route::apiResource('users', UserController::class);
         
         //Roles
+        Route::get('/roles/dropdown', [RoleController::class, 'dropdownRoles'])
+            ->name('roles.dropdown');
         Route::apiResource('roles', RoleController::class);
 
         //Categories

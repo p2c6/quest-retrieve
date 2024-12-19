@@ -87,4 +87,14 @@ class RoleController extends Controller
     {
         return $this->service->delete($role);
     }
+
+    /**
+     * List of all roles for dropdown.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function dropdownRoles(): JsonResponse
+    {
+        return $this->service->dropdownRoles();
+    }
 }

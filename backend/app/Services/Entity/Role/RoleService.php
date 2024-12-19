@@ -30,6 +30,18 @@ class RoleService
     }
 
     /**
+     * List of all roles for dropdown.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function dropdownRoles(): JsonResponse
+    {
+        $roles = Role::get(['id', 'name']);
+
+        return response()->json($roles);
+    }
+
+    /**
      * Show a single role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
