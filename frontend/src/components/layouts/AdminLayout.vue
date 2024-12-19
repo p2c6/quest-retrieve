@@ -81,7 +81,7 @@ onBeforeMount(async() => {
                 </div>
                 
                 <div class="mt-5">
-                    <div class="px-5">
+                    <div class="mx-5 flex items-center justify-center">
                         <RouterView />
                     </div>
                 </div>
