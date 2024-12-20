@@ -2,9 +2,9 @@
 
 namespace App\Services\Entity\User;
 
+use App\Filters\FilterUser;
 use App\Http\Requests\Entity\User\StoreUserRequest;
 use App\Http\Requests\Entity\User\UpdateUserRequest;
-use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\Post;
 use App\Models\User;
@@ -12,6 +12,8 @@ use App\Services\UserProfile\UserProfileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserService
 {
@@ -28,11 +30,26 @@ class UserService
     /**
      * List of all users.
      * 
-     * @return App\Http\Resources\UserCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): UserCollection
+    public function index($keyword): JsonResponse
     {
-        return new UserCollection(User::paginate());
+        $users = QueryBuilder::for(User::class)
+        ->select('id', 'email')
+        ->with(['profile' => function($q) {
+            $q->select(
+                'user_id', 
+                'last_name', 
+                'first_name', 
+                DB::raw('DATE_FORMAT(created_at, "%b %d, %Y") as birthday'),
+                'contact_no'
+            );
+        }])
+        ->allowedFilters([AllowedFilter::custom('keyword', new FilterUser)])
+        ->paginate(5)
+        ->appends($keyword);
+                
+        return response()->json($users);
     }
 
     /**
