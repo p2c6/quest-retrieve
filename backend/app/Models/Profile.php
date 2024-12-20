@@ -21,6 +21,14 @@ class Profile extends Model
         
     ];
 
+    public function scopeFilterByFullName($query, $search)
+    {
+        return $query->whereRaw(
+            "CONCAT(first_name, ' ', last_name) LIKE ? OR CONCAT(last_name, ' ', first_name) LIKE ?",
+            ["%{$search}%", "%{$search}%"]
+        );
+    }
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
