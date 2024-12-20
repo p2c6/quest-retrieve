@@ -4,16 +4,12 @@ namespace App\Services\Entity\User;
 
 use App\Http\Requests\Entity\User\StoreUserRequest;
 use App\Http\Requests\Entity\User\UpdateUserRequest;
-use App\Http\Resources\Entity\Role\RoleResource;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\Post;
-use App\Models\Role;
 use App\Models\User;
 use App\Services\UserProfile\UserProfileService;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
