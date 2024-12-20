@@ -22,9 +22,9 @@ class UserService
     /**
      * UserService contructor.
      * 
-     * @param UserProfileService $service The instance of UserProfileService.
+     * @param UserProfileService $userProfileService The instance of UserProfileService.
      */
-    public function __construct(protected UserProfileService $service)
+    public function __construct(protected UserProfileService $userProfileService)
     {
         
     }
@@ -70,7 +70,7 @@ class UserService
                 'role_id' => $request->role_id
             ]);
 
-            $this->service->storeUserProfile($user->id, $request);
+            $this->userProfileService->storeUserProfile($user->id, $request);
 
             DB::commit();
 
@@ -99,11 +99,17 @@ class UserService
     public function update(User $user, UpdateUserRequest $request)
     {
         try {
+            DB::beginTransaction();
+
             $user->update([
                 'email' => $request->email, 
                 'password' => bcrypt($request->password), 
                 'role_id' => $request->role_id
             ]);
+
+            $this->userProfileService->update($user, $request);
+
+            DB::commit();
             
             return response()->json(['message' => 'Successfully User Updated.'], 200);
             
@@ -111,6 +117,7 @@ class UserService
             info("Validation Error on update user: " . $validationException->getMessage());
             return response()->json(['errors' => $validationException->errors()], 422);
         } catch(\Throwable $th) {
+            DB::rollBack();
             info("Error on updating user: " . $th->getMessage());
             return response()->json([
                 'message' => 'An error occurred during updating user.'

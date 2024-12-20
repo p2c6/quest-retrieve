@@ -457,26 +457,54 @@ class UserTest extends TestCase
         $originalPassword = 'password1234';
         $originalRole = UserType::MODERATOR;
 
+        $originalLastName = "Doe";
+        $originalFirstName = "John";
+        $originalBirthday = "2024-04-26";
+        $originalContactNo = "0987576123";
+
         $user = User::create([
             'email' => $originalEmail,
             'password' => $originalPassword,
             'role_id' => $originalRole,
         ]);
 
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => $originalLastName,
+            'first_name' => $originalFirstName,
+            'birthday' => $originalBirthday,
+            'contact_no' => $originalContactNo,
+        ]);
+
         $updatedEmail = 'test000@gmail.com';
         $updatedPassword = 'password123';
         $updatedRole = UserType::PUBLIC_USER;
+
+        $updatedLastName = "Lee";
+        $updatedFirstName = "Max";
+        $updatedBirthday = "2024-04-21";
+        $updatedContactNo = "0987576121";
         
         $response = $this->putJson(route('api.v1.users.update', $user->id), [
             'email' => $updatedEmail, 
             'password' => $updatedPassword, 
             'password_confirmation' => $updatedPassword, 
+            'last_name' => $updatedLastName,
+            'first_name' => $updatedFirstName,
+            'birthday' => $updatedBirthday,
+            'contact_no' => $updatedContactNo,
             'role_id' => $updatedRole
         ]);
 
         $this->assertNotSame($originalEmail, $updatedEmail, 'Email must not equal to previous');
         $this->assertNotSame($originalPassword, $updatedPassword, 'Password must not equal to previous');
         $this->assertNotSame($originalRole, $updatedRole, 'Role must not equal to previous');
+
+        $this->assertNotSame($originalLastName, $updatedLastName, 'Last name must not equal to previous');
+        $this->assertNotSame($originalFirstName, $updatedFirstName, 'First name must not equal to previous');
+        $this->assertNotSame($originalBirthday, $updatedBirthday, 'Birthday must not equal to previous');
+        $this->assertNotSame($originalContactNo, $updatedContactNo, 'Contact no must not equal to previous');
+
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(200)
@@ -580,26 +608,53 @@ class UserTest extends TestCase
         $originalPassword = 'password1234';
         $originalRole = UserType::MODERATOR;
 
+        $originalLastName = "Doe";
+        $originalFirstName = "John";
+        $originalBirthday = "2024-04-26";
+        $originalContactNo = "0987576123";
+
         $user = User::create([
             'email' => $originalEmail,
             'password' => $originalPassword,
             'role_id' => $originalRole,
         ]);
 
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => $originalLastName,
+            'first_name' => $originalFirstName,
+            'birthday' => $originalBirthday,
+            'contact_no' => $originalContactNo,
+        ]);
+
         $updatedEmail = 'test000@gmail.com';
         $updatedPassword = 'password123';
         $updatedRole = UserType::PUBLIC_USER;
+
+        $updatedLastName = "Lee";
+        $updatedFirstName = "Max";
+        $updatedBirthday = "2024-04-21";
+        $updatedContactNo = "0987576121";
         
         $response = $this->putJson(route('api.v1.users.update', $user->id), [
             'email' => $updatedEmail, 
             'password' => $updatedPassword, 
             'password_confirmation' => $updatedPassword, 
+            'last_name' => $updatedLastName,
+            'first_name' => $updatedFirstName,
+            'birthday' => $updatedBirthday,
+            'contact_no' => $updatedContactNo,
             'role_id' => $updatedRole
         ]);
 
         $this->assertNotSame($originalEmail, $updatedEmail, 'Email must not equal to previous');
         $this->assertNotSame($originalPassword, $updatedPassword, 'Password must not equal to previous');
         $this->assertNotSame($originalRole, $updatedRole, 'Role must not equal to previous');
+
+        $this->assertNotSame($originalLastName, $updatedLastName, 'Last name must not equal to previous');
+        $this->assertNotSame($originalFirstName, $updatedFirstName, 'First name must not equal to previous');
+        $this->assertNotSame($originalBirthday, $updatedBirthday, 'Birthday must not equal to previous');
+        $this->assertNotSame($originalContactNo, $updatedContactNo, 'Contact no must not equal to previous');
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(403)
