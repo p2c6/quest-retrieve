@@ -10,12 +10,25 @@ use App\Http\Resources\UserResource;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\UserProfile\UserProfileService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class UserService
 {
+    /**
+     * UserService contructor.
+     * 
+     * @param UserProfileService $service The instance of UserProfileService.
+     */
+    public function __construct(protected UserProfileService $service)
+    {
+        
+    }
+
     /**
      * List of all users.
      * 
@@ -48,11 +61,18 @@ class UserService
     public function store(StoreUserRequest $request)
     {
         try {
-            User::create([
+            DB::beginTransaction();
+
+            $user = User::create([
                 'email' => $request->email, 
-                'password' => bcrypt($request->password), 
+                'email_verified_at' => now(),
+                'password' => bcrypt($request->password),
                 'role_id' => $request->role_id
             ]);
+
+            $this->service->storeUserProfile($user->id, $request);
+
+            DB::commit();
 
             return response()->json(['message' => 'Successfully User Created.'], 201);
 
@@ -60,6 +80,7 @@ class UserService
             info("Validation Error on store user: " . $validationException->getMessage());
             return response()->json(['errors' => $validationException->errors()], 422);
         } catch(\Throwable $th) {
+            DB::rollBack();
             info("Error on storing user: " . $th->getMessage());
             return response()->json([
                 'message' => 'An error occurred during creating user.'
