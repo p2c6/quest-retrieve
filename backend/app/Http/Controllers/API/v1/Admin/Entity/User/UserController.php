@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\Entity\User\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
@@ -38,15 +39,15 @@ class UserController extends Controller
      * 
      * @param App\Models\User $user The model of the user which needs to be retrieved.
      * 
-     * @return App\Http\Resources\UserCollection|Illuminate\Http\JsonResponse
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): JsonResponse|UserCollection
+    public function index(Request $request): JsonResponse
     {
         if(Gate::denies('viewAny', User::class)) {
             return response()->json(['message' => 'You are not allowed to access this action'], 403);
         }
 
-        return $this->service->index();
+        return $this->service->index($request->query('keyword'));
     }
 
     /**
