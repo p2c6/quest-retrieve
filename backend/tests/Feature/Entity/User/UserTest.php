@@ -281,7 +281,11 @@ class UserTest extends TestCase
         $response = $this->postJson(route('api.v1.users.store'), [
             'email' => 'test000@gmail.com', 
             'password' => 'password123', 
-            'password_confirmation' => 'password123', 
+            'password_confirmation' => 'password123',
+            'last_name' => 'Doe', 
+            'first_name' => 'John', 
+            'birthday' => '2005-06-05', 
+            'contact_no' => '0957261', 
             'role_id' => UserType::PUBLIC_USER
         ]);
 
@@ -370,7 +374,11 @@ class UserTest extends TestCase
         $response = $this->postJson(route('api.v1.users.store'), [
             'email' => 'test000@gmail.com', 
             'password' => 'password123', 
-            'password_confirmation' => 'password123', 
+            'password_confirmation' => 'password123',
+            'last_name' => 'Doe', 
+            'first_name' => 'John', 
+            'birthday' => '2005-06-05', 
+            'contact_no' => '0957261', 
             'role_id' => UserType::PUBLIC_USER
         ]);
 
