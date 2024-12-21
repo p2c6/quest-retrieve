@@ -41,7 +41,7 @@ class UserService
                 'user_id', 
                 'last_name', 
                 'first_name', 
-                DB::raw('DATE_FORMAT(created_at, "%b %d, %Y") as birthday'),
+                DB::raw('DATE_FORMAT(birthday, "%b %d, %Y") as birthday'),
                 'contact_no'
             );
         }])
