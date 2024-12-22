@@ -100,7 +100,7 @@ class FilterUser implements Filter
 
     public function dateFilter($query, $value, $columns)
     {
-        $inputDate = str_replace(",","", $value);
+        $inputDate = trim(str_replace(",","", $value));
 
         if ($this->isValidDate($inputDate)) {       
             foreach ($columns as $column) {
