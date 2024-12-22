@@ -68,6 +68,16 @@ class FilterUser implements Filter
         }
     }
 
+    private function hasOnlyYear($date)
+    {
+        try {
+            $date = Carbon::createFromFormat('Y', $date);
+            return true;
+        } catch (InvalidFormatException $e) {
+            return false;
+        }
+    }
+
     private function hasOnlyMonthDay($date)
     {
         try {
@@ -117,6 +127,13 @@ class FilterUser implements Filter
         });
     }
 
+    public function yearFilter($query, $column, $year)
+    {
+        return $query->orWhereHas('profile', function ($subQuery) use ($column, $year) {
+            $subQuery->whereYear($column, '=', "$year");
+        });
+    }
+
     public function monthDayFilter($query, $column, $month, $day)
     {
         return $query->orWhereHas('profile', function ($subQuery) use ($column, $month, $day) {
@@ -149,6 +166,13 @@ class FilterUser implements Filter
             $month = $date->format('n');
 
             $this->monthFilter($query, $column,  $month);
+        }
+
+        if ($this->hasOnlyYear($inputDate)) {
+            $date = Carbon::createFromFormat('Y', $inputDate);
+            $year = $date->format('Y');
+
+            $this->yearFilter($query, $column,  $year);
         }
 
         if ($this->hasOnlyMonthDay($inputDate)) {
