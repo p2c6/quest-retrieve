@@ -14,6 +14,7 @@ import CreateRolePage from '@/pages/admin/user_management/role/CreateRolePage.vu
 import EditRolePage from '@/pages/admin/user_management/role/EditRolePage.vue';
 import ListUserPage from '@/pages/admin/user_management/user/ListUserPage.vue';
 import CreateUserPage from '@/pages/admin/user_management/user/CreateUserPage.vue';
+import UserPage from '@/pages/admin/user_management/user/UserPage.vue';
 
 export default [
   {
@@ -90,7 +91,7 @@ export default [
       },
       {
         path: "users",
-        component: RolePage,
+        component: UserPage,
         children: [
           {
             path: "",
