@@ -61,7 +61,11 @@ const collapseSubItems = (parent) => {
                                 Roles
                             </li>
                         </RouterLink> 
-                        <li>Users</li>
+                        <RouterLink :to="{name: 'users.list'}">
+                            <li>
+                                Users
+                            </li>
+                        </RouterLink> 
                     </ul>
                 </li>
             </ul>
