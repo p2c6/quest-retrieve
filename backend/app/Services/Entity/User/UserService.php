@@ -151,12 +151,14 @@ class UserService
             if (Post::where('user_id', $user->id)->exists()) {
                 return response()->json(['message' => 'Cannot delete user. There are posts associated with this user.'], 409);
             }
+
+            $user->profile->delete();
             
             $user->delete();
     
             return response()->json(['message' => 'Successfully User Deleted.'], 200);
         } catch (\Throwable $th) {
-            info("Error on deleting role: " . $th->getMessage());
+            info("Error on deleting user: " . $th->getMessage());
             return response()->json([
                 'message' => 'An error occurred during deleting user.'
             ], 500);
