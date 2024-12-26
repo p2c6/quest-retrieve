@@ -15,6 +15,7 @@ import EditRolePage from '@/pages/admin/user_management/role/EditRolePage.vue';
 import ListUserPage from '@/pages/admin/user_management/user/ListUserPage.vue';
 import CreateUserPage from '@/pages/admin/user_management/user/CreateUserPage.vue';
 import UserPage from '@/pages/admin/user_management/user/UserPage.vue';
+import EditUserPage from '@/pages/admin/user_management/user/EditUserPage.vue';
 
 export default [
   {
@@ -106,7 +107,7 @@ export default [
           {
             path: "edit/:id",
             name: "users.edit",
-            component: EditRolePage,
+            component: EditUserPage,
           },
         ],
       },
