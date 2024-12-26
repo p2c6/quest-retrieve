@@ -47,7 +47,7 @@ class FilterUser implements Filter
     public function normalFilter($query, $value)
     {
         $query->where(function($subQuery) use ($value) {
-            $subQuery->where('email', $value)
+            $subQuery->where('email', 'LIKE', "%$value%")
                 ->orWhereHas('profile', function ($subQuery) use ($value) {
                     $subQuery->where('last_name', $value)
                         ->orWhere('first_name', $value)
