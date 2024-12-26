@@ -79,6 +79,9 @@ router.beforeEach(async (to, from, next) => {
     'role.list',
     'role.create',
     'role.edit',
+    'users.list',
+    'users.create',
+    'users.edit',
   ];
 
   //IF NOT AUTHENTICATED USER AND ACCESS ADMIN ROUTES
