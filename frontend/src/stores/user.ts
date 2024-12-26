@@ -91,6 +91,31 @@ export const useUserStore = defineStore('user', () => {
 
             console.log("Error on updating user: ", error)
         }
+    }
+
+    const deleteUser = async(id: any) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.delete(`/users/${id}`)
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+                
+                getAllUsers()
+
+                router.push({name: 'users.list'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 409) {
+                console.log('Validation error', error);
+                errors.value = error.response.data;
+                return;
+            }
+
+            console.log("Error on deleting user: ", error)
+        }
 
     }
 
@@ -111,5 +136,6 @@ export const useUserStore = defineStore('user', () => {
         storeUser,
         getUser,
         updateUser,
+        deleteUser,
     }
 });

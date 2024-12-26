@@ -62,13 +62,12 @@ onBeforeUnmount(() => {
                     <div class="flex justify-end mr-5">
                         <i class="pi pi-times text-gray-500 cursor-pointer" @click="closeModal"></i>
                     </div>
-
                 </div>
                 <div id="modal-body" class="flex items-center justify-center px-4">
                     <div class="flex-1">
                         <div class="flex flex-col justify-center gap-2">
-                            <p class="font-semibold text-md text-primary">Delete role?</p>
-                            <p class="text-xs text-gray-400">You are about to delete this role</p>
+                            <p class="font-semibold text-md text-primary">Delete user?</p>
+                            <p class="text-xs text-gray-400">You are about to delete this user</p>
                             <div class="flex gap-1 mt-2">
                                 <button class="w-36 h-8 bg-gray-200 rounded text-sm" @click="closeModal">Cancel</button>
                                 <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeleteUser(userId)">Yes,delete it</button>
@@ -166,16 +165,16 @@ onBeforeUnmount(() => {
                         <tbody>
                             <tr v-if="userStore.users.data && userStore.users.data.length > 0" v-for="user in userStore.users.data" :key="user.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ user.profile.first_name }} {{ user.profile.last_name }}
+                                    {{ user.profile?.first_name }} {{ user.profile?.last_name }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ user.profile.birthday }}
+                                    {{ user.profile?.birthday }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ user.email }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ user.profile.contact_no }}
+                                    {{ user.profile?.contact_no }}
                                 </th>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
