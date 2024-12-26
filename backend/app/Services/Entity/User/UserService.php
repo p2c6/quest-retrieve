@@ -152,7 +152,7 @@ class UserService
                 return response()->json(['message' => 'Cannot delete user. There are posts associated with this user.'], 409);
             }
 
-            $user->profile->delete();
+            $user->profile()->delete();
             
             $user->delete();
     
