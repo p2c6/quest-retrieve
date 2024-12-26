@@ -2,13 +2,20 @@
 import Card from '@/components/Card.vue';
 import { useRoleStore } from '@/stores/role';
 import { useUserStore } from '@/stores/user';
-import { onBeforeMount, reactive } from 'vue';
-import { RouterLink } from 'vue-router';
+import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
 
+const user = ref({});
+
+const id = route.params?.id;
+
 const formData = reactive({
+    id: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -21,6 +28,25 @@ const formData = reactive({
 
 onBeforeMount(async() => {
     await roleStore.getAllRolesDropdown();
+})
+
+onMounted(async() => {
+    if (id) {
+        user.value = await userStore.getUser(id);
+
+        formData.id = id;
+        formData.email = user.value.email;
+        formData.last_name = user.value.last_name;
+        formData.first_name = user.value.first_name;
+        formData.birthday = user.value.birthday;
+        formData.contact_no = user.value.contact_no;
+        formData.role_id = user.value.role_id;
+    }
+})
+
+onUnmounted(() => {
+    user.value = {};
+    userStore.errors = null;
 })
 
 
@@ -43,7 +69,7 @@ onBeforeMount(async() => {
                     </div>
                 </div>
                 <div class="mt-5">
-                    <form @submit.prevent="userStore.storeUser(formData)">
+                    <form @submit.prevent="userStore.updateUser(formData)">
                         <div>
                             <div class="flex gap-y-0.5 flex-col md:flex-row gap-5">
                                 <div class="w-full md:w-1/2">

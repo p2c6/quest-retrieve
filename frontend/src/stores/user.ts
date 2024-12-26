@@ -30,6 +30,23 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+     const getUser = async(id: any) => {
+            isLoading.value = true;
+    
+            try {
+                const response = await apiClient.get(`/users/${id}`);
+                
+                if (response.status === 200) {
+                    return response.data.data;
+                }
+    
+            } catch(error) {
+                console.log("Error fetching user: ", error);
+            } finally {
+                isLoading.value = null;
+            }
+        }
+
     const storeUser = async(payload: any) => {
         isLoading.value = false;
         
@@ -54,6 +71,29 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    const updateUser = async(payload: any) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.put(`/users/${payload.id}`, payload)
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+                router.push({name: 'users.list'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 422) {
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors;
+                return;
+            }
+
+            console.log("Error on updating user: ", error)
+        }
+
+    }
+
     return {
         /*
             @Variables
@@ -69,5 +109,7 @@ export const useUserStore = defineStore('user', () => {
         */
         getAllUsers,
         storeUser,
+        getUser,
+        updateUser,
     }
 });
