@@ -51,6 +51,8 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
         Route::apiResource('categories', CategoryController::class);
 
         //Subcategories
+        Route::get('/subcategories/dropdown', [SubCategoryController::class, 'dropdownSubcategories'])
+        ->name('subcategories.dropdown');
         Route::apiResource('subcategories', SubCategoryController::class)
             ->parameters(['subcategories' => 'subCategory']);
             
