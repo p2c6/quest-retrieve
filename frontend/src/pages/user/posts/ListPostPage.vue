@@ -2,12 +2,12 @@
 import Card from '@/components/Card.vue';
 import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
-import { useCategoryStore } from '@/stores/category';
+import { usePostStore } from '@/stores/post';
 
-const categoryStore = useCategoryStore();
+const postStore = usePostStore();
 
 const isModalOpen = ref(false);
-const categoryId = ref(null);
+const postId = ref(null);
 
 const formData = reactive({
     'keyword': ''
@@ -16,13 +16,13 @@ const formData = reactive({
 let typingTimer;
 const typingDelay = 1000;
 
-const openDeleteCategoryConfirmation = (id) => {
+const openDeletePostConfirmation = (id) => {
     isModalOpen.value = true;
-    categoryId.value = id;
+    postId.value = id;
 }
 
-const confirmDeleteCategory = (id) => {
-    categoryStore.deleteCategory(id)
+const confirmDeletePost = (id) => {
+    postStore.deletePost(id)
     isModalOpen.value = false;
 }
 
@@ -31,20 +31,20 @@ const closeModal = () => {
 }
 
 const search = async() => {
-    categoryStore.keyword = formData.keyword;
+    postStore.keyword = formData.keyword;
     clearTimeout(typingTimer);
     typingTimer = setTimeout(async() => {
-        await categoryStore.getAllCategories();
+        await postStore.getAllUserPosts();
     }, typingDelay)
 }
 
 onBeforeMount(async() => {
-    await categoryStore.getAllCategories();
+    await postStore.getAllUserPosts();
 })
 
 onBeforeUnmount(() => {
-    categoryStore.message = null;
-    categoryStore.keyword = null;
+    postStore.message = null;
+    postStore.keyword = null;
 })
 
 
@@ -68,7 +68,7 @@ onBeforeUnmount(() => {
                             <p class="text-xs text-gray-400">You are about to delete this category</p>
                             <div class="flex gap-1 mt-2">
                                 <button class="w-36 h-8 bg-gray-200 rounded text-sm" @click="closeModal">Cancel</button>
-                                <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeleteCategory(categoryId)">Yes,delete it</button>
+                                <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeletePost(postId)">Yes,delete it</button>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@ onBeforeUnmount(() => {
                 </label>
             </div>
             <div class="w-full mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
-                <div v-if="categoryStore.message" class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mb-5" role="alert">
+                <div v-if="postStore.message" class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mb-5" role="alert">
                         <div class="flex">
                             <div class="py-1">
                                 <svg class="w-6 h-6 text-teal-500 dark:text-white mr-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -111,12 +111,12 @@ onBeforeUnmount(() => {
                             <div>
                             <p class="font-bold text-sm">Success</p>
                             <div class="text-xs flex gap-1">
-                                {{ categoryStore.message }}
+                                {{ postStore.message }}
                             </div>
                             </div>
                         </div>
                     </div>
-                    <div v-if="categoryStore.errors && categoryStore.errors.message" class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md mb-5" role="alert">
+                    <div v-if="postStore.errors && postStore.errors.message" class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md mb-5" role="alert">
                         <div class="flex">
                             <div class="py-1">
                                 <svg class="w-6 h-6 text-red-500 dark:text-white mr-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -126,12 +126,12 @@ onBeforeUnmount(() => {
                             </div>
                             <div>
                                 <p class="font-bold text-sm">Error</p>
-                                <div class="text-xs flex gap-1">{{ categoryStore.errors.message }}
+                                <div class="text-xs flex gap-1">{{ postStore.errors.message }}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div role="status" v-if="categoryStore.isLoading" class="flex items-center justify-center mt-10">
+                    <div role="status" v-if="postStore.isLoading" class="flex items-center justify-center mt-10">
                         <div class="flex flex-col items-center justify-center gap-5">
                             <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -139,11 +139,11 @@ onBeforeUnmount(() => {
                             </svg>
                         </div>
                     </div>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" v-else>
+                    <!-- <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" v-else>
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    Category name
+                                    Incident Location
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <span class="sr-only">Edit</span>
@@ -152,16 +152,16 @@ onBeforeUnmount(() => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="categoryStore.categories.data.length > 0" v-for="category in categoryStore.categories.data" :key="category.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                            <tr v-if="postStore.posts.data.length > 0" v-for="post in postStore.posts.data" :key="post.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ category.name }}
+                                    {{ post.incident_location }}
                                 </th>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
-                                        <RouterLink :to="{name: 'category.edit', params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                        <RouterLink :to="{name: 'category.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                             <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
                                         </RouterLink>
-                                        <div class="text-red-500 cursor-pointer" @click="openDeleteCategoryConfirmation(category.id)">
+                                        <div class="text-red-500 cursor-pointer" @click="openDeletePostConfirmation(post.id)">
                                             <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
                                         </div>
                                     </div>
@@ -171,14 +171,14 @@ onBeforeUnmount(() => {
                                 <td colspan="2" class="text-center">No data found.</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
 
-                    <div class="flex justify-center md:justify-end mt-2">
+                    <!-- <div class="flex justify-center md:justify-end mt-2">
                         <TailwindPagination
-                        :data="categoryStore.categories"
-                        @pagination-change-page="categoryStore.getAllCategories"
+                        :data="postStore.posts"
+                        @pagination-change-page="postStore.getAllUserPosts"
                     />
-                    </div>
+                    </div> -->
             </div>
         </div>
     </Card>
