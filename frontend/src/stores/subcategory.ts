@@ -11,6 +11,7 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
     const errors = ref<any | null>(null);
     const message = ref(null);
     const keyword = ref(null);
+    const subcategoriesDropdown = ref(null);
 
     const getAllSubcategories = async(page = 1) => {
         isLoading.value = true;
@@ -41,6 +42,23 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
 
         } catch(error) {
             console.log("Error fetching subcategories: ", error);
+        } finally {
+            isLoading.value = null;
+        }
+    }
+
+    const getAllSubcategoriesDropdown = async() => {
+        isLoading.value = true;
+
+        try {
+            const response = await apiClient.get(`/subcategories/dropdown`);
+            
+            subcategoriesDropdown.value =  response.data;
+
+            isLoading.value = false;
+
+        } catch(error) {
+            console.log("Error fetching categories: ", error);
         } finally {
             isLoading.value = null;
         }
@@ -124,8 +142,11 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
         errors,
         isLoading,
         keyword,
+        subcategoriesDropdown,
+        
         getAllSubcategories,
         getSubcategory,
+        getAllSubcategoriesDropdown,
         storeSubcategory,
         updateSubcategory,
         deleteSubcategory,
