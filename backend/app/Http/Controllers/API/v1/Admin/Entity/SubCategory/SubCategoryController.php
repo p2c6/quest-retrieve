@@ -87,4 +87,14 @@ class SubcategoryController extends Controller
     {
         return $this->service->destroy($subCategory);
     }
+
+    /**
+     * List of all subcategories for dropdown.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function dropdownSubcategories(): JsonResponse
+    {
+        return $this->service->dropdownSubcategories();
+    }
 }
