@@ -43,6 +43,19 @@ class SubCategoryService
     }
 
     /**
+     * List of all categories for dropdown.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function dropdownSubcategories(): JsonResponse
+    {
+        $subcategory = Subcategory::get(['id', 'name']);
+
+        return response()->json($subcategory);
+    }
+
+
+    /**
      * Show a single category.
      * 
      * @param App\Models\Subcategory $subCategory The model of the subcategory which needs to be retrieved.
