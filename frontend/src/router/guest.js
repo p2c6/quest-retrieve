@@ -4,8 +4,8 @@ import EmailVerificationPage from "@/pages/authentication/EmailVerificationPage.
 import VerifyEmailPage from "@/pages/authentication/VerifyEmailPage.vue";
 import ForgotPasswordPage from "@/pages/authentication/ForgotPasswordPage.vue";
 import ResetPasswordPage from "@/pages/authentication/ResetPasswordPage.vue";
-import HomePage from "@/pages/user/home/HomePage.vue";
 import UserLayout from '@/components/layouts/UserLayout.vue';
+import HomePage from "@/pages/guest/HomePage.vue";
 
 export default [
   {
