@@ -28,6 +28,11 @@ class Post extends Model
         return Carbon::parse($value)->format('F j, Y');
     }
 
+    public function getFinishTransactionDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('F j, Y');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
