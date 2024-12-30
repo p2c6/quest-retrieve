@@ -25,7 +25,7 @@ class PostService
     /**
      * List of all posts.
      * 
-     * @param Illuminate\Http\Request $request The HTTP request object containing user data.
+     * @param Illuminate\Http\Request $keyword The HTTP request object containing user data.
      * @return Illuminate\Http\JsonResponse
      */
     public function index($keyword): JsonResponse

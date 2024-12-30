@@ -34,7 +34,7 @@ class PostController extends Controller
     /**
      * List of all posts.
      * 
-     * @param App\Models\Post The model of the post which needs to be retrieved.
+     * @param Illuminate\Http\Request $request The HTTP request object containing user data.
      * @return Illuminate\Http\JsonResponse
      */
     public function index(Request $request): JsonResponse
