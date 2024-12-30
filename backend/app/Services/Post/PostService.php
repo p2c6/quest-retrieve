@@ -30,9 +30,7 @@ class PostService
      */
     public function index($keyword): JsonResponse
     {
-        $query = Post::where('user_id', auth()->id());
-
-        $posts = QueryBuilder::for($query)
+        $posts = QueryBuilder::for(Post::class)
         ->with(['subcategory' => function($q) {
             $q->select('id', 'name');
         }])
@@ -42,6 +40,7 @@ class PostService
             'subcategory_id', 
             'incident_location', 
             'incident_date',
+            'finish_transaction_date',
             'status',
         )
         ->allowedFilters([
