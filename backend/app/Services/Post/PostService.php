@@ -28,7 +28,7 @@ class PostService
      * @param App\Models\Post The model of the post which needs to be retrieved.
      * @return Illuminate\Http\JsonResponse
      */
-    public function index($keyword)
+    public function index($keyword): JsonResponse
     {
         $query = Post::where('user_id', auth()->id());
 
