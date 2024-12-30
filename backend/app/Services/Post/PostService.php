@@ -3,16 +3,22 @@
 namespace App\Services\Post;
 
 use App\Enums\PostStatus;
+use App\Enums\UserType;
+use App\Filters\FilterPost;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Resources\Post\PostCollection;
 use App\Http\Resources\Post\PostResource;
 use App\Mail\ClaimRequested;
 use App\Mail\PostCreated;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PostService
 {
@@ -20,11 +26,31 @@ class PostService
      * List of all posts.
      * 
      * @param App\Models\Post The model of the post which needs to be retrieved.
-     * @return App\Http\Resources\Post\PostCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): PostCollection
+    public function index($keyword)
     {
-        return new PostCollection(Post::paginate());
+        $query = Post::where('user_id', auth()->id());
+
+        $posts = QueryBuilder::for($query)
+        ->with(['subcategory' => function($q) {
+            $q->select('id', 'name');
+        }])
+        ->select(
+            'id',
+            'type',
+            'subcategory_id', 
+            'incident_location', 
+            'incident_date',
+            'status',
+        )
+        ->allowedFilters([
+            AllowedFilter::custom('keyword', new FilterPost)
+        ])
+        ->paginate(5)
+        ->appends($keyword);
+                
+        return response()->json($posts);
     }
 
     /**

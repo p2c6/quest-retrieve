@@ -30,16 +30,16 @@ class PostController extends Controller
     {
         $this->service = $service;
     }
-
+    
     /**
      * List of all posts.
      * 
      * @param App\Models\Post The model of the post which needs to be retrieved.
-     * @return App\Http\Resources\Post\PostCollection
+     * @return Illuminate\Http\JsonResponse
      */
-    public function index(): PostCollection
+    public function index(Request $request): JsonResponse
     {
-        return $this->service->index();
+        return $this->service->index($request->query('keyword'));
     }
 
     /**
