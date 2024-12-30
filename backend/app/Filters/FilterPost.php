@@ -7,6 +7,7 @@ use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class FilterPost implements Filter
 {
@@ -38,6 +39,7 @@ class FilterPost implements Filter
             
             return $this->dateFilter($query, $value, [
                 'incident_date',
+                'finish_transaction_date'
             ]);
         }
 
@@ -120,7 +122,14 @@ class FilterPost implements Filter
     public function monthFilter($query, $relatedModel = null, $column, $month)
     {
         if (is_null($relatedModel)) {
-            return $query->whereMonth($column, '=', "$month");
+            return $query->where(function($subQuery) use ($column, $month) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, $month);
+                
+            })->orWhere(function($subQuery) use ($column, $month) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, $month);
+            });
         }
 
         return $query->orWhereHas($relatedModel, function ($subQuery) use ($column, $month) {
@@ -131,7 +140,14 @@ class FilterPost implements Filter
     public function yearFilter($query, $relatedModel = null, $column, $year)
     {
         if (is_null($relatedModel)) {
-            return $query->whereYear($column, '=', "$year");
+            return $query->where(function($subQuery) use ($column, $year) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereYear($column, '=', "$year");
+                
+            })->orWhere(function($subQuery) use ($column, $year) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereYear($column, $year);
+            });
         }
 
         return $query->orWhereHas($relatedModel, function ($subQuery) use ($column, $year) {
@@ -142,8 +158,16 @@ class FilterPost implements Filter
     public function monthDayFilter($query, $relatedModel = null, $column, $month, $day)
     {
         if (is_null($relatedModel)) {
-            return $query->whereMonth($column, '=', "$month")
-            ->whereDay($column, '=', "$day");
+            return $query->where(function($subQuery) use ($column, $month, $day) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, '=', "$month")
+                ->whereDay($column, '=', "$day");
+                
+            })->orWhere(function($subQuery) use ($column, $month, $day) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, '=', "$month")
+                ->whereDay($column, '=', "$day");
+            });
         }
 
         return $query->orWhereHas($relatedModel, function ($subQuery) use ($column, $month, $day) {
@@ -155,8 +179,16 @@ class FilterPost implements Filter
     public function monthYearFilter($query, $relatedModel = null, $column, $month, $year)
     {
         if (is_null($relatedModel)) {
-            return $query->whereMonth($column, '=', "$month")
-            ->whereYear($column, '=', "$year");
+            return $query->where(function($subQuery) use ($column, $month, $year) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, '=', "$month")
+                ->whereYear($column, '=', "$year");
+                
+            })->orWhere(function($subQuery) use ($column, $month, $year) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, '=', "$month")
+                ->whereYear($column, '=', "$year");
+            });
         }
 
         return $query->orWhereHas($relatedModel, function ($subQuery) use ($column, $month, $year) {
@@ -168,9 +200,18 @@ class FilterPost implements Filter
     public function completeDateFilter($query, $relatedModel = null, $column, $month, $day, $year)
     {
         if (is_null($relatedModel)) {
-            return $query->whereMonth($column, '=', "$month")
-            ->whereDay($column, '=', "$day")
-            ->whereYear($column, '=', "$year");
+            return $query->where(function($subQuery) use ($column, $month, $day, $year) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, '=', "$month")
+                ->whereDay($column, '=', "$day")
+                ->whereYear($column, '=', "$year");
+                
+            })->orWhere(function($subQuery) use ($column, $month, $day, $year) {
+                $subQuery->where('user_id', auth()->id())
+                ->whereMonth($column, '=', "$month")
+                ->whereDay($column, '=', "$day")
+                ->whereYear($column, '=', "$year");
+            });
         }
 
         return $query->orWhereHas($relatedModel, function ($subQuery) use ($column, $month, $day, $year) {
@@ -186,6 +227,12 @@ class FilterPost implements Filter
             $date = Carbon::createFromFormat('F', $inputDate);
             $month = $date->format('n');
 
+            if (stripos(strtolower($inputDate), 'Feb') !== false) {
+                $febDate = Carbon::create(2024, 2, 1, 0, 0, 0, 'Asia/Manila');
+
+                $month = $febDate->month;
+            }
+
             return $this->monthFilter($query, $relatedModel, $column,  $month);
         }
 
@@ -199,6 +246,13 @@ class FilterPost implements Filter
         if ($this->hasOnlyMonthDay($inputDate)) {
             $date = Carbon::createFromFormat('F j', $inputDate);
             $month = $date->format('n');
+
+            if (stripos(strtolower($inputDate), 'Feb') !== false) {
+                $febDate = Carbon::create(2024, 2, 1, 0, 0, 0, 'Asia/Manila');
+
+                $month = $febDate->month;
+            }
+
             $day = $date->format('j');
         
             return $this->monthDayFilter($query, $relatedModel, $column, $month, $day);
@@ -206,6 +260,13 @@ class FilterPost implements Filter
         if ($this->hasOnlyMonthYear($inputDate)) {
             $date = Carbon::createFromFormat('F Y', $inputDate);
             $month = $date->format('n');
+
+            if (stripos(strtolower($inputDate), 'Feb') !== false) {
+                $febDate = Carbon::create(2024, 2, 1, 0, 0, 0, 'Asia/Manila');
+
+                $month = $febDate->month;
+            }
+
             $year = $date->format('Y');
 
             return $this->monthYearFilter($query, $relatedModel, $column, $month, $year);
@@ -214,6 +275,13 @@ class FilterPost implements Filter
         if ($this->hasCompleteDate($inputDate)) {
             $date = Carbon::createFromFormat('F j Y', $inputDate);
             $month = $date->format('n');
+
+            if (stripos(strtolower($inputDate), 'Feb') !== false) {
+                $febDate = Carbon::create(2024, 2, 1, 0, 0, 0, 'Asia/Manila');
+
+                $month = $febDate->month;
+            }
+
             $day = $date->format('j');
             $year = $date->format('Y');
 
