@@ -31,7 +31,9 @@ const collapseNav = () => collapse.value = !collapse.value;
                             Home
                         </div>
                         <div>
-                            Posts
+                            <RouterLink :to="{name: 'posts.list'}">
+                                Posts
+                            </RouterLink>
                         </div>
                     </div>
                     <div class="flex flex-col md:flex-row justify-end gap-2">
