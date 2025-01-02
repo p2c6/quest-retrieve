@@ -139,11 +139,26 @@ onBeforeUnmount(() => {
                             </svg>
                         </div>
                     </div>
-                    <!-- <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" v-else>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" v-else>
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
+                                    Type
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Item
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Incident Location
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Incident Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Date Resolved
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Status
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <span class="sr-only">Edit</span>
@@ -154,7 +169,22 @@ onBeforeUnmount(() => {
                         <tbody>
                             <tr v-if="postStore.posts.data.length > 0" v-for="post in postStore.posts.data" :key="post.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ post.type }}
+                                </th>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ post.subcategory.name }}
+                                </th>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ post.incident_location }}
+                                </th>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ post.incident_date }}
+                                </th>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ post.finish_transaction_date }}
+                                </th>
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ post.status }}
                                 </th>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
@@ -168,17 +198,17 @@ onBeforeUnmount(() => {
                                 </td>
                             </tr>
                             <tr v-else>
-                                <td colspan="2" class="text-center">No data found.</td>
+                                <td colspan="7" class="text-center">No data found.</td>
                             </tr>
                         </tbody>
-                    </table> -->
+                    </table>
 
-                    <!-- <div class="flex justify-center md:justify-end mt-2">
+                    <div class="flex justify-center md:justify-end mt-2">
                         <TailwindPagination
                         :data="postStore.posts"
                         @pagination-change-page="postStore.getAllUserPosts"
                     />
-                    </div> -->
+                    </div>
             </div>
         </div>
     </Card>
