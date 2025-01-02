@@ -11,6 +11,21 @@ export const usePostStore = defineStore('post', () => {
     const message = ref(null);
     const keyword = ref(null);
 
+    const getAllUserPosts = async(page = 1) => {
+        isLoading.value = true;
+        try {
+            const response = await apiClient.get(`/posts?page=${page}&filter[keyword]=${keyword.value ?? ""}`);
+
+            posts.value = response.data
+
+            isLoading.value = false;
+        } catch(error) {
+
+        } finally {
+            isLoading.value = null;
+        }
+    }
+
     const storePost = async(payload: any) => {
         isLoading.value = false;
 
@@ -31,7 +46,6 @@ export const usePostStore = defineStore('post', () => {
 
             console.log("Error on storing post: ", error)
         }
-
     }
 
     return {
@@ -41,5 +55,6 @@ export const usePostStore = defineStore('post', () => {
         message,
         keyword,
         storePost,
+        getAllUserPosts,
     }
 })
