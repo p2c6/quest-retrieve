@@ -49,11 +49,11 @@ class FilterPost implements Filter
     public function normalFilter($query, $value)
     {
         $query->where(function($subQuery) use ($value) {
-            $subQuery->where('type', 'LIKE', "$value")
-            ->orWhere('incident_location', 'LIKE', "$value")
+            $subQuery->where('type', 'LIKE', "%$value%")
+            ->orWhere('incident_location', 'LIKE', "%$value%")
             ->orWhere('status', 'LIKE', "%$value%")
             ->orWhereHas('subcategory', function ($subQuery) use ($value) {
-                $subQuery->where('name', 'LIKE', "$value");
+                $subQuery->where('name', 'LIKE', "%$value%");
             });
         });
     }
