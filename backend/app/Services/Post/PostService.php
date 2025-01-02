@@ -31,6 +31,7 @@ class PostService
     public function index($keyword): JsonResponse
     {
         $posts = QueryBuilder::for(Post::class)
+        ->where('user_id', auth()->id())
         ->with(['subcategory' => function($q) {
             $q->select('id', 'name');
         }])
