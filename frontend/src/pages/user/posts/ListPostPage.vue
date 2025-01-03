@@ -68,8 +68,8 @@ onBeforeUnmount(() => {
                 <div id="modal-body" class="flex items-center justify-center px-4">
                     <div class="flex-1">
                         <div class="flex flex-col justify-center gap-2">
-                            <p class="font-semibold text-md text-primary">Delete category?</p>
-                            <p class="text-xs text-gray-400">You are about to delete this category</p>
+                            <p class="font-semibold text-md text-primary">Delete post?</p>
+                            <p class="text-xs text-gray-400">You are about to delete this post</p>
                             <div class="flex gap-1 mt-2">
                                 <button class="w-36 h-8 bg-gray-200 rounded text-sm" @click="closeModal">Cancel</button>
                                 <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeletePost(postId)">Yes,delete it</button>
