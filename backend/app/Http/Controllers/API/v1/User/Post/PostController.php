@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Services\Post\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -75,6 +76,10 @@ class PostController extends Controller
      */
     public function update(Post $post, UpdatePostRequest $request): JsonResponse
     {
+        if (Gate::denies('update', $post)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+        
         return $this->service->update($post, $request);
     }
 
