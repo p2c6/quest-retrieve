@@ -188,7 +188,7 @@ onBeforeUnmount(() => {
                                 </th>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
-                                        <RouterLink :to="{name: 'category.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                        <RouterLink :to="{name: 'posts.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                             <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
                                         </RouterLink>
                                         <div class="text-red-500 cursor-pointer" @click="openDeletePostConfirmation(post.id)">
