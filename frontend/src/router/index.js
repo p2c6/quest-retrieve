@@ -100,6 +100,21 @@ router.beforeEach(async (to, from, next) => {
     return next({name: 'dashboard'})
   }
 
+  const publicUserRoutes = [
+    'public-user.home',
+    'posts.list',
+    'posts.create',
+    'posts.edit',
+  ];
+
+  if (!authUser && publicUserRoutes.includes(to.name)) {
+    return next({ name: 'login' });
+  }
+
+  if (authUser && !isPublicUser && publicUserRoutes.includes(to.name)) {
+    return next({ name: 'login' });
+  }
+
   next();
 
 });
