@@ -92,6 +92,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post): JsonResponse
     {
+        if (Gate::denies('delete', $post)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->destroy($post);
     }
 
