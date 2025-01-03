@@ -64,6 +64,36 @@ export const usePostStore = defineStore('post', () => {
         }
     }
 
+    const updatePost = async(payload: any) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.put(`/posts/${payload.id}`, payload)
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+                router.push({name: 'posts.list'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 422) {
+                console.log('Validation error', error);
+                errors.value = error.response.data.errors;
+                return;
+            }
+
+            if (error.status == 409) {
+                console.log('Validation error', error);
+                errors.value = error.response.data;
+                router.push({name: 'posts.list'});
+                return;
+            }
+
+
+            console.log("Error on storing post: ", error)
+        }
+    }
+
     return {
         posts,
         isLoading,
@@ -73,5 +103,6 @@ export const usePostStore = defineStore('post', () => {
         storePost,
         getAllUserPosts,
         getUserPost,
+        updatePost
     }
 })
