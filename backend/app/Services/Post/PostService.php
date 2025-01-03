@@ -112,17 +112,21 @@ class PostService
     public function update(Post $post, UpdatePostRequest $request) : JsonResponse
     {
         try {
-            ;
-            $post->update([
-                'type' => $request->type,
-                'subcategory_id' => $request->subcategory_id,
-                'incident_location' => $request->incident_location,
-                'incident_date' => $request->incident_date,
-            ]);
+            if ($this->isStillPending($post->status)) {
+                $post->update([
+                    'type' => $request->type,
+                    'subcategory_id' => $request->subcategory_id,
+                    'incident_location' => $request->incident_location,
+                    'incident_date' => $request->incident_date,
+                ]);
 
-            return response()->json([
-                'message' => 'Successfully Post Updated.'
-            ], 200);
+                return response()->json([
+                    'message' => 'Successfully Post Updated.'
+                ], 200);
+            }
+
+            return response()->json(['message' => 'Cannot update post. The post was already processed.'], 409);
+
         } catch (ValidationException $validationException) {
             info("Validation Error on updating post: " . $validationException->getMessage());
             return response()->json(['errors' => $validationException->errors()], 422);
@@ -157,6 +161,15 @@ class PostService
                 'message' => 'An error occurred during deleting post.'
             ], 500);
         }
+    }
+
+    public function isStillPending($status): bool
+    {
+        if ($status === PostStatus::PENDING) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
