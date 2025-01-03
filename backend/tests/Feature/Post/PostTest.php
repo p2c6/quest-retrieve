@@ -827,4 +827,66 @@ class PostTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson([ 'message' => 'Cannot update post. The post was already processed.']);
     }
+
+    /**
+     * Test user cannot delete post while the status is not pending via API.
+     * 
+     * This test verifies that a user cannot delete post while the status is not pending via API endpoint.
+     */
+    public function test_user_cannot_delete_post_while_status_not_pending(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        
+        $originalType = "Lost";
+        $originalSubCategoryId = $subCategory->id;
+        $originalIncidentLocation = 'Manila City';
+        $originalIncidentDate = '2024-01-02';
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => $originalType,
+            'subcategory_id' => $originalSubCategoryId,
+            'incident_location' => $originalIncidentLocation,
+            'incident_date' => $originalIncidentDate,
+            'status' => PostStatus::ON_PROCESSING
+        ]);
+        
+        $response = $this->deleteJson(route('api.v1.posts.destroy', $post->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(409)
+                ->assertJsonStructure(['message'])
+                ->assertJson([ 'message' => 'Cannot delete post. The post was already processed.']);
+    }
 }
