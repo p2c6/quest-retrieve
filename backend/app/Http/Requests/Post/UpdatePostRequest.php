@@ -28,4 +28,11 @@ class UpdatePostRequest extends FormRequest
             'incident_date' => 'required|date', 
         ];
     }
+
+    public function messages(): array
+    {
+        $messages = ['subcategory_id' => 'The item field is required.'];
+
+        return $messages;
+    }
 }
