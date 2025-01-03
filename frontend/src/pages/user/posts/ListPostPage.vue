@@ -44,6 +44,7 @@ onBeforeMount(async() => {
 
 onBeforeUnmount(() => {
     postStore.message = null;
+    postStore.errors = null;
     postStore.keyword = null;
 })
 
