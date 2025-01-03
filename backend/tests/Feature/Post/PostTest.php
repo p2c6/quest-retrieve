@@ -974,4 +974,73 @@ class PostTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'You are not allowed to access this action']);
     }
+
+    /**
+     * Test user cannot update post if not owner via API.
+     * 
+     * This test verifies that a user cannot update post if not owner via API endpoint.
+     */
+    public function test_user_cannot_delete_post_if_not_owner(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        
+        $originalType = "Lost";
+        $originalSubCategoryId = $subCategory->id;
+        $originalIncidentLocation = 'Manila City';
+        $originalIncidentDate = '2024-01-02';
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => $originalType,
+            'subcategory_id' => $originalSubCategoryId,
+            'incident_location' => $originalIncidentLocation,
+            'incident_date' => $originalIncidentDate,
+            'status' => PostStatus::PENDING
+        ]);
+
+        $otherPost = Post::create([
+            'user_id' => 1,
+            'type' => $originalType,
+            'subcategory_id' => $originalSubCategoryId,
+            'incident_location' => $originalIncidentLocation,
+            'incident_date' => $originalIncidentDate,
+            'status' => PostStatus::PENDING
+        ]);
+        
+        $response = $this->deleteJson(route('api.v1.posts.destroy', $otherPost->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
 }
