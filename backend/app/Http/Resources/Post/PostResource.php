@@ -26,7 +26,10 @@ class PostResource extends JsonResource
                                                         'name' => $this->subcategory->name
                                                     ] : null,
             'incident_location' => $this->incident_location,
-            'incident_date' => $this->formatDate($this->incident_date),
+            'incident_date' =>  [
+                                    'original' => $this->originalDate($this->incident_date), 
+                                    'for_human' =>$this->formatDate($this->incident_date),
+                                ],
             'status' => $this->status,
         ];
     }
@@ -34,5 +37,13 @@ class PostResource extends JsonResource
     public function formatDate($date)
     {
         return $date ? Carbon::parse($date)->format('F j, Y') : null;
+    }
+
+    public function originalDate($date)
+    {
+        $date = Carbon::createFromFormat('F j, Y', $date);
+        $formattedDate = $date->format('Y-m-d');
+
+        return $formattedDate;
     }
 }
