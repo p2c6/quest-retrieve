@@ -20,7 +20,23 @@ export const usePostStore = defineStore('post', () => {
 
             isLoading.value = false;
         } catch(error) {
+            console.log("Error fetching all user post: ", error);
+        } finally {
+            isLoading.value = null;
+        }
+    }
 
+    const getUserPost = async(id: any) => {
+        isLoading.value = true;
+        try {
+            const response = await apiClient.get(`/posts/${id}`);
+            
+            if (response.status === 200) {
+                return response.data.data;
+            }
+
+        } catch(error) {
+            console.log("Error fetching user post: ", error);
         } finally {
             isLoading.value = null;
         }
@@ -56,5 +72,6 @@ export const usePostStore = defineStore('post', () => {
         keyword,
         storePost,
         getAllUserPosts,
+        getUserPost,
     }
 })
