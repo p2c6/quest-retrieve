@@ -125,7 +125,9 @@ class PostService
                 ], 200);
             }
 
-            return response()->json(['message' => 'Cannot update post. The post was already processed.'], 409);
+            return response()->json([
+                'message' => 'Cannot update post. The post was already processed.'
+            ], 409);
 
         } catch (ValidationException $validationException) {
             info("Validation Error on updating post: " . $validationException->getMessage());
