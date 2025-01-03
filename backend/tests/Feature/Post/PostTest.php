@@ -889,4 +889,89 @@ class PostTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson([ 'message' => 'Cannot delete post. The post was already processed.']);
     }
+
+    /**
+     * Test user cannot update post if not owner via API.
+     * 
+     * This test verifies that a user cannot update post if not owner via API endpoint.
+     */
+    public function test_user_cannot_update_post_if_not_owner(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+
+        $originalType = "Lost";
+        $originalSubCategoryId = $subCategory->id;
+        $originalIncidentLocation = 'Manila City';
+        $originalIncidentDate = '2024-01-02';
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => $originalType,
+            'subcategory_id' => $originalSubCategoryId,
+            'incident_location' => $originalIncidentLocation,
+            'incident_date' => $originalIncidentDate,
+            'status' => PostStatus::PENDING
+        ]);
+
+        $otherPost = Post::create([
+            'user_id' => 1,
+            'type' => $originalType,
+            'subcategory_id' => $originalSubCategoryId,
+            'incident_location' => $originalIncidentLocation,
+            'incident_date' => $originalIncidentDate,
+            'status' => PostStatus::PENDING
+        ]);
+
+        $updatedType = "Found";
+        $updatedSubCategoryId = 2;
+        $updatedIncidentLocation = 'Quezon City';
+        $updatedIncidentDate = '2024-05-02';
+
+        $response = $this->putJson(route('api.v1.posts.update', $otherPost->id), [
+            'user_id' => $user->id,
+            'type' => $updatedType,
+            'subcategory_id' => $updatedSubCategoryId,
+            'incident_location' => $updatedIncidentLocation,
+            'incident_date' => $updatedIncidentDate,
+        ]);
+
+        $this->assertNotSame($originalType, $updatedType, 'Type must not equal to previous');
+        $this->assertNotSame($originalSubCategoryId, $updatedSubCategoryId, 'Subcategory must not equal to previous');
+        $this->assertNotSame($originalIncidentLocation, $updatedIncidentLocation, 'Incident Location must not equal to previous');
+        $this->assertNotSame($originalIncidentDate, $updatedIncidentDate, 'Incident Date must not equal to previous');
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
 }
