@@ -152,11 +152,18 @@ class PostService
     public function destroy(Post $post): JsonResponse
     {
         try {
-            $post->delete();
+            if ($this->isStillPending($post->status)) {
+                $post->delete();
         
+                return response()->json([
+                    'message' => 'Successfully Post Deleted.'
+                ], 200);
+            }
+
             return response()->json([
-                'message' => 'Successfully Post Deleted.'
-            ], 200);
+                'message' => 'Cannot delete post. The post was already processed.'
+            ], 409);
+
         } catch (\Throwable $th) {
             info("Error on deleting post: " . $th->getMessage());
             return response()->json([
