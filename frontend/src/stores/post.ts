@@ -120,6 +120,32 @@ export const usePostStore = defineStore('post', () => {
 
     }
 
+    const markAsDonePost = async(id: any) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.put(`/posts/${id}/mark-as-done`)
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+                
+                getAllUserPosts()
+
+                router.push({name: 'posts.list'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 409) {
+                console.log('Validation error', error);
+                errors.value = error.response.data;
+                return;
+            }
+
+            console.log("Error on marking as done post: ", error)
+        }
+
+    }
+
     return {
         posts,
         isLoading,
@@ -130,6 +156,7 @@ export const usePostStore = defineStore('post', () => {
         getAllUserPosts,
         getUserPost,
         updatePost,
-        deletePost
+        deletePost,
+        markAsDonePost
     }
 })
