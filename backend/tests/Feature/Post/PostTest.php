@@ -1129,10 +1129,10 @@ class PostTest extends TestCase
                 ->assertJson(['message' => 'You are not allowed to access this action']);
     }
 
-     /**
-     * Test user cannot mark post as done if not owner via API.
+    /**
+     * Test user can mark post as done via API.
      * 
-     * This test verifies that a user cannot mark post as done if not owner via API endpoint.
+     * This test verifies that a user cannot mark post as done via API endpoint.
      */
     public function test_user_can_mark_post_as_done(): void
     {
