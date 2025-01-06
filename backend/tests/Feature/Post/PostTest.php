@@ -1049,7 +1049,7 @@ class PostTest extends TestCase
      * 
      * This test verifies that a user cannot mark post as done if not owner via API endpoint.
      */
-    public function test_user_cannot_mark_post_as_doneif_not_owner(): void
+    public function test_user_cannot_mark_post_as_done_if_not_owner(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
