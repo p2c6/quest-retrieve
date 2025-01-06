@@ -1132,7 +1132,7 @@ class PostTest extends TestCase
     /**
      * Test user can mark post as done via API.
      * 
-     * This test verifies that a user cannot mark post as done via API endpoint.
+     * This test verifies that a user can mark post as done via API endpoint.
      */
     public function test_user_can_mark_post_as_done(): void
     {
