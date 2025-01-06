@@ -203,4 +203,35 @@ class PostService
             ], 500);
         }
     }
+
+    /**
+     * Handle mark as done post.
+     * 
+     * @param App\Models\Post $post The model of the post which needs status to be updated.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function markAsDone(Post $post)
+    {   
+        try {
+            if ($post->status !== PostStatus::ON_PROCESSING) {
+                return response()->json([
+                    'message' => 'Cannot mark post as done. The post is still pending or already done.'
+                ], 409);
+            }
+
+            $post->update([
+                'status' => PostStatus::FINISHED
+            ]);
+
+            return response()->json([
+            'message' => 'Successfully Post Mark As Done.'
+            ], 200);
+        } catch(\Throwable $th) {
+            info("Error on updating post status as done: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during claiming post.'
+            ], 500);
+        }
+    }
 }
