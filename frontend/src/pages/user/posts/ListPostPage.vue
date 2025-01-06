@@ -3,10 +3,12 @@ import Card from '@/components/Card.vue';
 import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { usePostStore } from '@/stores/post';
+import DialogBox from '@/components/DialogBox.vue';
 
 const postStore = usePostStore();
 
-const isModalOpen = ref(false);
+const isDeleteDialogOpen = ref(false);
+const isMarkAsDoneDialogOpen = ref(false);
 const postId = ref(null);
 
 const formData = reactive({
@@ -17,20 +19,39 @@ let typingTimer;
 const typingDelay = 1000;
 
 const openDeletePostConfirmation = (id) => {
-    isModalOpen.value = true;
+    isDeleteDialogOpen.value = true;
     postId.value = id;
 }
 
-const confirmDeletePost = (id) => {
+const confirmDeletePost = () => {
     postStore.message = null;
     postStore.errors = null;
 
-    postStore.deletePost(id)
-    isModalOpen.value = false;
+    postStore.deletePost(postId.value)
+    postId.value = null;
+    isDeleteDialogOpen.value = false;
 }
 
-const closeModal = () => {
-    isModalOpen.value = false;
+const closeDeletePostDialog = () => {
+    isDeleteDialogOpen.value = false;
+}
+
+const openMarkAsDonePostConfirmation = (id) => {
+    isMarkAsDoneDialogOpen.value = true;
+    postId.value = id;
+}
+
+const confirmMarkAsDonePost = () => {
+    postStore.message = null;
+    postStore.errors = null;
+
+    postStore.markAsDonePost(postId.value)
+    postId.value = null;
+    isMarkAsDoneDialogOpen.value = false;
+}
+
+const closeMarkAsDonePostDialog = () => {
+    isMarkAsDoneDialogOpen.value = false;
 }
 
 const search = async() => {
@@ -55,43 +76,31 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Teleport to="#modal-container">
-        <div :class="`fixed inset-0 z-20 flex items-center justify-center ${isModalOpen ? 'block' : 'hidden'}`">
-            <div class="absolute inset-0 bg-slate-950 opacity-40" @click="closeModal"></div>
-            <div id="modal-card" class="relative w-80 h-40 bg-white z-20 rounded-2xl">
-                <div id="modal-header" class="w-full py-2">
-                    <div class="flex justify-end mr-5">
-                        <i class="pi pi-times text-gray-500 cursor-pointer" @click="closeModal"></i>
-                    </div>
-
-                </div>
-                <div id="modal-body" class="flex items-center justify-center px-4">
-                    <div class="flex-1">
-                        <div class="flex flex-col justify-center gap-2">
-                            <p class="font-semibold text-md text-primary">Delete post?</p>
-                            <p class="text-xs text-gray-400">You are about to delete this post</p>
-                            <div class="flex gap-1 mt-2">
-                                <button class="w-36 h-8 bg-gray-200 rounded text-sm" @click="closeModal">Cancel</button>
-                                <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeletePost(postId)">Yes,delete it</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </Teleport>
+    <DialogBox 
+        title="Delete post?" 
+        description="You are about to delete this post" 
+        :isVisible="isDeleteDialogOpen"
+        @closeDialogBox="closeDeletePostDialog"
+        @confirm="confirmDeletePost"
+    />
+    <DialogBox 
+        title="Mark as done post?" 
+        description="You are about to mark as done this post" 
+        :isVisible="isMarkAsDoneDialogOpen"
+        @closeDialogBox="closeMarkAsDonePostDialog"
+        @confirm="confirmMarkAsDonePost"
+    />
     <div class="flex flex-col gap-2 justify-between items-center md:flex-row">
-                <div class="text-center md:text-left">
-                    <p class="text-primary font-medium">Posts</p>
-                    <p class="text-tertiary text-xs md:text-sm">Listing of all posts.</p>
-                </div>
-                <div class="w-full md:w-16">
-                    <RouterLink :to="{ name: 'posts.create' }">
-                    <button class="bg-secondary text-white px-2 py-1 rounded text-sm w-full">Create</button>
-                    </RouterLink>
-                </div>
-            </div>
+        <div class="text-center md:text-left">
+            <p class="text-primary font-medium">Posts</p>
+            <p class="text-tertiary text-xs md:text-sm">Listing of all posts.</p>
+        </div>
+        <div class="w-full md:w-16">
+            <RouterLink :to="{ name: 'posts.create' }">
+            <button class="bg-secondary text-white px-2 py-1 rounded text-sm w-full">Create</button>
+            </RouterLink>
+        </div>
+    </div>
     <Card class="p-5 flex flex-row mt-2  w-full">
         <div class="overflow-x-auto w-full">
             <div class="flex justify-center relative mt-2 md:justify-end">
@@ -195,6 +204,9 @@ onBeforeUnmount(() => {
                                         <RouterLink :to="{name: 'posts.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                             <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
                                         </RouterLink>
+                                        <div class="text-primary cursor-pointer" @click="openMarkAsDonePostConfirmation(post.id)">
+                                            <i class="text-primary pi pi-check-circle text-gray-500 cursor-pointer"> </i> Mark As Done
+                                        </div>
                                         <div class="text-red-500 cursor-pointer" @click="openDeletePostConfirmation(post.id)">
                                             <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
                                         </div>
