@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -62,5 +63,13 @@ class PublicUserPostPolicy
     public function forceDelete(User $user, Post $post): bool
     {
         //
+    }
+
+    /**
+     * Determine whether the user can mark the post as done.
+     */
+    public function markAsDone(User $user, Post $post): bool
+    {
+        return $user->id === $post->user_id;
     }
 }
