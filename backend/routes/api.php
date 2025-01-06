@@ -57,6 +57,7 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
             ->parameters(['subcategories' => 'subCategory']);
             
         //Post
+        Route::put('/posts/{post}/mark-as-done', [PostController::class, 'markAsDone'])->name('posts.markAsDone');
         Route::post('/posts/{post}/claim', [PostController::class, 'claim'])->name('posts.claim');
         Route::apiResource('posts', PostController::class);
 
