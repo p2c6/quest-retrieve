@@ -110,4 +110,20 @@ class PostController extends Controller
     {   
         return $this->service->claim($post, $request);
     }
+
+    /**
+     * Handle mark as done post.
+     * 
+     * @param App\Models\Post $post The model of the post which needs status to be updated.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function markAsDone(Post $post): JsonResponse
+    {
+        if (Gate::denies('mark-as-done', $post)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
+        return $this->service->markAsDone($post);
+    }
 }
