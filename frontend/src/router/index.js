@@ -1,14 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import guestRoutes from "@/router/guest";
 import publicUserRoutes from "@/router/public-user";
-import adminRoutes from "./admin";
+import adminRoutes from "@/router/admin";
+import moderatorRoutes from "@/router/moderator";
 import { useAuthStore } from '@/stores/auth';
 import ROLE from '@/constants/user-role';
 
 const routes = [
   ...guestRoutes,
   ...publicUserRoutes,
-  ...adminRoutes
+  ...adminRoutes,
+  ...moderatorRoutes,
 ];
 
 const router = createRouter({
@@ -97,8 +99,12 @@ router.beforeEach(async (to, from, next) => {
     return next({name: 'home'})
   }
 
-  if ((isAdmin || isModerator) && to.path == "/") {
-    return next({name: 'dashboard'})
+  if (isAdmin  && to.path == "/") {
+    return next({name: 'admin.dashboard'})
+  }
+
+  if (isModerator  && to.path == "/") {
+    return next({name: 'moderator.dashboard'})
   }
 
   const publicUserRoutes = [
