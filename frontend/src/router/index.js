@@ -23,6 +23,7 @@ router.beforeEach(async (to, from, next) => {
   const authUser = authStore.user;
 
   const isAdmin = authUser?.role_id === ROLE.IS_ADMIN;
+  const isModerator = authUser?.role_id === ROLE.IS_MODERATOR;
   const isPublicUser = authUser?.role_id === ROLE.IS_PUBLIC_USER;
 
   const authVerifiedUserRestrictedRoutes = ['login', 'register', 'password.forgot', 'email.verification'];
@@ -96,7 +97,7 @@ router.beforeEach(async (to, from, next) => {
     return next({name: 'home'})
   }
 
-  if (isAdmin && to.path == "/") {
+  if ((isAdmin || isModerator) && to.path == "/") {
     return next({name: 'dashboard'})
   }
 
