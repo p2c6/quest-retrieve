@@ -26,6 +26,21 @@ export const usePostStore = defineStore('post', () => {
         }
     }
 
+    const getAllForApprovalPost = async(page = 1) => {
+        isLoading.value = true;
+        try {
+            const response = await apiClient.get(`/approval/posts?page=${page}&filter[keyword]=${keyword.value ?? ""}`);
+
+            posts.value = response.data
+
+            isLoading.value = false;
+        } catch(error) {
+            console.log("Error fetching all user post: ", error);
+        } finally {
+            isLoading.value = null;
+        }
+    }
+
     const getUserPost = async(id: any) => {
         isLoading.value = true;
         try {
@@ -157,6 +172,7 @@ export const usePostStore = defineStore('post', () => {
         getUserPost,
         updatePost,
         deletePost,
-        markAsDonePost
+        markAsDonePost,
+        getAllForApprovalPost
     }
 })
