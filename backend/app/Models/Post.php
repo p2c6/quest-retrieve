@@ -30,7 +30,7 @@ class Post extends Model
 
     public function getFinishTransactionDateAttribute($value)
     {
-        return Carbon::parse($value)->format('F j, Y');
+        return !is_null($value) ? Carbon::parse($value)->format('F j, Y') : null;
     }
 
     public function user(): BelongsTo
