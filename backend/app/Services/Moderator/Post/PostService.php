@@ -3,7 +3,7 @@
 namespace App\Services\Moderator\Post;
 
 use App\Enums\PostStatus;
-use App\Filters\FilterPost;
+use App\Filters\FilterForApprovalPost;
 use App\Models\Post;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Http\JsonResponse;
@@ -33,7 +33,7 @@ class PostService
         )
         ->where('status', PostStatus::PENDING)
         ->allowedFilters([
-            AllowedFilter::custom('keyword', new FilterPost)
+            AllowedFilter::custom('keyword', new FilterForApprovalPost)
         ])
         ->paginate(5)
         ->appends($keyword);
