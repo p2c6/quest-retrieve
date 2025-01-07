@@ -27,7 +27,7 @@ const confirmRejectPost = () => {
     postStore.message = null;
     postStore.errors = null;
 
-    postStore.deletePost(postId.value)
+    postStore.rejectPost(postId.value)
     postId.value = null;
     isRejectDialogOpen.value = false;
 }
