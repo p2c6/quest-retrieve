@@ -30,6 +30,10 @@ class PostController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        if (Gate::denies('view-any', Post::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->index($request->query('keyword'));
     }
 
@@ -41,6 +45,10 @@ class PostController extends Controller
      */
     public function approve(Post $post) : JsonResponse
     {
+        if (Gate::denies('approve-post', $post)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->approve($post);
     }
 
@@ -52,6 +60,10 @@ class PostController extends Controller
      */
     public function reject(Post $post) : JsonResponse
     {
+        if (Gate::denies('reject-post', $post)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->reject($post);
     }
 }
