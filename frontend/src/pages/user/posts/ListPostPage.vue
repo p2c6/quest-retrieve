@@ -199,16 +199,18 @@ onBeforeUnmount(() => {
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ post.status }}
                                 </th>
-                                <td class="px-6 py-4">
-                                    <div class="flex gap-2">
-                                        <RouterLink :to="{name: 'posts.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                            <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
-                                        </RouterLink>
-                                        <div class="text-primary cursor-pointer" @click="openMarkAsDonePostConfirmation(post.id)">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div v-show="post.status !== 'Rejected'" class="flex flex-col gap-2 md:flex-row">
+                                        <div v-show="post.status === 'On Processing'" class="text-primary cursor-pointer" @click="openMarkAsDonePostConfirmation(post.id)">
                                             <i class="text-primary pi pi-check-circle text-gray-500 cursor-pointer"> </i> Mark As Done
                                         </div>
-                                        <div class="text-red-500 cursor-pointer" @click="openDeletePostConfirmation(post.id)">
-                                            <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
+                                        <div  v-show="post.status !== 'On Processing'" class="flex flex-col gap-2 md:flex-row">
+                                            <RouterLink :to="{name: 'posts.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
+                                            </RouterLink>
+                                            <div class="text-red-500 cursor-pointer" @click="openDeletePostConfirmation(post.id)">
+                                                <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
