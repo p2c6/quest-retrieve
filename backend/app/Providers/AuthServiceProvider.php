@@ -7,7 +7,6 @@ namespace App\Providers;
 use App\Enums\UserType;
 use App\Models\Post;
 use App\Models\User;
-use App\Policies\Moderator\Post\PostPolicy;
 use App\Policies\PublicUserPostPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -25,7 +24,6 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         User::class => UserPolicy::class,
         Post::class => PublicUserPostPolicy::class,
-        Post::class => PostPolicy::class,
     ];
 
     /**
@@ -33,6 +31,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->gates();
         $this->verifyEmailNotification();
     }
 
@@ -45,6 +44,21 @@ class AuthServiceProvider extends ServiceProvider
                     ->subject('Verify Email Address')
                     ->line('Click the button below to verify your email address.')
                     ->action('Verify Email Address', $spaUrl);
+        });
+    }
+
+    public function gates()
+    {
+        Gate::define('view-posts', function (User $user) {
+            return in_array($user->role_id, [UserType::ADMINISTRATOR, UserType::MODERATOR]);
+        });
+
+        Gate::define('approve-post', function (User $user) {
+            return in_array($user->role_id, [UserType::ADMINISTRATOR, UserType::MODERATOR]);
+        });
+
+        Gate::define('reject-post', function (User $user) {
+            return in_array($user->role_id, [UserType::ADMINISTRATOR, UserType::MODERATOR]);
         });
     }
 }
