@@ -30,7 +30,7 @@ class PostController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        if (Gate::denies('view-any', Post::class)) {
+        if (Gate::denies('view-posts', auth()->user())) {
             return response()->json(['message' => 'You are not allowed to access this action'], 403);
         }
 
