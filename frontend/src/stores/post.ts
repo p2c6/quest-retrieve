@@ -187,6 +187,32 @@ export const usePostStore = defineStore('post', () => {
 
     }
 
+    const rejectPost = async(id: any) => {
+        isLoading.value = false;
+
+        try {
+            const response = await apiClient.put(`/approval/posts/${id}/reject`)
+
+            if (response.status === 200) {
+                message.value = response.data.message;
+                
+                getAllForApprovalPost()
+
+                router.push({name: 'moderator.posts.list'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 409) {
+                console.log('Validation error', error);
+                errors.value = error.response.data;
+                return;
+            }
+
+            console.log("Error on approving post: ", error)
+        }
+
+    }
+
     return {
         posts,
         isLoading,
@@ -201,5 +227,6 @@ export const usePostStore = defineStore('post', () => {
         markAsDonePost,
         getAllForApprovalPost,
         approvePost,
+        rejectPost,
     }
 })
