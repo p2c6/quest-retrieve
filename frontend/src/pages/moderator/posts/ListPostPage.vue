@@ -7,8 +7,8 @@ import DialogBox from '@/components/DialogBox.vue';
 
 const postStore = usePostStore();
 
-const isDeleteDialogOpen = ref(false);
-const isMarkAsDoneDialogOpen = ref(false);
+const isRejectDialogOpen = ref(false);
+const isApproveDialogOpen = ref(false);
 const postId = ref(null);
 
 const formData = reactive({
@@ -18,40 +18,40 @@ const formData = reactive({
 let typingTimer;
 const typingDelay = 1000;
 
-const openDeletePostConfirmation = (id) => {
-    isDeleteDialogOpen.value = true;
+const openRejectPostConfirmation = (id) => {
+    isRejectDialogOpen.value = true;
     postId.value = id;
 }
 
-const confirmDeletePost = () => {
+const confirmRejectPost = () => {
     postStore.message = null;
     postStore.errors = null;
 
     postStore.deletePost(postId.value)
     postId.value = null;
-    isDeleteDialogOpen.value = false;
+    isRejectDialogOpen.value = false;
 }
 
-const closeDeletePostDialog = () => {
-    isDeleteDialogOpen.value = false;
+const closeRejectPostDialog = () => {
+    isRejectDialogOpen.value = false;
 }
 
-const openMarkAsDonePostConfirmation = (id) => {
-    isMarkAsDoneDialogOpen.value = true;
+const openApprovePostConfirmation = (id) => {
+    isApproveDialogOpen.value = true;
     postId.value = id;
 }
 
-const confirmMarkAsDonePost = () => {
+const confirmApprovePost = () => {
     postStore.message = null;
     postStore.errors = null;
 
-    postStore.markAsDonePost(postId.value)
+    postStore.approvePost(postId.value)
     postId.value = null;
-    isMarkAsDoneDialogOpen.value = false;
+    isApproveDialogOpen.value = false;
 }
 
-const closeMarkAsDonePostDialog = () => {
-    isMarkAsDoneDialogOpen.value = false;
+const closeApprovePostDialog = () => {
+    isApproveDialogOpen.value = false;
 }
 
 const search = async() => {
@@ -77,28 +77,23 @@ onBeforeUnmount(() => {
 
 <template>
     <DialogBox 
-        title="Delete post?" 
-        description="You are about to delete this post" 
-        :isVisible="isDeleteDialogOpen"
-        @closeDialogBox="closeDeletePostDialog"
-        @confirm="confirmDeletePost"
+        title="Reject post" 
+        description="You are about to reject this post" 
+        :isVisible="isRejectDialogOpen"
+        @closeDialogBox="closeRejectPostDialog"
+        @confirm="confirmRejectPost"
     />
     <DialogBox 
-        title="Mark as done post?" 
-        description="You are about to mark as done this post" 
-        :isVisible="isMarkAsDoneDialogOpen"
-        @closeDialogBox="closeMarkAsDonePostDialog"
-        @confirm="confirmMarkAsDonePost"
+        title="Approve post?" 
+        description="You are about to approve this post" 
+        :isVisible="isApproveDialogOpen"
+        @closeDialogBox="closeApprovePostDialog"
+        @confirm="confirmApprovePost"
     />
     <div class="flex flex-col gap-2 justify-between items-center md:flex-row">
         <div class="text-center md:text-left">
             <p class="text-primary font-medium">Posts</p>
             <p class="text-tertiary text-xs md:text-sm">Listing of all posts.</p>
-        </div>
-        <div class="w-full md:w-16">
-            <RouterLink :to="{ name: 'posts.create' }">
-            <button class="bg-secondary text-white px-2 py-1 rounded text-sm w-full">Create</button>
-            </RouterLink>
         </div>
     </div>
     <Card class="p-5 flex flex-row mt-2  w-full">
@@ -201,14 +196,11 @@ onBeforeUnmount(() => {
                                 </th>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
-                                        <RouterLink :to="{name: 'posts.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                            <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
-                                        </RouterLink>
-                                        <div class="text-primary cursor-pointer" @click="openMarkAsDonePostConfirmation(post.id)">
-                                            <i class="text-primary pi pi-check-circle text-gray-500 cursor-pointer"> </i> Mark As Done
+                                        <div class="text-primary cursor-pointer" @click="openApprovePostConfirmation(post.id)">
+                                            <i class="text-primary pi pi-check text-gray-500 cursor-pointer"> </i> Approve
                                         </div>
-                                        <div class="text-red-500 cursor-pointer" @click="openDeletePostConfirmation(post.id)">
-                                            <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
+                                        <div class="text-red-500 cursor-pointer" @click="openRejectPostConfirmation(post.id)">
+                                            <i class="text-red-500 pi pi-times text-gray-500 cursor-pointer"> </i> Reject
                                         </div>
                                     </div>
                                 </td>
