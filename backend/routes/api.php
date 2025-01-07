@@ -13,7 +13,7 @@ use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use App\Http\Controllers\API\v1\Authentication\VerifyController;
 use App\Http\Controllers\API\v1\FileUpload\TemporaryFileUploadController;
 use App\Http\Controllers\API\v1\Moderator\Post\PostController as PostPostController;
-use App\Http\Controllers\API\v1\PostApproval\PostApprovalController;
+use App\Http\Controllers\API\v1\Public\Post\PostController as PublicPostController;
 use App\Http\Controllers\API\v1\User\Post\PostController;
 use App\Http\Controllers\API\v1\User\UserProfile\UserProfileController;
 use Illuminate\Http\Request;
@@ -26,6 +26,12 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
         Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
         Route::post('/register', [RegisterController::class, 'register'])->name('register');
     });
+
+    //Public Post
+    Route::prefix('public/posts')->name('public.')->group(function() {
+        Route::get('/', [PublicPostController::class, 'index'])->name('index');
+    });
+
 
     //Authenticated User
     Route::middleware('auth:sanctum')->group(function() {
