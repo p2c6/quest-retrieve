@@ -24,7 +24,7 @@ export default [
     children: [
       {
         path: "",
-        name: "dashboard",
+        name: "admin.dashboard",
         component: DashboardPage,
       },
       {
