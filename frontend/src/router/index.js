@@ -74,7 +74,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   const restrictedForPublicUsers = [
-    'dashboard',
+    'admin.dashboard',
     'category.list',
     'category.create',
     'category.edit',
@@ -87,6 +87,8 @@ router.beforeEach(async (to, from, next) => {
     'users.list',
     'users.create',
     'users.edit',
+    'moderator.dashboard',
+    'moderator.posts.list',
   ];
 
   //IF NOT AUTHENTICATED USER AND ACCESS ADMIN ROUTES
