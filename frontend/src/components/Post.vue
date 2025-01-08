@@ -1,23 +1,25 @@
 <script setup>
 import Status from '@/components/Status.vue';
-import { RouterLink } from 'vue-router';
 
+defineProps({
+    post: Object
+});
 
 </script>
 
 <template>
     <div class="p-3">
         <div class="grid grid-cols-2 gap-38 place-content-between">
-            <h1 class="font-bold text-primary place-self-start text-md md:text-lg">Iphone XR</h1>
-            <Status />
-            <div class="mt-4">
+            <h1 class="font-bold text-primary place-self-start text-md md:text-lg">{{ post.subcategory.name }}</h1>
+            <Status :type="post.type" />
+            <div class="mt-4 w-60">
                 <div class="flex flex-row items-center gap-1 text-tertiary text-sm md:text-md">
                     <i class="pi pi-map-marker"></i>
-                    <p>Quezon City</p>
+                    <p>{{ post.incident_location }}</p>
                 </div>
                 <div class="flex flex-row items-center gap-1 text-tertiary text-sm md:text-md">
                     <i class="pi pi-calendar"></i>
-                    <p>August 31, 2024</p>
+                    <p>{{ post.incident_date }}</p>
                 </div>
                 <div class="mt-5">
                     <div class="bg-secondary px-2 py-1 rounded text-white text-sm w-16">
