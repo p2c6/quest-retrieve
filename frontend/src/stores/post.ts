@@ -11,6 +11,21 @@ export const usePostStore = defineStore('post', () => {
     const message = ref(null);
     const keyword = ref(null);
 
+    const getAllPublicPost = async(page = 1) => {
+        isLoading.value = true;
+        try {
+            const response = await apiClient.get(`/public/posts?page=${page}&filter[keyword]=${keyword.value ?? ""}`);
+
+            posts.value = response.data
+
+            isLoading.value = false;
+        } catch(error) {
+            console.log("Error fetching all public post: ", error);
+        } finally {
+            isLoading.value = null;
+        }
+    }
+
     const getAllUserPosts = async(page = 1) => {
         isLoading.value = true;
         try {
@@ -228,5 +243,6 @@ export const usePostStore = defineStore('post', () => {
         getAllForApprovalPost,
         approvePost,
         rejectPost,
+        getAllPublicPost,
     }
 })
