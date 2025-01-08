@@ -36,7 +36,7 @@ class PostService
         ->allowedFilters([
             AllowedFilter::custom('keyword', new FilterPublicPost)
         ])
-        ->paginate(5)
+        ->paginate(10)
         ->appends($keyword);
                 
         return response()->json($posts);
