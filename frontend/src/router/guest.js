@@ -6,6 +6,7 @@ import ForgotPasswordPage from "@/pages/authentication/ForgotPasswordPage.vue";
 import ResetPasswordPage from "@/pages/authentication/ResetPasswordPage.vue";
 import UserLayout from '@/components/layouts/UserLayout.vue';
 import HomePage from "@/pages/guest/HomePage.vue";
+import ContactPage from "@/pages/guest/ContactPage.vue";
 
 export default [
   {
@@ -16,6 +17,11 @@ export default [
         path: "",
         name: "home",
         component: HomePage,
+      },
+      {
+        path: "/posts/contact/:id/:type",
+        name: "posts.contact",
+        component: ContactPage,
       },
       {
         path: "/login",
