@@ -12,9 +12,10 @@ const postStore = usePostStore();
 
 const formData = reactive({
     id: route.params.id,
+    type: route.params.type,
     full_name: authStore.fullName,
     email: '',
-    description: '',
+    item_description: '',
     where: '',
     when: '',
     message: '',
@@ -45,7 +46,7 @@ const term = computed(() => {
                         <div>
                             <label class="text-primary text-sm">Description</label>
                             <div class="text-gray-400 text-xs">Please describe the item as much as possible in a very detailed way</div>
-                            <textarea v-model="formData.description" class="w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded" cols="10" rows="2"></textarea>
+                            <textarea v-model="formData.item_description" class="w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded" cols="10" rows="2"></textarea>
                         </div>
                         <div>
                             <label class="text-primary text-sm">Where</label>
