@@ -105,6 +105,9 @@ class PostService
             return response()->json([
                 'message' => 'Successfully Return Requested.'
             ], 200);
+        } catch (ValidationException $validationException) {
+            info("Validation Error on claiming post: " . $validationException->getMessage());
+            return response()->json(['errors' => $validationException->errors()], 422);
         } catch (\Throwable $th) {
             info("Error on returning post: " . $th->getMessage());
             return response()->json([

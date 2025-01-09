@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Public\Post;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\Post\ClaimRequest;
+use App\Http\Requests\Public\Post\ReturnRequest;
 use App\Models\Post;
 use App\Services\Public\Post\PostService;
 use Illuminate\Http\Request;
@@ -58,7 +59,7 @@ class PostController extends Controller
      * 
      * @return Illuminate\Http\JsonResponse
      */
-    public function return(Post $post, Request $request)
+    public function return(Post $post, ReturnRequest $request)
     {
         return $this->service->return($post, $request);
     }
