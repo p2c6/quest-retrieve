@@ -1,15 +1,15 @@
 <x-mail::message>
-<img src="{{ asset('images/qr-logo.png') }}" width="160" height="40" style="margin-bottom: 20px;">
+<img src="{{ asset('images/qr-logo.png') }}" width="160" height="35" style="margin-bottom: 20px;">
 
-Lost Item: {{ $item }}
+Item: {{ $item }}
 
 Claimer's name: {{ $claimers_name }}
 
 Description: {{ $item_description }}
 
-Lost On: {{ $where }}
+Lost At: {{ $where }}
 
-At: {{ $when }}
+On: {{ $when }}
 
 Claimer's message: {{ $message }}
 
