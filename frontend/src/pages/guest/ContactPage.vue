@@ -1,0 +1,72 @@
+<script setup>
+import Input from '@/components/Input.vue';
+import Card from '@/components/Card.vue';
+import { useRoute } from 'vue-router';
+import { computed, reactive } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { usePostStore } from '@/stores/post';
+
+const route = useRoute();
+const authStore = useAuthStore();
+const postStore = usePostStore();
+
+const formData = reactive({
+    id: route.params.id,
+    full_name: authStore.fullName,
+    email: '',
+    description: '',
+    where: '',
+    when: '',
+    message: '',
+});
+
+const term = computed(() => {
+    return route.params.type == "Found" ? {title: "Claim", person: "Claimer's"} : {title: "Return", person: "Returner's"};
+});
+
+
+</script>
+
+<template>
+    <div class="mt-5 md:mt-5">
+        <div class="container mx-auto grid grid-cols-1 place-items-start w-auto md:w-[520px]">
+            <Card class="p-8">
+                    <form @submit.prevent="postStore.requestClaimOrReturnPost(formData)">
+                        <div class="border-b-2 mb-5">
+                            <div class="flex flex-row items-center justify-center p-2 gap-x-2 text-primary">
+                                <i class="pi pi-id-card text-secondary"></i>
+                                <h2 class="font-bold">{{ term.title }} Item</h2>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-primary text-sm">{{ term.person }} name</label>
+                            <input  v-model="formData.full_name" type="text" :class="`h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded`">
+                        </div>
+                        <div>
+                            <label class="text-primary text-sm">Description</label>
+                            <div class="text-gray-400 text-xs">Please describe the item as much as possible in a very detailed way</div>
+                            <textarea v-model="formData.description" class="w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded" cols="10" rows="2"></textarea>
+                        </div>
+                        <div>
+                            <label class="text-primary text-sm">Where</label>
+                            <input  v-model="formData.where" type="text" :class="`h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded`">
+                        </div>
+                        <div>
+                            <label class="text-primary text-sm">When</label>
+                            <input  v-model="formData.when" type="text" :class="`h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded`">
+                        </div>
+                        <div>
+                            <label class="text-primary text-sm">E-mail</label>
+                            <input  v-model="formData.email" type="text" :class="`h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded`">
+                        </div>
+                        <div>
+                            <label class="text-primary text-sm">Message</label>
+                            <textarea v-model="formData.message" class="w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded" cols="10" rows="2"></textarea>
+                        </div>
+                        <button class="w-full bg-secondary p-1 mt-1 text-white rounded">Submit</button>
+                    </form>
+            </Card>
+        </div>
+</div>
+
+</template>
