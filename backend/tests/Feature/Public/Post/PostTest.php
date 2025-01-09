@@ -200,4 +200,76 @@ class PostTest extends TestCase
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'Successfully Claim Requested.']);
     }
+
+    /**
+     * Test not public user cannot claim post via API.
+     * 
+     * This test verifies that not public user cannot claim post via API endpoint.
+     */
+    public function test_not_public_user_cannot_claim_post(): void
+    {
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $category = Category::create(['name' => "Sample Category"]);
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory"
+        ]);
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => "Lost",
+            'subcategory_id' => $subCategory->id,
+            'incident_location' => 'Manila City',
+            'incident_date' => '2024-01-02',
+            'status' => PostStatus::ON_PROCESSING
+        ]);
+
+        $guestClaimerEmail = 'test555@gmail.com';
+
+        $response = $this->postJson(route('api.v1.public.claim', $post->id), [
+            'email' => $guestClaimerEmail,
+            'item_description' => "Testing Description",
+            'where' => "Quezon City",
+            'when' => "December 5, 2024",
+            'message' => "Test Message",
+            'full_name' => "John Doe",
+        ]);
+
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
 }
