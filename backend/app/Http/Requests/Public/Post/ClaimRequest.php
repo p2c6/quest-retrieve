@@ -30,4 +30,14 @@ class ClaimRequest extends FormRequest
             'full_name' => 'required|string',
         ];
     }
+
+    public function messages(): array
+    {
+        $messages = [
+            'full_name' => 'The name is required.',
+            'item_description' => 'The description is required.',
+        ];
+
+        return $messages;
+    }
 }
