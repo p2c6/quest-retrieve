@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { apiClient, webClient } from "@/config/http";
 import type { User, UserForgotPassword, UserLogin, UserRegistration, UserResetPassword } from "@/types";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 
@@ -185,11 +185,16 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    const fullName = computed(() => {
+        return user.value ? user.value.profile?.first_name.concat(" ", user.value.profile?.last_name) : '';
+    })
+
     return {
         /*
             @Variables
         */
         user,
+        fullName,
         isLoading,
         message,
         errors,
