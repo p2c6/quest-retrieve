@@ -100,6 +100,10 @@ class PostService
     public function return(Post $post, $request)
     {
         try {
+            if ($this->isNotPublicUser()) {
+                return response()->json(['message' => 'You are not allowed to access this action'], 403);
+            }
+            
             Mail::to($post->user->email)->send(new ReturnRequested($post, $request));
             
             return response()->json([
