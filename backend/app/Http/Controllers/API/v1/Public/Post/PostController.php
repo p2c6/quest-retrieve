@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1\Public\Post;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\Services\Public\Post\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -35,5 +36,29 @@ class PostController extends Controller
     public function index(Request $request): JsonResponse
     {
         return $this->service->index($request->query('keyword'));
+    }
+
+    /**
+     * Handle claim post.
+     * 
+     * @param App\Models\Post $post The model of the post which needs to be posted.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function claim(Post $post, Request $request)
+    {   
+        return $this->service->claim($post, $request);
+    }
+
+    /**
+     * Handle return post request.
+     * 
+     * @param App\Models\Post $post The model of the post which needs to be retrieve.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function return(Post $post, Request $request)
+    {
+        return $this->service->return($post, $request);
     }
 }
