@@ -233,7 +233,7 @@ export const usePostStore = defineStore('post', () => {
         try {
             let url = `/public/posts/${payload.id}/claim`;
         
-            if (payload.type == 'Found') {
+            if (payload.type == 'Lost') {
                 url = `/public/posts/${payload.id}/return`;
             }
 
