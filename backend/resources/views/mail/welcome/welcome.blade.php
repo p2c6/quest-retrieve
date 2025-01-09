@@ -1,5 +1,5 @@
 <x-mail::message>
-<img src="{{ asset('images/qr-logo.png') }}" width="160" height="40" style="margin-bottom: 20px;">
+<img src="{{ asset('images/qr-logo.png') }}" width="160" height="35" style="margin-bottom: 20px;">
 
 # Welcome, {{ $full_name }}
 
