@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
                 :data="postStore.posts"
                 @pagination-change-page="postStore.getAllPublicPost"
             />
-            <NoItems v-if="postStore.posts.data && postStore.posts.data.length === 0" />
+            <NoItems v-if="!postStore.isLoading && postStore.posts.data && postStore.posts.data.length === 0" />
         </div>
     </main>
 </template>
