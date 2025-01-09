@@ -3,6 +3,7 @@
 namespace App\Services\Public\Post;
 
 use App\Enums\PostStatus;
+use App\Enums\UserType;
 use App\Filters\FilterPublicPost;
 use App\Mail\ClaimRequested;
 use App\Mail\ReturnRequested;
@@ -46,6 +47,19 @@ class PostService
     }
 
     /**
+     * Check authenticated user if public user.
+     * @return bool
+     */
+    public function isNotPublicUser(): bool
+    {
+        if (auth()->user() && auth()->user()->role_id !== UserType::PUBLIC_USER) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Handle claim post request.
      * 
      * @param App\Models\Post $post The model of the post which needs to be retrieve.
@@ -55,6 +69,10 @@ class PostService
     public function claim(Post $post, $request)
     {
         try {
+            if ($this->isNotPublicUser()) {
+                return response()->json(['message' => 'You are not allowed to access this action'], 403);
+            }
+
             Mail::to($post->user->email)->send(new ClaimRequested($post, $request));
             
             return response()->json([
