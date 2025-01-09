@@ -28,10 +28,13 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
     });
 
     //Public Post
-    Route::prefix('public/posts')->name('public.')->group(function() {
-        Route::get('/', [PublicPostController::class, 'index'])->name('index');
+    Route::prefix('public/posts')->name('public.')
+    ->controller(PublicPostController::class)
+    ->group(function() {
+            Route::get('/', 'index')->name('index');
+            Route::post('/{post}/claim',  'claim')->name('claim');
+            Route::post('/{post}/return',  'return')->name('return');
     });
-
 
     //Authenticated User
     Route::middleware('auth:sanctum')->group(function() {
