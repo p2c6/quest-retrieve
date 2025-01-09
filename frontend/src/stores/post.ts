@@ -225,6 +225,35 @@ export const usePostStore = defineStore('post', () => {
 
             console.log("Error on approving post: ", error)
         }
+    }
+
+    const requestClaimOrReturnPost = async(payload: any) => {
+        isLoading.value = false;
+
+        try {
+            let url = `/public/posts/${payload.id}/claim`;
+        
+            if (payload.type == 'Found') {
+                url = `/public/posts/${payload.id}/return`;
+            }
+
+            const response = await apiClient.post(url, payload)
+    
+            if (response?.status === 200) {
+                message.value = response.data.message;
+
+                router.push({name: 'home'});
+            }
+
+        } catch(error: any) {
+            if (error.status == 409) {
+                console.log('Validation error', error);
+                errors.value = error.response.data;
+                return;
+            }
+
+            console.log("Error on requesting claim or return post: ", error)
+        }
 
     }
 
@@ -244,5 +273,6 @@ export const usePostStore = defineStore('post', () => {
         approvePost,
         rejectPost,
         getAllPublicPost,
+        requestClaimOrReturnPost,
     }
 })
