@@ -10,6 +10,7 @@ use App\Mail\ReturnRequested;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -78,6 +79,9 @@ class PostService
             return response()->json([
                 'message' => 'Successfully Claim Requested.'
             ], 200);
+        } catch (ValidationException $validationException) {
+            info("Validation Error on claiming post: " . $validationException->getMessage());
+            return response()->json(['errors' => $validationException->errors()], 422);
         } catch (\Throwable $th) {
             info("Error on claiming post: " . $th->getMessage());
             return response()->json([
