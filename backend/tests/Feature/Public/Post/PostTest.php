@@ -8,6 +8,7 @@ use App\Enums\UserType;
 use App\Mail\ClaimRequested;
 use App\Mail\PostCreated;
 use App\Mail\PostDeactivated;
+use App\Mail\ReturnRequested;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Profile;
@@ -207,6 +208,227 @@ class PostTest extends TestCase
      * This test verifies that not public user cannot claim post via API endpoint.
      */
     public function test_not_public_user_cannot_claim_post(): void
+    {
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $category = Category::create(['name' => "Sample Category"]);
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory"
+        ]);
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => "Lost",
+            'subcategory_id' => $subCategory->id,
+            'incident_location' => 'Manila City',
+            'incident_date' => '2024-01-02',
+            'status' => PostStatus::ON_PROCESSING
+        ]);
+
+        $guestClaimerEmail = 'test555@gmail.com';
+
+        $response = $this->postJson(route('api.v1.public.claim', $post->id), [
+            'email' => $guestClaimerEmail,
+            'item_description' => "Testing Description",
+            'where' => "Quezon City",
+            'when' => "December 5, 2024",
+            'message' => "Test Message",
+            'full_name' => "John Doe",
+        ]);
+
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    //dito
+    /**
+     * Test guest user can return post even unauthenticated via API.
+     * 
+     * This test verifies that a guest user can return post even unauthenticated via API endpoint.
+     */
+    public function test_guest_user_can_return_post_even_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $category = Category::create(['name' => "Sample Category"]);
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory"
+        ]);
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => "Lost",
+            'subcategory_id' => $subCategory->id,
+            'incident_location' => 'Manila City',
+            'incident_date' => '2024-01-02',
+            'status' => PostStatus::ON_PROCESSING
+        ]);
+
+        $guestReturnerEmail = 'test555@gmail.com';
+
+        Mail::fake();
+
+        $response = $this->postJson(route('api.v1.public.return', $post->id), [
+            'email' => $guestReturnerEmail,
+            'item_description' => "Testing Description",
+            'where' => "Quezon City",
+            'when' => "December 5, 2024",
+            'message' => "Test Message",
+            'full_name' => "John Doe",
+        ]);
+
+        Mail::assertSent(ReturnRequested::class, function (ReturnRequested $mail) use ($user, $guestReturnerEmail) {
+            return $mail->hasSubject('QuestRetrieve - Someone wants to return your lost item') &&
+                $mail->hasFrom($guestReturnerEmail) && 
+                $mail->hasReplyTo($user->email);
+        });
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Successfully Return Requested.']);
+    }
+
+    /**
+     * Test user can return post while authenticated via API.
+     * 
+     * This test verifies that a user can return post while authenticated via API endpoint.
+     */
+    public function test_user_can_return_post_even_authenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $category = Category::create(['name' => "Sample Category"]);
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory"
+        ]);
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => "Lost",
+            'subcategory_id' => $subCategory->id,
+            'incident_location' => 'Manila City',
+            'incident_date' => '2024-01-02',
+            'status' => PostStatus::ON_PROCESSING
+        ]);
+
+        $guestReturnerEmail = 'test555@gmail.com';
+
+        Mail::fake();
+
+        $response = $this->postJson(route('api.v1.public.return', $post->id), [
+            'email' => $guestReturnerEmail,
+            'item_description' => "Testing Description",
+            'where' => "Quezon City",
+            'when' => "December 5, 2024",
+            'message' => "Test Message",
+            'full_name' => "John Doe",
+        ]);
+
+        Mail::assertSent(ReturnRequested::class, function (ReturnRequested $mail) use ($user, $guestReturnerEmail) {
+            return $mail->hasSubject('QuestRetrieve - Someone wants to return your lost item') &&
+                $mail->hasFrom($guestReturnerEmail) && 
+                $mail->hasReplyTo($user->email);
+        });
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Successfully Return Requested.']);
+    }
+
+    /**
+     * Test not public user cannot return post via API.
+     * 
+     * This test verifies that not public user cannot return post via API endpoint.
+     */
+    public function test_not_public_user_cannot_return_post(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
