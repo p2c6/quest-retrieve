@@ -246,9 +246,9 @@ export const usePostStore = defineStore('post', () => {
             }
 
         } catch(error: any) {
-            if (error.status == 409) {
+            if (error.status == 422) {
                 console.log('Validation error', error);
-                errors.value = error.response.data;
+                errors.value = error.response.data.errors;
                 return;
             }
 
