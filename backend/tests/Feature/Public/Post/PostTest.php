@@ -5,10 +5,12 @@ namespace Tests\Feature\Public\Post;
 use App\Enums\PostStatus;
 use App\Enums\PostType;
 use App\Enums\UserType;
+use App\Mail\ClaimRequested;
 use App\Mail\PostCreated;
 use App\Mail\PostDeactivated;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Profile;
 use App\Models\Role;
 use App\Models\Subcategory;
 use App\Models\User;
@@ -49,5 +51,75 @@ class PostTest extends TestCase
 
         $response->assertStatus(200)
                 ->assertJsonStructure(['data', 'links']);
+    }
+
+    /**
+     * Test guest user can claim post while unauthenticated via API.
+     * 
+     * This test verifies that a guest user claim post while unauthenticated via API endpoint.
+     */
+    public function test_guest_user_can_claim_post_while_unauthenticated(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $category = Category::create(['name' => "Sample Category"]);
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory"
+        ]);
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => "Lost",
+            'subcategory_id' => $subCategory->id,
+            'incident_location' => 'Manila City',
+            'incident_date' => '2024-01-02',
+            'status' => PostStatus::ON_PROCESSING
+        ]);
+
+        $guestClaimerEmail = 'test555@gmail.com';
+
+        Mail::fake();
+
+        $response = $this->postJson(route('api.v1.public.claim', $post->id), [
+            'email' => $guestClaimerEmail,
+            'item_description' => "Testing Description",
+            'where' => "Quezon City",
+            'when' => "December 5, 2024",
+            'message' => "Test Message",
+            'full_name' => "John Doe",
+        ]);
+
+        Mail::assertSent(ClaimRequested::class, function (ClaimRequested $mail) use ($user, $guestClaimerEmail) {
+            return $mail->hasSubject('QuestRetrieve - Someone wants to claim your found item') &&
+                $mail->hasFrom($guestClaimerEmail) && 
+                $mail->hasReplyTo($user->email);
+        });
+
+        $response->assertStatus(200)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'Successfully Claim Requested.']);
     }
 }
