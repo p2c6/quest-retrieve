@@ -1,5 +1,6 @@
 <script setup>
 import Status from '@/components/Status.vue';
+import { RouterLink } from 'vue-router';
 
 defineProps({
     post: Object
@@ -22,9 +23,11 @@ defineProps({
                     <p>{{ post.incident_date }}</p>
                 </div>
                 <div class="mt-5">
-                    <div class="bg-secondary px-2 py-1 rounded text-white text-sm w-16">
-                        Contact
-                    </div>
+                    <RouterLink  :to="{name: 'posts.contact', params:{ id: post.id, type: post.type } }">
+                        <div class="bg-secondary px-2 py-1 rounded text-white text-sm w-16">
+                            Contact
+                        </div>
+                    </RouterLink>
                     <!-- <div class="flex flex-row gap-1 text-tertiary">
                         <i class="pi pi-pen-to-square"></i>
                         <i class="pi pi-times-circle"></i>
