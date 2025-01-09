@@ -337,7 +337,6 @@ class PostTest extends TestCase
                 ]);
     }
 
-    //dito
     /**
      * Test guest user can return post even unauthenticated via API.
      * 
@@ -556,5 +555,68 @@ class PostTest extends TestCase
                 ->assertStatus(403)
                 ->assertJsonStructure(['message'])
                 ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    /**
+     * Test user cannot return post with empty fields via API.
+     * 
+     * This test verifies user cannot return post with empty fields via API endpoint.
+     */
+    public function test_user_cannot_return_post_with_empty_fields(): void
+    {
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'last_name' => "Doe",
+            'first_name' => "Rick",
+            'birthday' => "2024-05-19",
+            'contact_no' => "12345",
+        ]);
+
+        $csrf = $this->get('/sanctum/csrf-cookie');
+        $csrf->assertCookie('XSRF-TOKEN');
+
+        $category = Category::create(['name' => "Sample Category"]);
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory"
+        ]);
+
+        $post = Post::create([
+            'user_id' => $user->id,
+            'type' => "Lost",
+            'subcategory_id' => $subCategory->id,
+            'incident_location' => 'Manila City',
+            'incident_date' => '2024-01-02',
+            'status' => PostStatus::ON_PROCESSING
+        ]);
+
+        $guestClaimerEmail = '';
+
+        $response = $this->postJson(route('api.v1.public.return', $post->id), [
+            'email' => $guestClaimerEmail,
+            'item_description' => "",
+            'where' => "",
+            'when' => "",
+            'message' => "",
+            'full_name' => "",
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(422)
+                ->assertJsonStructure(['message'])
+                ->assertJsonValidationErrors([
+                    'email',
+                    'item_description',
+                    'where',
+                    'when',
+                    'message',
+                    'full_name',
+                ]);
     }
 }
