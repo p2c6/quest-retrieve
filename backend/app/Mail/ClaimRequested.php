@@ -30,7 +30,7 @@ class ClaimRequested extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(auth()->user()->email, auth()->user()->profile->full_name),
+            from: new Address($this->request->email, $this->request->full_name),
             replyTo: [
                 new Address($this->post->user->email, $this->post->user->profile->full_name),
             ],
@@ -49,7 +49,7 @@ class ClaimRequested extends Mailable
             with: [
                 'item' => $this->post->subcategory->name,
                 'type' => $this->post->type,
-                'claimers_name' => auth()->user()->profile->full_name,
+                'claimers_name' => $this->request->full_name,
                 'item_description' => $this->request->item_description,
                 'where' => $this->request->where,
                 'when' => $this->request->when,
