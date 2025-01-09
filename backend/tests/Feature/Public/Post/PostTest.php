@@ -124,11 +124,11 @@ class PostTest extends TestCase
     }
 
     /**
-     * Test guest user can claim post while authenticated via API.
+     * Test user can claim post while authenticated via API.
      * 
-     * This test verifies that a guest user can claim post while authenticated via API endpoint.
+     * This test verifies that a user can claim post while authenticated via API endpoint.
      */
-    public function test_guest_user_can_claim_post_even_authenticated(): void
+    public function test_user_can_claim_post_even_authenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
