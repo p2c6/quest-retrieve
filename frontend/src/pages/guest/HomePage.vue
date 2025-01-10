@@ -51,6 +51,16 @@ onBeforeUnmount(() => {
                             </div>
                         </button>        
                     </div>
+                    <div class="flex mt-4 gap-2 justify-center md:justify-end" v-if="!postStore.isLoading && postStore.posts.data && postStore.posts.data.length > 0">
+                        <div class="flex items-center justify-center gap-1">
+                            <div class="rounded-full w-5 h-3 bg-red-500"></div>
+                            <p class="text-xs text-gray-500 md:text-sm">Lost</p>
+                        </div>
+                        <div class="flex items-center justify-center gap-1">
+                            <div class="rounded-full w-5 h-3 bg-green-500"></div>
+                            <p class="text-xs text-gray-500 md:text-sm">Found</p>
+                        </div>
+                    </div>
                     <div v-if="postStore.message" class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-5" role="alert">
                         <div class="flex">
                             <div class="py-1">
