@@ -104,6 +104,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): JsonResponse
     {
+        if(Gate::denies('delete', $category)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->destroy($category);
     }
 
