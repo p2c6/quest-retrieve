@@ -31,11 +31,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user can store subcategory with valid inputs via API.
+     * Test admin can store subcategory with valid inputs via API.
      * 
-     * This test verifies that a user can store subcategory with valid inputs via API endpoint.
+     * This test verifies that an admin can store subcategory with valid inputs via API endpoint.
      */
-    public function test_user_can_store_subcategory_with_valid_inputs(): void
+    public function test_admin_can_store_subcategory_with_valid_inputs(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -71,11 +71,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store subcategory with empty category inputs via API.
+     * Test admin cannot store subcategory with empty category inputs via API.
      * 
-     * This test verifies that a user cannot store subcategory with empty category via API endpoint.
+     * This test verifies that an admin cannot store subcategory with empty category via API endpoint.
      */
-    public function test_user_cannot_store_subcategory_with_empty_category(): void
+    public function test_admin_cannot_store_subcategory_with_empty_category(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -114,11 +114,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store subcategory with empty subcategory name inputs via API.
+     * Test admin cannot store subcategory with empty subcategory name inputs via API.
      * 
-     * This test verifies that a user cannot store subcategory with empty subcategory name via API endpoint.
+     * This test verifies that an admin cannot store subcategory with empty subcategory name via API endpoint.
      */
-    public function test_user_cannot_store_subcategory_with_empty_subcategory_name(): void
+    public function test_admin_cannot_store_subcategory_with_empty_subcategory_name(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -161,11 +161,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store subcategory with all fields are empty via API.
+     * Test admin cannot store subcategory with all fields are empty via API.
      * 
-     * This test verifies that a user cannot store subcategory with all fields are empty via API endpoint.
+     * This test verifies that an admin cannot store subcategory with all fields are empty via API endpoint.
      */
-    public function test_user_cannot_store_subcategory_with_empty_all_fields_are_empty(): void
+    public function test_admin_cannot_store_subcategory_with_empty_all_fields_are_empty(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -205,11 +205,11 @@ class SubCategoryTest extends TestCase
     }
     
     /**
-     * Test user cannot store subcategory with subcategory name more than 100 hundred characters via API.
+     * Test admin cannot store subcategory with subcategory name more than 100 hundred characters via API.
      * 
-     * This test verifies that a user cannot store subcategory with subcategory name more than 100 characters via API endpoint.
+     * This test verifies that an admin cannot store subcategory with subcategory name more than 100 characters via API endpoint.
      */
-    public function test_user_cannot_store_subcategory_with_subcategory_name_more_than_one_hundred_chars(): void
+    public function test_admin_cannot_store_subcategory_with_subcategory_name_more_than_one_hundred_chars(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -251,11 +251,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store subcategory while category is not exists via API.
+     * Test admin cannot store subcategory while category is not exists via API.
      * 
-     * This test verifies that a user cannot store subcategory while category is not exists via API endpoint.
+     * This test verifies that an admin cannot store subcategory while category is not exists via API endpoint.
      */
-    public function test_user_cannot_store_subcategory_while_category_is_not_exists(): void
+    public function test_admin_cannot_store_subcategory_while_category_is_not_exists(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -288,11 +288,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store subcategory while unauthenticated via API.
+     * Test admin cannot store subcategory while unauthenticated via API.
      * 
-     * This test verifies that a user cannot store subcategory while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot store subcategory while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_store_subcategory_while_unauthenticated(): void
+    public function test_admin_cannot_store_subcategory_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -318,11 +318,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user can update subcategory with valid inputs via API.
+     * Test admin can update subcategory with valid inputs via API.
      * 
-     * This test verifies that a user can update subcategory with valid inputs via API endpoint.
+     * This test verifies that an admin can update subcategory with valid inputs via API endpoint.
      */
-    public function test_user_can_update_subcategory_with_valid_inputs(): void
+    public function test_admin_can_update_subcategory_with_valid_inputs(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -373,11 +373,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot update subcategory with empty fields via API.
+     * Test admin cannot update subcategory with empty fields via API.
      * 
-     * This test verifies that a user can update subcategory with empty fields via API endpoint.
+     * This test verifies that an admin can update subcategory with empty fields via API endpoint.
      */
-    public function test_user_cannot_update_subcategory_with_empty_fields(): void
+    public function test_admin_cannot_update_subcategory_with_empty_fields(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -429,11 +429,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot update subcategory with subcategory name more than 100 hundred characters via API.
+     * Test admin cannot update subcategory with subcategory name more than 100 hundred characters via API.
      * 
-     * This test verifies that a user cannot update subcategory with subcategory name more than 100 characters via API endpoint.
+     * This test verifies that an admin cannot update subcategory with subcategory name more than 100 characters via API endpoint.
      */
-    public function test_user_cannot_update_subcategory_with_subcategory_name_more_than_one_hundred_chars(): void
+    public function test_admin_cannot_update_subcategory_with_subcategory_name_more_than_one_hundred_chars(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -480,11 +480,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot update subcategory while category is not exists via API.
+     * Test admin cannot update subcategory while category is not exists via API.
      * 
-     * This test verifies that a user cannot update subcategory while category is not exists via API endpoint.
+     * This test verifies that an admin cannot update subcategory while category is not exists via API endpoint.
      */
-    public function test_user_cannot_update_subcategory_while_category_is_not_exists(): void
+    public function test_admin_cannot_update_subcategory_while_category_is_not_exists(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -526,11 +526,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot update subcategory while unauthenticated via API.
+     * Test admin cannot update subcategory while unauthenticated via API.
      * 
-     * This test verifies that a user update store subcategory while unauthenticated via API endpoint.
+     * This test verifies that an admin update store subcategory while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_update_subcategory_while_unauthenticated(): void
+    public function test_admin_cannot_update_subcategory_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -561,11 +561,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user can delete subcategory via API.
+     * Test admin can delete subcategory via API.
      * 
-     * This test verifies that a user can delete subcategory via API endpoint.
+     * This test verifies that an admin can delete subcategory via API endpoint.
      */
-    public function test_user_can_delete_subcategory(): void
+    public function test_admin_can_delete_subcategory(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -611,11 +611,11 @@ class SubCategoryTest extends TestCase
     
 
     /**
-     * Test user cannot delete while subcategory already associated to post via API.
+     * Test admin cannot delete while subcategory already associated to post via API.
      * 
-     * This test verifies that a user cannot delete subcategory while subcategory already associated to post via API endpoint.
+     * This test verifies that an admin cannot delete subcategory while subcategory already associated to post via API endpoint.
      */
-    public function test_user_cannot_delete_subcategory_while_already_associated_to_post(): void
+    public function test_admin_cannot_delete_subcategory_while_already_associated_to_post(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -677,11 +677,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot delete subcategory while unauthenticated via API.
+     * Test admin cannot delete subcategory while unauthenticated via API.
      * 
-     * This test verifies that a user cannot delete subcategory while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot delete subcategory while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_delete_subcategory_while_unauthenticated(): void
+    public function test_admin_cannot_delete_subcategory_while_unauthenticated(): void
     {
         $category = Category::create([
             'name' => "Category 1"
@@ -703,11 +703,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot delete subcategory if not existing via API.
+     * Test admin cannot delete subcategory if not existing via API.
      * 
-     * This test verifies that a user cannot delete subcategory if not existing via API endpoint.
+     * This test verifies that an admin cannot delete subcategory if not existing via API endpoint.
      */
-    public function test_user_cannot_delete_subcategory_if_not_existing(): void
+    public function test_admin_cannot_delete_subcategory_if_not_existing(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -772,11 +772,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot retrieve all subcategories while unauthenticated via API.
+     * Test admin cannot retrieve all subcategories while unauthenticated via API.
      * 
-     * This test verifies that a user cannot retrieve all subcategories while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot retrieve all subcategories while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_retrieve_all_subcategories_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_all_subcategories_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -836,11 +836,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot retrieve specific subcategory while unauthenticated via API.
+     * Test admin cannot retrieve specific subcategory while unauthenticated via API.
      * 
-     * This test verifies that a user cannot retrieve specific subcategory while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot retrieve specific subcategory while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_retrieve_specific_subcategory_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_specific_subcategory_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -867,11 +867,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user can retrieve all dropdown subcategories via API.
+     * Test admin can retrieve all dropdown subcategories via API.
      * 
-     * This test verifies that a user can retrieve all subcategories via API endpoint.
+     * This test verifies that an admin can retrieve all subcategories via API endpoint.
      */
-    public function test_user_can_retrieve_all_dropdown_subcategories(): void
+    public function test_admin_can_retrieve_all_dropdown_subcategories(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -899,11 +899,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot retrieve all dropdown subcategories while unauthenticated via API.
+     * Test admin cannot retrieve all dropdown subcategories while unauthenticated via API.
      * 
-     * This test verifies that a user cannot retrieve all dropdown subcategories while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot retrieve all dropdown subcategories while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_retrieve_all_dropdown_subcategories_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_all_dropdown_subcategories_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
