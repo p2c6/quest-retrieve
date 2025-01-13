@@ -89,6 +89,10 @@ class CategoryController extends Controller
      */
     public function update(Category $category, UpdateCategoryRequest $request): JsonResponse
     {
+        if(Gate::denies('update', $category)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->update($category, $request);
     }
 
