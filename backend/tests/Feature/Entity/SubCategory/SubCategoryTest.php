@@ -567,7 +567,7 @@ class SubCategoryTest extends TestCase
      */
     public function test_admin_can_delete_subcategory(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -617,7 +617,7 @@ class SubCategoryTest extends TestCase
      */
     public function test_admin_cannot_delete_subcategory_while_already_associated_to_post(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -923,7 +923,7 @@ class SubCategoryTest extends TestCase
     /**
      * Test other user type is unauthorize to get all subcategories via API.
      * 
-     * This test verifies that other admin type is unauthorize to get all subcategories via API endpoint.
+     * This test verifies that other user type is unauthorize to get all subcategories via API endpoint.
      */
     public function test_other_user_type_is_unauthorize_to_get_all_subcategories(): void
     {
@@ -958,7 +958,7 @@ class SubCategoryTest extends TestCase
     /**
      * Test other user type is unauthorize to get subcategory via API.
      * 
-     * This test verifies that other admin type is unauthorize to get subcategory via API endpoint.
+     * This test verifies that other user type is unauthorize to get subcategory via API endpoint.
      */
     public function test_other_user_type_is_unauthorize_to_get_subcategory(): void
     {
@@ -1002,7 +1002,7 @@ class SubCategoryTest extends TestCase
     /**
      * Test other user type is unauthorize to store subcategory via API.
      * 
-     * This test verifies that other admin type is unauthorize to store subcategory via API endpoint.
+     * This test verifies that other user type is unauthorize to store subcategory via API endpoint.
      */
     public function test_other_user_type_is_unauthorize_to_store_subcategory(): void
     {
@@ -1044,7 +1044,7 @@ class SubCategoryTest extends TestCase
     /**
      * Test other user type is unauthorize to update subcategory via API.
      * 
-     * This test verifies that other admin type is unauthorize to update subcategory via API endpoint.
+     * This test verifies that other user type is unauthorize to update subcategory via API endpoint.
      */
     public function test_other_user_type_is_unauthorize_to_update_subcategory(): void
     {
@@ -1095,4 +1095,47 @@ class SubCategoryTest extends TestCase
         ->assertJson(['message' => 'You are not allowed to access this action']);
     }
 
+    /**
+     * Test other user type is unauthorize to delete subcategory via API.
+     * 
+     * This test verifies that other user type is unauthorize to delete subcategory via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_delete_subcategory(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->getJson('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => "Sample Category",
+        ]);
+
+        $subCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Sample Subcategory",
+        ]);
+        
+        $response = $this->deleteJson(route('api.v1.subcategories.destroy', $subCategory->id));
+
+        $response->assertCookie('laravel_session')
+        ->assertStatus(403)
+        ->assertJsonStructure(['message'])
+        ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
 }
