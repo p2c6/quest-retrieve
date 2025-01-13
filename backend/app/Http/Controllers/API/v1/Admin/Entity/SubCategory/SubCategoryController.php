@@ -51,10 +51,14 @@ class SubcategoryController extends Controller
      * Show a single subcategory.
      * 
      * @param App\Models\Subcategory $subCategory The model of the subcategory which needs to be retrieved.
-     * @return App\Http\Resources\Entity\Subcategory\SubcategoryResource
+     * @return App\Http\Resources\Entity\Subcategory\SubcategoryResource|Illuminate\Http\JsonResponse
      */
-    public function show(Subcategory $subCategory): SubcategoryResource
+    public function show(Subcategory $subCategory): SubcategoryResource|JsonResponse
     {
+        if(Gate::denies('view', $subCategory)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->show($subCategory);
     }
 
