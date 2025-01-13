@@ -27,13 +27,13 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user can store role with valid inputs via API.
+     * Test admin can store role with valid inputs via API.
      * 
-     * This test verifies that a user can store role with valid inputs via API endpoint.
+     * This test verifies that an admin can store role with valid inputs via API endpoint.
      */
-    public function test_user_can_store_role_with_valid_inputs(): void
+    public function test_admin_can_store_role_with_valid_inputs(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -720,6 +720,43 @@ class RoleTest extends TestCase
         ]);
         
         $response = $this->getJson(route('api.v1.roles.show', $newRole->id));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    /**
+     * Test other user type is unauthorize to store role via API.
+     * 
+     * This test verifies that other user type is unauthorize to store role via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_store_role(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        
+        $response = $this->postJson(route('api.v1.roles.store'), [
+            'name' => 'Test Role'
+        ]);
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(403)
