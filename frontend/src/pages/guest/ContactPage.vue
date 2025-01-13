@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
                         </div>
                         <div>
                             <label class="text-primary text-sm">When</label>
-                            <input  v-model="formData.when" type="text" :class="`h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded`">
+                            <input  v-model="formData.when" type="date" :class="`h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded`">
                             <p v-if="postStore.errors && postStore.errors.when" class="text-red-500 text-xs">{{ postStore.errors.when[0] }}</p>
                         </div>
                         <div>
