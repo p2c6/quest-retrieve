@@ -324,7 +324,7 @@ class SubCategoryTest extends TestCase
      */
     public function test_admin_can_update_subcategory_with_valid_inputs(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -379,7 +379,7 @@ class SubCategoryTest extends TestCase
      */
     public function test_admin_cannot_update_subcategory_with_empty_fields(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -486,7 +486,7 @@ class SubCategoryTest extends TestCase
      */
     public function test_admin_cannot_update_subcategory_while_category_is_not_exists(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -532,7 +532,7 @@ class SubCategoryTest extends TestCase
      */
     public function test_admin_cannot_update_subcategory_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -1033,6 +1033,60 @@ class SubCategoryTest extends TestCase
         $response = $this->getJson(route('api.v1.subcategories.store'), [
             'category_id' => $category->id,
             'name' => "Subcategory 1"
+        ]);
+
+        $response->assertCookie('laravel_session')
+        ->assertStatus(403)
+        ->assertJsonStructure(['message'])
+        ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    /**
+     * Test other user type is unauthorize to update subcategory via API.
+     * 
+     * This test verifies that other admin type is unauthorize to update subcategory via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_update_subcategory(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $categoryName = "Category One";
+        
+        $categoryOne = Category::create([
+            'name' => $categoryName
+        ]);
+
+        $subCategoryName = "Sub Category One";
+
+        $subCategory = Subcategory::create([
+            'category_id' => $categoryOne->id,
+            'name' => $subCategoryName,
+        ]);
+
+        $updatedCategoryId = 2;
+        $updatedSubCategoryName = "Sub Category Updated";
+
+        $response = $this->putJson(route('api.v1.subcategories.update', $subCategory->id), [
+            'category_id' => $updatedCategoryId,
+            'name' => $updatedSubCategoryName
         ]);
 
         $response->assertCookie('laravel_session')
