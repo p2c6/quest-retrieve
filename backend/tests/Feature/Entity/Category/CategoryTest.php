@@ -70,7 +70,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_store_category_with_empty_category_name(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -112,7 +112,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_store_category_with_category_name_more_than_one_hundred_chars(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -153,7 +153,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_store_category_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -225,7 +225,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_update_category_with_empty_fields(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -272,7 +272,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_update_category_with_category_name_more_than_one_hundred_chars(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -320,7 +320,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_update_category_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -448,7 +448,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_delete_category_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -475,7 +475,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_delete_category_if_not_existing(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -544,7 +544,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_retrieve_all_categories_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -603,7 +603,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_retrieve_specific_category_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -629,7 +629,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_can_retrieve_all_dropdown_categories(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -661,7 +661,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_cannot_retrieve_all_dropdown_categories_while_unauthenticated(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
