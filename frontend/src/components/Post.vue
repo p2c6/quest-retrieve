@@ -1,16 +1,21 @@
 <script setup>
 import Status from '@/components/Status.vue';
+import { useAuthStore } from '@/stores/auth';
 import { RouterLink } from 'vue-router';
 
-defineProps({
-    post: Object
+const authStore = useAuthStore();
+
+const prop = defineProps({
+    post: Object,
 });
+
 
 </script>
 
 <template>
     <div class="p-3">
         <div class="grid grid-cols-2 gap-38 place-content-between">
+        
             <h1 class="font-bold text-primary place-self-start text-md md:text-lg">{{ post.subcategory.name }}</h1>
             <Status :type="post.type" />
             <div class="mt-4 w-60">
@@ -22,7 +27,7 @@ defineProps({
                     <i class="pi pi-calendar"></i>
                     <p>{{ post.incident_date }}</p>
                 </div>
-                <div class="mt-5">
+                <div class="mt-5" v-if="!authStore.user || authStore.user && authStore.user.id !== post.user_id">
                     <RouterLink  :to="{name: 'posts.contact', params:{ id: post.id, type: post.type } }">
                         <div class="bg-secondary px-2 py-1 rounded text-white text-sm w-16">
                             Contact
@@ -33,6 +38,9 @@ defineProps({
                         <i class="pi pi-times-circle"></i>
                         <i class="pi pi-bookmark text-green-500"></i>
                     </div> -->
+                </div>
+                <div class="mt-5" v-else>
+                    <p class="text-secondary">(Owned)</p>
                 </div>
             </div>
         </div>
