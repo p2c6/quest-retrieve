@@ -354,7 +354,7 @@ class RoleTest extends TestCase
      */
     public function test_admin_can_delete_role(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -398,7 +398,7 @@ class RoleTest extends TestCase
      */
     public function test_admin_cannot_delete_role_while_already_associated_to_user(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -798,6 +798,45 @@ class RoleTest extends TestCase
         $response = $this->putJson(route('api.v1.roles.update', $newRole->id), [
             'name' => 'Test Role'
         ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    /**
+     * Test other user type is unauthorize to delete role via API.
+     * 
+     * This test verifies that other user type is unauthorize to delete role via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_delete_role(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $newRole = Role::create([
+            'name' => 'Test Role'
+        ]);
+        
+        $response = $this->deleteJson(route('api.v1.roles.destroy', $newRole->id));
 
         $response->assertCookie('laravel_session')
                 ->assertStatus(403)
