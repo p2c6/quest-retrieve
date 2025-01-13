@@ -659,7 +659,7 @@ class CategoryTest extends TestCase
      * 
      * This test verifies that an admin cannot retrieve all dropdown categories while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_retrieve_all_dropdown_categories_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_all_dropdown_categories_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
