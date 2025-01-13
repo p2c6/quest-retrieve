@@ -921,11 +921,11 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test other admin type is unauthorize to get all subcategories via API.
+     * Test other user type is unauthorize to get all subcategories via API.
      * 
      * This test verifies that other admin type is unauthorize to get all subcategories via API endpoint.
      */
-    public function test_other_admin_type_is_unauthorize_to_get_all_subcategories(): void
+    public function test_other_user_type_is_unauthorize_to_get_all_subcategories(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
