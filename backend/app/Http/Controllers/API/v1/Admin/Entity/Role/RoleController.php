@@ -87,6 +87,10 @@ class RoleController extends Controller
      */
     public function update(Role $role, UpdateRoleRequest $request): JsonResponse
     {
+        if(Gate::denies('update', $role)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->update($role, $request);
     }
 
