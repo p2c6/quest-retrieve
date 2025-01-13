@@ -178,7 +178,7 @@ class CategoryTest extends TestCase
      */
     public function test_user_can_update_category_with_valid_inputs(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -756,7 +756,7 @@ class CategoryTest extends TestCase
     /**
      * Test other user type is unauthorize to store category via API.
      * 
-     * This test verifies that other user type is unauthorize to get store via API endpoint.
+     * This test verifies that other user type is unauthorize to store category via API endpoint.
      */
     public function test_other_user_type_is_unauthorize_to_store_category(): void
     {
@@ -786,6 +786,49 @@ class CategoryTest extends TestCase
         
         $response = $this->postJson(route('api.v1.categories.store'), [
             'name' => "Test Category"
+        ]);
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    /**
+     * Test other user type is unauthorize to update category via API.
+     * 
+     * This test verifies that other user type is unauthorize to update category via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_update_category(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $oldCategory = 'Old Category';
+
+        $newCategory = Category::create([
+            'name' => $oldCategory
+        ]);
+
+        $response = $this->putJson(route('api.v1.categories.update', $newCategory->id), [
+            'name' => 'New Category'
         ]);
 
         $response->assertCookie('laravel_session')
