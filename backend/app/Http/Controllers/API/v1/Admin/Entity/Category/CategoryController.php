@@ -52,10 +52,14 @@ class CategoryController extends Controller
      * Show a single category.
      * 
      * @param App\Models\Category $role The model of the category which needs to be retrieved.
-     * @return App\Http\Resources\Entity\Category\CategoryResource
+     * @return App\Http\Resources\Entity\Category\CategoryResource|Illuminate\Http\JsonResponse
      */
-    public function show(Category $category): CategoryResource
+    public function show(Category $category): CategoryResource|JsonResponse
     {
+        if(Gate::denies('view', $category)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->show($category);
     }
 
