@@ -51,10 +51,14 @@ class RoleController extends Controller
      * Show a single role.
      * 
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
-     * @return App\Http\Resources\Entity\Role\RoleResource
+     * @return App\Http\Resources\Entity\Role\RoleResource|Illuminate\Http\JsonResponse
      */
-    public function show(Role $role): RoleResource
+    public function show(Role $role): RoleResource|JsonResponse
     {
+        if(Gate::denies('view', $role)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->show($role);
     }
 
