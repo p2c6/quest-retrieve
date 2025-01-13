@@ -63,11 +63,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot store role with empty role name inputs via API.
+     * Test admin cannot store role with empty role name inputs via API.
      * 
      * This test verifies that a user cannot store role with empty role name via API endpoint.
      */
-    public function test_user_cannot_store_role_with_empty_role_name(): void
+    public function test_admin_cannot_store_role_with_empty_role_name(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -105,11 +105,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot store role with role name more than 100 hundred characters via API.
+     * Test admin cannot store role with role name more than 100 hundred characters via API.
      * 
      * This test verifies that a user cannot store role with role name more than 100 characters via API endpoint.
      */
-    public function test_user_cannot_store_role_with_role_name_more_than_one_hundred_chars(): void
+    public function test_admin_cannot_store_role_with_role_name_more_than_one_hundred_chars(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -146,11 +146,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot store role while unauthenticated via API.
+     * Test admin cannot store role while unauthenticated via API.
      * 
      * This test verifies that a user cannot store while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_store_role_while_unauthenticated(): void
+    public function test_admin_cannot_store_role_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -218,11 +218,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot update role with empty role name inputs via API.
+     * Test admin cannot update role with empty role name inputs via API.
      * 
      * This test verifies that a user cannot update role with empty role name via API endpoint.
      */
-    public function test_user_cannot_update_role_with_empty_fields(): void
+    public function test_admin_cannot_update_role_with_empty_fields(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -265,11 +265,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot store role with role name more than 100 hundred characters via API.
+     * Test admin cannot store role with role name more than 100 hundred characters via API.
      * 
      * This test verifies that a user cannot store role with role name more than 100 characters via API endpoint.
      */
-    public function test_user_cannot_update_role_with_role_name_more_than_one_hundred_chars(): void
+    public function test_admin_cannot_update_role_with_role_name_more_than_one_hundred_chars(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -313,11 +313,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot update role while unauthenticated via API.
+     * Test admin cannot update role while unauthenticated via API.
      * 
      * This test verifies that a user cannot update while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_update_role_while_unauthenticated(): void
+    public function test_admin_cannot_update_role_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -348,11 +348,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user can delete role via API.
+     * Test admin can delete role via API.
      * 
      * This test verifies that a user can delete role via API endpoint.
      */
-    public function test_user_can_delete_role(): void
+    public function test_admin_can_delete_role(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -392,11 +392,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot delete role while role was already associated to user via API.
+     * Test admin cannot delete role while role was already associated to user via API.
      * 
      * This test verifies that a user cannot delete role while role was already associated to user via API endpoint.
      */
-    public function test_user_cannot_delete_role_while_already_associated_to_user(): void
+    public function test_admin_cannot_delete_role_while_already_associated_to_user(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -430,11 +430,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot delete role while unauthenticated via API.
+     * Test admin cannot delete role while unauthenticated via API.
      * 
      * This test verifies that a user cannot delete role while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_delete_role_while_unauthenticated(): void
+    public function test_admin_cannot_delete_role_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -453,11 +453,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot delete role if not existing via API.
+     * Test admin cannot delete role if not existing via API.
      * 
      * This test verifies that a user cannot delete role if not existing via API endpoint.
      */
-    public function test_user_cannot_delete_role_if_not_existing(): void
+    public function test_admin_cannot_delete_role_if_not_existing(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -523,11 +523,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user can retrieve all roles via API.
+     * Test admin can retrieve all roles via API.
      * 
      * This test verifies that a user can retrieve all roles via API endpoint.
      */
-    public function test_user_cannot_retrieve_all_roles_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_all_roles_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -545,11 +545,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user can retrieve specific role via API.
+     * Test admin can retrieve specific role via API.
      * 
      * This test verifies that a user can retrieve specific role via API endpoint.
      */
-    public function test_user_can_retrieve_specific_role(): void
+    public function test_admin_can_retrieve_specific_role(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -578,11 +578,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user can retrieve specific role via API.
+     * Test admin can retrieve specific role via API.
      * 
      * This test verifies that a user can retrieve specific role via API endpoint.
      */
-    public function test_user_cannot_retrieve_specific_role_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_specific_role_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -600,11 +600,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user can retrieve all dropdown roles via API.
+     * Test admin can retrieve all dropdown roles via API.
      * 
      * This test verifies that a user can retrieve all dropdown roles via API endpoint.
      */
-    public function test_user_can_retrieve_all_dropdown_roles(): void
+    public function test_admin_can_retrieve_all_dropdown_roles(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
@@ -632,11 +632,11 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user cannot retrieve all dropdown roles while unauthenticated via API.
+     * Test admin cannot retrieve all dropdown roles while unauthenticated via API.
      * 
      * This test verifies that a user cannot retrieve all dropdown roles while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_retrieve_all_dropdown_roles_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_all_dropdown_roles_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::PUBLIC_USER)->first();
 
