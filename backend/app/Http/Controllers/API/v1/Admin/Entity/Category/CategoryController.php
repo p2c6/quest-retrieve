@@ -71,6 +71,11 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request): JsonResponse
     {
+        if(Gate::denies('create', Category::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
+
         return $this->service->store($request);
     }
 
