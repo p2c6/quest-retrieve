@@ -28,11 +28,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user can store category with valid inputs via API.
+     * Test admin can store category with valid inputs via API.
      * 
-     * This test verifies that a user can store category with valid inputs via API endpoint.
+     * This test verifies that a admin can store category with valid inputs via API endpoint.
      */
-    public function test_user_can_store_category_with_valid_inputs(): void
+    public function test_admin_can_store_category_with_valid_inputs(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -64,11 +64,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store category with empty role name inputs via API.
+     * Test admin cannot store category with empty role name inputs via API.
      * 
-     * This test verifies that a user cannot store category with empty category name via API endpoint.
+     * This test verifies that a admin cannot store category with empty category name via API endpoint.
      */
-    public function test_user_cannot_store_category_with_empty_category_name(): void
+    public function test_admin_cannot_store_category_with_empty_category_name(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -106,11 +106,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store category with category name more than 100 hundred characters via API.
+     * Test admin cannot store category with category name more than 100 hundred characters via API.
      * 
-     * This test verifies that a user cannot store category with category name more than 100 characters via API endpoint.
+     * This test verifies that a admin cannot store category with category name more than 100 characters via API endpoint.
      */
-    public function test_user_cannot_store_category_with_category_name_more_than_one_hundred_chars(): void
+    public function test_admin_cannot_store_category_with_category_name_more_than_one_hundred_chars(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -147,11 +147,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store category while unauthenticated via API.
+     * Test admin cannot store category while unauthenticated via API.
      * 
-     * This test verifies that a user cannot store category while unauthenticated via API endpoint.
+     * This test verifies that a admin cannot store category while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_store_category_while_unauthenticated(): void
+    public function test_admin_cannot_store_category_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -172,11 +172,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user can update category with valid inputs via API.
+     * Test admin can update category with valid inputs via API.
      * 
-     * This test verifies that a user can update category with valid inputs via API endpoint.
+     * This test verifies that an admin can update category with valid inputs via API endpoint.
      */
-    public function test_user_can_update_category_with_valid_inputs(): void
+    public function test_admin_can_update_category_with_valid_inputs(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -219,11 +219,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot update category with empty category name inputs via API.
+     * Test admin cannot update category with empty category name inputs via API.
      * 
-     * This test verifies that a user cannot update category with empty category name via API endpoint.
+     * This test verifies that an admin cannot update category with empty category name via API endpoint.
      */
-    public function test_user_cannot_update_category_with_empty_fields(): void
+    public function test_admin_cannot_update_category_with_empty_fields(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -266,11 +266,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot store category with category name more than 100 hundred characters via API.
+     * Test admin cannot store category with category name more than 100 hundred characters via API.
      * 
-     * This test verifies that a user cannot store category with category name more than 100 characters via API endpoint.
+     * This test verifies that an admin cannot store category with category name more than 100 characters via API endpoint.
      */
-    public function test_user_cannot_update_category_with_category_name_more_than_one_hundred_chars(): void
+    public function test_admin_cannot_update_category_with_category_name_more_than_one_hundred_chars(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -314,11 +314,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot update category while unauthenticated via API.
+     * Test admin cannot update category while unauthenticated via API.
      * 
-     * This test verifies that a user cannot update category while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot update category while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_update_category_while_unauthenticated(): void
+    public function test_admin_cannot_update_category_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -349,11 +349,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user can delete category via API.
+     * Test admin can delete category via API.
      * 
-     * This test verifies that a user can delete category via API endpoint.
+     * This test verifies that an admin can delete category via API endpoint.
      */
-    public function test_user_can_delete_category(): void
+    public function test_admin_can_delete_category(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -393,11 +393,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot delete category while category was already associated to user via API.
+     * Test admin cannot delete category while category was already associated to user via API.
      * 
-     * This test verifies that a user cannot delete category while category was already associated to user via API endpoint.
+     * This test verifies that a admin cannot delete category while category was already associated to user via API endpoint.
      */
-    public function test_user_cannot_delete_category_while_already_associated_to_subcategory(): void
+    public function test_admin_cannot_delete_category_while_already_associated_to_subcategory(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -442,11 +442,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot delete category while unauthenticated via API.
+     * Test admin cannot delete category while unauthenticated via API.
      * 
-     * This test verifies that a user cannot delete category while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot delete category while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_delete_category_while_unauthenticated(): void
+    public function test_admin_cannot_delete_category_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -469,11 +469,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot delete category if not existing via API.
+     * Test admin cannot delete category if not existing via API.
      * 
-     * This test verifies that a user cannot delete category if not existing via API endpoint.
+     * This test verifies that an admin cannot delete category if not existing via API endpoint.
      */
-    public function test_user_cannot_delete_category_if_not_existing(): void
+    public function test_admin_cannot_delete_category_if_not_existing(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -505,11 +505,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user can retrieve all categories via API.
+     * Test admin can retrieve all categories via API.
      * 
-     * This test verifies that a user can retrieve all categories via API endpoint.
+     * This test verifies that an admin can retrieve all categories via API endpoint.
      */
-    public function test_user_can_retrieve_all_categories(): void
+    public function test_admin_can_retrieve_all_categories(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -538,11 +538,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user can retrieve all categories via API.
+     * Test admin can retrieve all categories via API.
      * 
-     * This test verifies that a user cannot retrieve all categories via API endpoint.
+     * This test verifies that an admin cannot retrieve all categories via API endpoint.
      */
-    public function test_user_cannot_retrieve_all_categories_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_all_categories_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -560,11 +560,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user can retrieve specific category via API.
+     * Test admin can retrieve specific category via API.
      * 
-     * This test verifies that a user can retrieve specific category via API endpoint.
+     * This test verifies that an admin can retrieve specific category via API endpoint.
      */
-    public function test_user_can_retrieve_specific_category(): void
+    public function test_admin_can_retrieve_specific_category(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -597,11 +597,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot retrieve specific category while unauthenticated via API.
+     * Test admin cannot retrieve specific category while unauthenticated via API.
      * 
-     * This test verifies that a user cannot retrieve specific category while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot retrieve specific category while unauthenticated via API endpoint.
      */
-    public function test_user_cannot_retrieve_specific_category_while_unauthenticated(): void
+    public function test_admin_cannot_retrieve_specific_category_while_unauthenticated(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -623,11 +623,11 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user can retrieve all dropdown categories via API.
+     * Test admin can retrieve all dropdown categories via API.
      * 
      * This test verifies that a user can retrieve all dropdown categories via API endpoint.
      */
-    public function test_user_can_retrieve_all_dropdown_categories(): void
+    public function test_admin_can_retrieve_all_dropdown_categories(): void
     {
         $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
@@ -655,9 +655,9 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Test user cannot retrieve all dropdown categories while unauthenticated via API.
+     * Test admin cannot retrieve all dropdown categories while unauthenticated via API.
      * 
-     * This test verifies that a user cannot retrieve all dropdown categories while unauthenticated via API endpoint.
+     * This test verifies that an admin cannot retrieve all dropdown categories while unauthenticated via API endpoint.
      */
     public function test_user_cannot_retrieve_all_dropdown_categories_while_unauthenticated(): void
     {
