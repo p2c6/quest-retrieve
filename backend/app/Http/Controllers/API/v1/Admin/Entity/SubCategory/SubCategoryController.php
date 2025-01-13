@@ -102,6 +102,10 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subCategory): JsonResponse
     {
+        if(Gate::denies('delete', $subCategory)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->destroy($subCategory);
     }
 
