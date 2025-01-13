@@ -9,7 +9,7 @@ Description: {{ $item_description }}
 
 Found At: {{ $where }}
 
-On: {{ $when }}
+On: {{ date("F d, Y", strtotime($when ))}}
 
 Returner's message: {{ $message }}
 

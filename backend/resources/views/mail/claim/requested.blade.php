@@ -9,7 +9,7 @@ Description: {{ $item_description }}
 
 Lost At: {{ $where }}
 
-On: {{ $when }}
+On: {{ date("F d, Y", strtotime($when ))}}
 
 Claimer's message: {{ $message }}
 
