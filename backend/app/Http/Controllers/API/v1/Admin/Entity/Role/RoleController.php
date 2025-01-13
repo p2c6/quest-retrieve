@@ -70,6 +70,10 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request): JsonResponse
     {
+        if(Gate::denies('create', Role::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->store($request);
     }
 
