@@ -102,6 +102,10 @@ class RoleController extends Controller
      */
     public function destroy(Role $role): JsonResponse
     {
+        if(Gate::denies('delete', $role)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->delete($role);
     }
 
