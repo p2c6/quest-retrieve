@@ -87,6 +87,10 @@ class SubcategoryController extends Controller
      */
     public function update(Subcategory $subCategory, UpdateSubcategoryRequest $request): JsonResponse
     {
+        if(Gate::denies('update', $subCategory)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->update($subCategory, $request);
     }
 
