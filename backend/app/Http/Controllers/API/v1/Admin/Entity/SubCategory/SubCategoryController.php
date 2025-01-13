@@ -70,6 +70,10 @@ class SubcategoryController extends Controller
      */
     public function store(StoreSubcategoryRequest $request): JsonResponse
     {
+        if(Gate::denies('create', Subcategory::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+
         return $this->service->store($request);
     }
 
