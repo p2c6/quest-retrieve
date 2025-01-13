@@ -28,7 +28,7 @@ class DeactivatePostJob implements ShouldQueue
     public function handle(): void
     {
         $posts = Post::where('expiration_date', '<' , now()->format('Y-m-d'))
-                    ->whereNot('status', PostStatus::DEACTIVATED)
+                    ->where('status', PostStatus::PENDING)
                     ->get();
 
         foreach ($posts as $post) {
