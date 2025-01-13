@@ -489,13 +489,13 @@ class RoleTest extends TestCase
     }
 
     /**
-     * Test user can retrieve all roles via API.
+     * Test admin can retrieve all roles via API.
      * 
-     * This test verifies that a user can retrieve all roles via API endpoint.
+     * This test verifies that an admin can retrieve all roles via API endpoint.
      */
-    public function test_user_can_retrieve_all_roles(): void
+    public function test_admin_can_retrieve_all_roles(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -651,5 +651,40 @@ class RoleTest extends TestCase
                 ->assertJson([
                     'message' => 'Unauthenticated.', 
                 ]);
+    }
+
+    /**
+     * Test other user type is unauthorize to get all roles via API.
+     * 
+     * This test verifies that other user type is unauthorize to get all categories via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_get_all_categories(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $this->get('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->post('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        
+        $response = $this->getJson(route('api.v1.roles.index'));
+
+        $response->assertCookie('laravel_session')
+                ->assertStatus(403)
+                ->assertJsonStructure(['message'])
+                ->assertJson(['message' => 'You are not allowed to access this action']);
     }
 }
