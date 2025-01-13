@@ -8,9 +8,11 @@ use App\Http\Requests\Entity\Category\UpdateCategoryRequest;
 use App\Http\Resources\Entity\Category\CategoryCollection;
 use App\Http\Resources\Entity\Category\CategoryResource;
 use App\Models\Category;
+use App\Models\User;
 use App\Services\Entity\Category\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -39,6 +41,10 @@ class CategoryController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        if(Gate::denies('viewAny', Category::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+        
         return $this->service->index($request->query('keyword'));
     }
 
