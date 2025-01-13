@@ -794,13 +794,13 @@ class SubCategoryTest extends TestCase
     }
 
     /**
-     * Test user can retrieve specific subcategory via API.
+     * Test admin can retrieve specific subcategory via API.
      * 
-     * This test verifies that a user can retrieve specific subcategory via API endpoint.
+     * This test verifies that an admin can retrieve specific subcategory via API endpoint.
      */
     public function test_user_can_retrieve_specific_subcategory(): void
     {
-        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+        $role = Role::where('id', UserType::ADMINISTRATOR)->first();
 
         if (!$role) {
             $this->fail('Role Public User not found in the database.');
@@ -948,6 +948,50 @@ class SubCategoryTest extends TestCase
         $this->assertAuthenticatedAs($user);
 
         $response = $this->getJson(route('api.v1.subcategories.index'));
+
+        $response->assertCookie('laravel_session')
+        ->assertStatus(403)
+        ->assertJsonStructure(['message'])
+        ->assertJson(['message' => 'You are not allowed to access this action']);
+    }
+
+    /**
+     * Test other user type is unauthorize to get subcategory via API.
+     * 
+     * This test verifies that other admin type is unauthorize to get subcategory via API endpoint.
+     */
+    public function test_other_user_type_is_unauthorize_to_get_subcategory(): void
+    {
+        $role = Role::where('id', UserType::PUBLIC_USER)->first();
+
+        if (!$role) {
+            $this->fail('Role Public User not found in the database.');
+        }
+
+        $user = User::factory()->create([
+            'password' => bcrypt('password123'),
+            'role_id' => $role->id,
+        ]);
+
+        $this->getJson('/sanctum/csrf-cookie')->assertCookie('XSRF-TOKEN');
+
+        $this->postJson('/api/v1/authentication/login', [
+            'email' => $user->email,
+            'password' => 'password123',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $category = Category::create([
+            'name' => 'Category 1'
+        ]);
+
+        $usbCategory = Subcategory::create([
+            'category_id' => $category->id,
+            'name' => "Subcategory 1"
+        ]);
+
+        $response = $this->getJson(route('api.v1.subcategories.show', $usbCategory->id));
 
         $response->assertCookie('laravel_session')
         ->assertStatus(403)
