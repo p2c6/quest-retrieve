@@ -31,6 +31,7 @@ class PostService
         ->select(
             'id',
             'type',
+            'user_id',
             'subcategory_id', 
             'incident_location', 
             'incident_date',
