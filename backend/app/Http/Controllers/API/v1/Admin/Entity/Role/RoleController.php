@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Services\Entity\Role\RoleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -39,6 +40,10 @@ class RoleController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        if(Gate::denies('viewAny', Role::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+        
         return $this->service->index($request->query('keyword'));
     }
 
