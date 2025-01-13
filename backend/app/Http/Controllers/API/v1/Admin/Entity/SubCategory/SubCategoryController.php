@@ -11,6 +11,7 @@ use App\Models\Subcategory;
 use App\Services\Entity\Subcategory\SubCategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SubcategoryController extends Controller
 {
@@ -39,6 +40,10 @@ class SubcategoryController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        if(Gate::denies('viewAny', Subcategory::class)) {
+            return response()->json(['message' => 'You are not allowed to access this action'], 403);
+        }
+        
         return $this->service->index($request->query('keyword'));
     }
 
