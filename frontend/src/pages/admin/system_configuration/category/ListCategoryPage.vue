@@ -39,20 +39,8 @@ const search = async() => {
     }, typingDelay)
 }
 
-const currentColumn = ref('name');
-const currentDirection = ref('desc');
-
 const sort = async (columnName) => {
-    if (currentColumn.value === columnName) {
-        console.log(currentDirection.value);
-        currentDirection.value = currentDirection.value === 'asc' ? 'desc' : 'asc';
-    } else {
-        currentColumn.value = columnName;
-        currentDirection.value = 'asc';
-    }
-
-    const prefix = currentDirection.value === 'desc' ? '-' : '';
-    categoryStore.column = `${prefix}${columnName}`;
+    await categoryStore.sort(columnName);
     await categoryStore.getAllCategories();
 }
 

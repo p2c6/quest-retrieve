@@ -13,6 +13,8 @@ export const useCategoryStore = defineStore('category', () => {
     const keyword = ref(null);
     const categoriesDropdown = ref(null);
     const column = ref<string | null>(null);
+    const currentColumn = ref('name');
+    const currentDirection = ref('desc');
 
     const getAllCategories = async(page = 1) => {
         isLoading.value = true;
@@ -46,6 +48,19 @@ export const useCategoryStore = defineStore('category', () => {
         } finally {
             isLoading.value = null;
         }
+    }
+
+    const sort = async(columnName:string) => {
+        if (currentColumn.value === columnName) {
+            console.log(currentDirection.value);
+            currentDirection.value = currentDirection.value === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentColumn.value = columnName;
+            currentDirection.value = 'asc';
+        }
+
+        const prefix = currentDirection.value === 'desc' ? '-' : '';
+        column.value = `${prefix}${columnName}`;
     }
 
     const getCategory = async(id: GetCategory) => {
@@ -152,5 +167,6 @@ export const useCategoryStore = defineStore('category', () => {
         updateCategory,
         deleteCategory,
         getAllCategoriesDropdown,
+        sort,
     }
 });
