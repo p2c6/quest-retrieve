@@ -41,7 +41,7 @@ const search = async() => {
 
 const sort = async (columnName) => {
     await categoryStore.sort(columnName);
-    await categoryStore.getAllCategories();
+    await categoryStore.getAllCategories(categoryStore.categories.current_page || 1);
 }
 
 onBeforeMount(async() => {
