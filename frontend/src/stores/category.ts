@@ -52,7 +52,6 @@ export const useCategoryStore = defineStore('category', () => {
 
     const sort = async(columnName:string) => {
         if (currentColumn.value === columnName) {
-            console.log(currentDirection.value);
             currentDirection.value = currentDirection.value === 'asc' ? 'desc' : 'asc';
         } else {
             currentColumn.value = columnName;
