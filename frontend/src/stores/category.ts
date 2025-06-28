@@ -12,12 +12,13 @@ export const useCategoryStore = defineStore('category', () => {
     const message = ref(null);
     const keyword = ref(null);
     const categoriesDropdown = ref(null);
+    const column = ref<string | null>(null);
 
     const getAllCategories = async(page = 1) => {
         isLoading.value = true;
 
         try {
-            const response = await apiClient.get(`/categories?page=${page}&filter[name]=${keyword.value ?? ""}`);
+            const response = await apiClient.get(`/categories?page=${page}&sort=${column.value ?? ""}&filter[name]=${keyword.value ?? ""}`);
             
             categories.value =  response.data;
 
@@ -143,12 +144,13 @@ export const useCategoryStore = defineStore('category', () => {
         isLoading,
         keyword,
         categoriesDropdown,
+        column,
 
         getAllCategories,
         getCategory,
         storeCategory,
         updateCategory,
         deleteCategory,
-        getAllCategoriesDropdown
+        getAllCategoriesDropdown,
     }
 });

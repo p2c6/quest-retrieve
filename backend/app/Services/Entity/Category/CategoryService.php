@@ -19,12 +19,14 @@ class CategoryService
      * @param Illuminate\Http\Request $request The HTTP request object containing user data.
      * @return Illuminate\Http\JsonResponse
      */
-    public function index($keyword): JsonResponse
+    public function index($request): JsonResponse
     {
+        info($request);
         $category = QueryBuilder::for(Category::class)
+        ->allowedSorts($request->query('sort'))
         ->allowedFilters('name')
         ->paginate(5)
-        ->appends($keyword);
+        ->appends($request->query('keyword'));
 
         return response()->json($category);
     }

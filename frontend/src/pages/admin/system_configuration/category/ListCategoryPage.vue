@@ -10,7 +10,8 @@ const isModalOpen = ref(false);
 const categoryId = ref(null);
 
 const formData = reactive({
-    'keyword': ''
+    'keyword': '',
+    'column': ''
 })
 
 let typingTimer;
@@ -36,6 +37,23 @@ const search = async() => {
     typingTimer = setTimeout(async() => {
         await categoryStore.getAllCategories();
     }, typingDelay)
+}
+
+const currentColumn = ref('name');
+const currentDirection = ref('desc');
+
+const sort = async (columnName) => {
+    if (currentColumn.value === columnName) {
+        console.log(currentDirection.value);
+        currentDirection.value = currentDirection.value === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentColumn.value = columnName;
+        currentDirection.value = 'asc';
+    }
+
+    const prefix = currentDirection.value === 'desc' ? '-' : '';
+    categoryStore.column = `${prefix}${columnName}`;
+    await categoryStore.getAllCategories();
 }
 
 onBeforeMount(async() => {
@@ -142,8 +160,8 @@ onBeforeUnmount(() => {
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" v-else>
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Category name
+                                <th scope="col" class="px-6 py-3 cursor-pointer" @click="sort('name')">
+                                    <i class="pi pi-sort-alt"></i>  Category name
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <span class="sr-only">Edit</span>
