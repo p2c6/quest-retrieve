@@ -1,6 +1,5 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import Table from '@/components/Table.vue';
 import { useCategoryStore } from '@/stores/category';
 import { reactive } from 'vue';
 import { RouterLink } from 'vue-router';
