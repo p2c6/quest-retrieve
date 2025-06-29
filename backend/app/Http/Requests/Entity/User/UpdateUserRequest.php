@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($this->route('user')->id)
             ],
-            'password' =>  'required|confirmed|max:16',
+            'password' =>  'sometimes|nullable|confirmed|max:16',
             'user_id' => 'required_if_accepted:password',
             'last_name' => 'required',
             'first_name'  => 'required',
