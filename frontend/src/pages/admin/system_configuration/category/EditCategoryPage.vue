@@ -4,11 +4,15 @@ import Table from '@/components/Table.vue';
 import { useCategoryStore } from '@/stores/category';
 import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
+import * as yup from 'yup';
 
 const categoryStore = useCategoryStore();
 const route = useRoute();
 
 const category = ref({});
+const schema = yup.object({
+    name: yup.string().required('Name is required.')
+});
 
 const formData = reactive({
     id: '',
@@ -16,6 +20,25 @@ const formData = reactive({
 });
 
 const id = route.params?.id;
+
+
+const yupErrors = reactive({});
+
+const updateCategory = async(formData) => {
+    yupErrors.name = '';
+    categoryStore.errors = null;
+
+    try {
+        await schema.validate(formData, {abortEarly: false })
+        categoryStore.updateCategory(formData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+    }
+}
 
 onMounted(async() => {
     if (id) {
@@ -50,11 +73,14 @@ onUnmounted(() => {
                     </div>
                 </div>
                 <div class="mt-5">
-                    <form @submit.prevent="categoryStore.updateCategory(formData)">
+                    <form @submit.prevent="updateCategory(formData)">
                         <div>
                             <label class="text-primary text-sm font-medium">Category Name</label>
-                            <input type="text" v-model="formData.name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
-                            <p v-if="categoryStore.errors && categoryStore.errors.name" class="text-red-500 text-xs">{{ categoryStore.errors.name[0] }}</p>
+                            <input type="text" v-model="formData.name" :class="`h-8 w-full border-[1.1px] border-${yupErrors.name || (categoryStore.errors && categoryStore.errors.name) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
+                            <p v-if="yupErrors.name" class="text-red-500 text-xs">{{ yupErrors.name }}</p>
+                            <p v-else-if="categoryStore.errors && categoryStore.errors.name" class="text-red-500 text-xs">
+                            {{ categoryStore.errors.name[0] }}
+                            </p>
                         </div>
                         <button class="bg-secondary rounded-lg px-6 py-1 text-white text-sm w-full mt-2 md:w-24">Update</button>
 

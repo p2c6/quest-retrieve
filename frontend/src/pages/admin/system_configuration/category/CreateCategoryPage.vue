@@ -3,6 +3,11 @@ import Card from '@/components/Card.vue';
 import { useCategoryStore } from '@/stores/category';
 import { reactive } from 'vue';
 import { RouterLink } from 'vue-router';
+import * as yup from 'yup';
+
+let schema = yup.object({
+    name: yup.string().required('Name is required.')
+})
 
 const categoryStore = useCategoryStore();
 
@@ -10,7 +15,23 @@ const formData = reactive({
     name: ''
 });
 
+const yupErrors = reactive({});
 
+const storeCategory = async(formData) => {
+    yupErrors.name = '';
+    categoryStore.errors = null;
+
+    try {
+        await schema.validate(formData, {abortEarly: false })
+        categoryStore.storeCategory(formData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+    }
+}
 </script>
 
 <template>
@@ -30,11 +51,14 @@ const formData = reactive({
                     </div>
                 </div>
                 <div class="mt-5">
-                    <form @submit.prevent="categoryStore.storeCategory(formData)">
+                    <form @submit.prevent="storeCategory(formData)">
                         <div>
                             <label class="text-primary text-sm font-medium">Category Name</label>
-                            <input type="text" v-model="formData.name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
-                            <p v-if="categoryStore.errors && categoryStore.errors.name" class="text-red-500 text-xs">{{ categoryStore.errors.name[0] }}</p>
+                            <input type="text" v-model="formData.name" :class="`h-8 w-full border-[1.1px] border-${yupErrors.name || (categoryStore.errors && categoryStore.errors.name) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
+                            <p v-if="yupErrors.name" class="text-red-500 text-xs">{{ yupErrors.name }}</p>
+                            <p v-else-if="categoryStore.errors && categoryStore.errors.name" class="text-red-500 text-xs">
+                            {{ categoryStore.errors.name[0] }}
+                            </p>
                         </div>
                         <button class="bg-secondary rounded-lg px-6 py-1 text-white mt-2 text-sm w-full md:w-20">Save</button>
 
