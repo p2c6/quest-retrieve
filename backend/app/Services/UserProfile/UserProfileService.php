@@ -50,13 +50,15 @@ class UserProfileService
     public function update(User $user, $request): mixed
     {
         try {
-
-            $user->profile()->update([
-                'last_name' => $request->last_name,
-                'first_name' => $request->first_name,
-                'birthday' => $request->birthday,
-                'contact_no' => $request->contact_no,
-            ]);
+            $user->profile()->updateOrCreate(
+                ['user_id' => $request->id],
+                [
+                    'last_name' => $request->last_name,
+                    'first_name' => $request->first_name,
+                    'birthday' => $request->birthday,
+                    'contact_no' => $request->contact_no,
+                ]
+            );
 
             return response()->json([
                 'message' => 'Successfully User Profile Updated.'
