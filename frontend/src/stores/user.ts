@@ -75,6 +75,11 @@ export const useUserStore = defineStore('user', () => {
         isLoading.value = false;
 
         try {
+
+            if (!payload.password || payload.length === 0 || payload.password === '') {
+                delete payload.password;
+            }
+
             const response = await apiClient.put(`/users/${payload.id}`, payload)
 
             if (response.status === 200) {

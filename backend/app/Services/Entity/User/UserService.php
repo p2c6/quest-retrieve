@@ -114,11 +114,7 @@ class UserService
         try {
             DB::beginTransaction();
 
-            $user->update([
-                'email' => $request->email, 
-                'password' => bcrypt($request->password), 
-                'role_id' => $request->role_id
-            ]);
+            $user->update($request->validated());
 
             $this->userProfileService->update($user, $request);
 
