@@ -10,7 +10,7 @@ const route = useRoute();
 
 const category = ref({});
 const schema = yup.object({
-    name: yup.string().required('Name is required.')
+    name: yup.string().required('category name is required.')
 });
 
 const formData = reactive({

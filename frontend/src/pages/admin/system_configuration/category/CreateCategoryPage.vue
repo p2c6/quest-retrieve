@@ -6,7 +6,7 @@ import { RouterLink } from 'vue-router';
 import * as yup from 'yup';
 
 let schema = yup.object({
-    name: yup.string().required('Name is required.')
+    name: yup.string().required('category name is required.')
 })
 
 const categoryStore = useCategoryStore();
