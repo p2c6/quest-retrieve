@@ -14,7 +14,7 @@ export const useCategoryStore = defineStore('category', () => {
     const categoriesDropdown = ref(null);
     const column = ref<string | null>(null);
     const currentColumn = ref('name');
-    const currentDirection = ref('desc');
+    const currentDirection = ref('asc');
 
     const getAllCategories = async(page = 1) => {
         isLoading.value = true;
