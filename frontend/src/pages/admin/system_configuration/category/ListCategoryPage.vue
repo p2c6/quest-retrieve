@@ -5,6 +5,9 @@ import DynamicTable from '@/components/DynamicTable.vue';
 
 const categoryStore = useCategoryStore();
 
+const createRoute = { name: 'category.create' };
+const editRoute = 'category.edit'
+
 const columns = [
     {
         key: "name",
@@ -53,5 +56,7 @@ onBeforeUnmount(() => {
         :paginated-data="categoryStore.getAllCategories"
         :message="categoryStore.message"
         :errors="categoryStore.errors"
+        :create-route="createRoute"
+        :edit-route="editRoute"
     />
 </template>

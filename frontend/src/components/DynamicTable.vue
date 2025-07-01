@@ -12,7 +12,9 @@ const props = defineProps({
     onSort: Function,          
     onSearch: Function,
     message: String,
-    errors: Array,         
+    errors: Array,
+    createRoute: Object,
+    editRoute: String,         
 });
 
 const isModalOpen = ref(false);
@@ -82,7 +84,7 @@ const sort = async (columnName) => {
                     <p class="text-tertiary text-xs md:text-sm">Listing of all categories.</p>
                 </div>
                 <div class="w-full md:w-16">
-                    <RouterLink :to="{ name: 'category.create' }">
+                    <RouterLink :to="createRoute">
                     <button class="bg-secondary text-white px-2 py-1 rounded text-sm w-full">Create</button>
                     </RouterLink>
                 </div>
@@ -161,7 +163,7 @@ const sort = async (columnName) => {
                                 </th>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
-                                        <RouterLink :to="{name: 'category.edit', params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                        <RouterLink :to="{name: editRoute, params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                             <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
                                         </RouterLink>
                                         <div class="text-red-500 cursor-pointer" @click="openDeleteCategoryConfirmation(category.id)">
