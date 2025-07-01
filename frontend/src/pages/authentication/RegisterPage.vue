@@ -76,9 +76,9 @@ const formData = reactive({
                             <div class="border-t-[1.1px] border-gray w-full mt-2"></div>
                             <div class="mt-2 flex flex-row items-center gap-1">
                                 <h1 class="text-primary">Already have an account?</h1> 
-
-                                    <div class="underline text-primary"> Log-in</div>
-
+                                    <RouterLink :to="{name: 'login'}">
+                                        <div class="underline text-primary"> Log-in</div>
+                                    </RouterLink>
                             </div>
                             <button class="bg-secondary rounded-lg px-6 py-1 text-white mt-5 text-sm">Next</button>
                         </div>
