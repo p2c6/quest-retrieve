@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { useCategoryStore } from '@/stores/category';
-import Table from '@/components/Table.vue';
+import DynamicTable from '@/components/DynamicTable.vue';
 
 const categoryStore = useCategoryStore();
 
@@ -43,7 +43,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Table
+    <DynamicTable
         :columns="columns" 
         :isLoading="categoryStore.isLoading"
         :on-delete="categoryStore.deleteCategory"
