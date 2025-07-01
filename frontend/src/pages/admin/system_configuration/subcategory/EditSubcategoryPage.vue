@@ -4,6 +4,13 @@ import { useCategoryStore } from '@/stores/category';
 import { useSubcategoryStore } from '@/stores/subcategory';
 import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
+import * as yup from 'yup';
+
+let schema = yup.object({
+    category_id: yup.string().required('category is required.'),
+    name: yup.string().required('subcategory is required.'),
+})
+
 
 const route = useRoute();
 const subcategoryStore = useSubcategoryStore();
@@ -18,6 +25,25 @@ const formData = reactive({
 
 
 const id = route.params?.id;
+
+const yupErrors = reactive({});
+
+const updateSubcategory = async(formData) => {
+    yupErrors.category_id = '';
+    yupErrors.name = '';
+    subcategoryStore.errors = null;
+
+    try {
+        await schema.validate(formData, {abortEarly: false })
+        subcategoryStore.updateSubcategory(formData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+    }
+}
 
 onBeforeMount(async() => {
     await categoryStore.getAllCategoriesDropdown();
@@ -56,19 +82,21 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
                 <div class="mt-5">
-                    <form @submit.prevent="subcategoryStore.updateSubcategory(formData)">
+                    <form @submit.prevent="updateSubcategory(formData)">
                         <div>
                             <label class="text-primary text-sm font-medium">Category</label>
                             <select v-model="formData.category_id"  class="h-10 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <option disabled value="">Please select category</option>
                                 <option v-for="category in categoryStore.categoriesDropdown" :value="category.id">{{  category.name }}</option>
                             </select>
-                            <p v-if="subcategoryStore.errors && subcategoryStore.errors.category_id" class="text-red-500 text-xs">{{ subcategoryStore.errors.category_id[0] }}</p>
+                            <p v-if="yupErrors.category_id" class="text-red-500 text-xs">{{ yupErrors.category_id }}</p>
+                            <p v-else-if="subcategoryStore.errors && subcategoryStore.errors.category_id" class="text-red-500 text-xs">{{ subcategoryStore.errors.category_id[0] }}</p>
                         </div>
                         <div>
                             <label class="text-primary text-sm font-medium">Subcategory Name</label>
                             <input type="text" v-model="formData.name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
-                            <p v-if="subcategoryStore.errors && subcategoryStore.errors.name" class="text-red-500 text-xs">{{ subcategoryStore.errors.name[0] }}</p>
+                            <p v-if="yupErrors.name" class="text-red-500 text-xs">{{ yupErrors.name }}</p>
+                            <p v-else-if="subcategoryStore.errors && subcategoryStore.errors.name" class="text-red-500 text-xs">{{ subcategoryStore.errors.name[0] }}</p>
                         </div>
                         <button class="bg-secondary rounded-lg px-6 py-1 text-white mt-2 text-sm w-full md:w-20">Save</button>
 
