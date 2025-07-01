@@ -1,8 +1,7 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import Table from '@/components/Table.vue';
 import { useCategoryStore } from '@/stores/category';
-import { onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import * as yup from 'yup';
 
