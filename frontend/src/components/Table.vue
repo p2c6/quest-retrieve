@@ -1,8 +1,7 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
-import { useCategoryStore } from '@/stores/category';
 
 const props = defineProps({
     columns: Array,            
@@ -15,8 +14,6 @@ const props = defineProps({
     message: String,
     errors: Array,         
 });
-
-const categoryStore = useCategoryStore();
 
 const isModalOpen = ref(false);
 const categoryId = ref(null);
@@ -148,6 +145,7 @@ const sort = async (columnName) => {
                                     v-if="column.key !== 'actions'"
                                     :class="[
                                         column.sortable ? 'cursor-pointer hover:text-primary' : '',
+                                        'flex items-center gap-1'
                                     ]"
                                     >
                                     <i class="pi pi-sort-alt" v-if="column.sortable"></i>

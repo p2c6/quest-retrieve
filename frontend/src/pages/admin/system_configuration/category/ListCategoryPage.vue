@@ -1,7 +1,5 @@
 <script setup>
-import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
-import { TailwindPagination } from 'laravel-vue-pagination';
+import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { useCategoryStore } from '@/stores/category';
 import Table from '@/components/Table.vue';
 
