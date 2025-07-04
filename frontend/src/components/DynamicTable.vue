@@ -47,6 +47,10 @@ const sort = async (columnName) => {
     await props.onSort?.(columnName);
 }
 
+function getNestedValue(obj, keyPath, fallback = '-') {
+  return keyPath.split('.').reduce((acc, key) => acc && acc[key], obj) ?? fallback;
+}
+
 </script>
 
 <template>
@@ -158,18 +162,20 @@ const sort = async (columnName) => {
                         </thead>
                         <tbody>
                             <tr v-if="data.data.length > 0" v-for="category in data.data" :key="category.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ category.name }}
-                                </th>
-                                <td class="px-6 py-4">
-                                    <div class="flex gap-2">
-                                        <RouterLink :to="{name: editRoute, params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                            <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
-                                        </RouterLink>
-                                        <div class="text-red-500 cursor-pointer" @click="openDeleteCategoryConfirmation(category.id)">
-                                            <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
+                                <td v-for="column in columns" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <span v-if="column.key !== 'actions'">
+                                        {{ getNestedValue(category, column.key) }}
+                                    </span>
+                                    <span v-else>
+                                        <div class="flex gap-2">
+                                            <RouterLink :to="{name: editRoute, params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
+                                            </RouterLink>
+                                            <div class="text-red-500 cursor-pointer" @click="openDeleteCategoryConfirmation(category.id)">
+                                                <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
+                                            </div>
                                         </div>
-                                    </div>
+                                    </span>
                                 </td>
                             </tr>
                             <tr v-else>

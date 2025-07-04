@@ -21,7 +21,6 @@ class CategoryService
      */
     public function index($request): JsonResponse
     {
-        info($request);
         $category = QueryBuilder::for(Category::class)
         ->allowedSorts($request->query('sort'))
         ->allowedFilters('name')

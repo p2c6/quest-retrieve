@@ -12,12 +12,15 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
     const message = ref(null);
     const keyword = ref(null);
     const subcategoriesDropdown = ref(null);
+    const column = ref<string | null>(null);
+    const currentColumn = ref('name');
+    const currentDirection = ref('asc');
 
     const getAllSubcategories = async(page = 1) => {
         isLoading.value = true;
 
         try {
-            const response = await apiClient.get(`/subcategories?page=${page}&filter[keyword]=${keyword.value ?? ""}`);
+            const response = await apiClient.get(`/subcategories?page=${page}&sort=${column.value ?? ""}&filter[keyword]=${keyword.value ?? ""}`);
             
             subcategories.value =  response.data;
 
@@ -28,6 +31,18 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
         } finally {
             isLoading.value = null;
         }
+    }
+
+    const sort = async(columnName: string) => {
+        if (currentColumn.value === columnName) {
+            currentDirection.value = currentDirection.value === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentColumn.value = columnName;
+            currentDirection.value = 'asc';
+        }
+
+        const prefix = currentDirection.value === 'desc' ? '-' : '';
+        column.value = `${prefix}${columnName}`;
     }
 
     const getSubcategory = async(id: any) => {
@@ -143,6 +158,7 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
         isLoading,
         keyword,
         subcategoriesDropdown,
+        column,
         
         getAllSubcategories,
         getSubcategory,
@@ -150,5 +166,6 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
         storeSubcategory,
         updateSubcategory,
         deleteSubcategory,
+        sort,
     }
 });
