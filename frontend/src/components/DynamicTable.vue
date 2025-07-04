@@ -2,6 +2,8 @@
 import Card from '@/components/Card.vue';
 import { reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
+import { getNestedValue } from '@/utils/getNestedValue';
+import { capitalize } from '@/utils/capitalize';
 
 const props = defineProps({
     resource: String,
@@ -48,10 +50,6 @@ const sort = async (columnName) => {
     await props.onSort?.(columnName);
 }
 
-function getNestedValue(obj, keyPath, fallback = '-') {
-    return keyPath.split('.').reduce((acc, key) => acc && acc[key], obj) ?? fallback;
-}
-
 </script>
 
 <template>
@@ -68,7 +66,7 @@ function getNestedValue(obj, keyPath, fallback = '-') {
                 <div id="modal-body" class="flex items-center justify-center px-4">
                     <div class="flex-1">
                         <div class="flex flex-col justify-center gap-2">
-                            <p class="font-semibold text-md text-primary">Delete {{ resource }}</p>
+                            <p class="font-semibold text-md text-primary">Delete {{ capitalize(resource) }}</p>
                             <p class="text-xs text-gray-400">You are about to delete this {{ resource }}</p>
                             <div class="flex gap-1 mt-2">
                                 <button class="w-36 h-8 bg-gray-200 rounded text-sm" @click="closeModal">Cancel</button>
@@ -85,8 +83,8 @@ function getNestedValue(obj, keyPath, fallback = '-') {
         <div class="overflow-x-auto w-full">
             <div class="flex flex-col gap-2 justify-between items-center md:flex-row">
                 <div class="text-center md:text-left">
-                    <p class="text-primary font-medium">{{ resource }} List</p>
-                    <p class="text-tertiary text-xs md:text-sm">Listing of all {{ resource }}.</p>
+                    <p class="text-primary font-medium">{{ capitalize(resource) }} List</p>
+                    <p class="text-tertiary text-xs md:text-sm">Listing of all {{ capitalize(resource) }}.</p>
                 </div>
                 <div class="w-full md:w-16">
                     <RouterLink :to="createRoute">
