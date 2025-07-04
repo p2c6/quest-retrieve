@@ -10,9 +10,9 @@ class FilterSubcategory implements Filter
     public function __invoke(Builder $query, $value, string $property)
     {
         $query->where(function($subQuery) use ($value) {
-            $subQuery->where('name', $value)
+            $subQuery->where('subcategories.name', $value)
             ->orWhereHas('category', function ($subQuery) use ($value) {
-                $subQuery->where('name', $value);
+                $subQuery->where('categories.name', $value);
             });
         });
     }
