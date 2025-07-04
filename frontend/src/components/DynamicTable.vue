@@ -48,7 +48,7 @@ const sort = async (columnName) => {
 }
 
 function getNestedValue(obj, keyPath, fallback = '-') {
-  return keyPath.split('.').reduce((acc, key) => acc && acc[key], obj) ?? fallback;
+    return keyPath.split('.').reduce((acc, key) => acc && acc[key], obj) ?? fallback;
 }
 
 </script>
@@ -147,7 +147,6 @@ function getNestedValue(obj, keyPath, fallback = '-') {
                             <tr>
                                 <th scope="col" class="px-6 py-3" v-for="column in columns" :key="column.key">
                                     <div
-                                    @click="sort(column.key)"
                                     v-if="column.key !== 'actions'"
                                     :class="[
                                         column.sortable ? 'cursor-pointer hover:text-primary' : '',
@@ -155,7 +154,7 @@ function getNestedValue(obj, keyPath, fallback = '-') {
                                     ]"
                                     >
                                     <i class="pi pi-sort-alt" v-if="column.sortable"></i>
-                                    {{ column.label }}
+                                    <span @click="sort(column.key.replace('.', '_'))">{{ column.label }}</span>
                                     </div>
                                 </th>
                             </tr>

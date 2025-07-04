@@ -11,6 +11,7 @@ use App\Models\Subcategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class SubCategoryService
@@ -24,17 +25,16 @@ class SubCategoryService
     public function index($keyword): JsonResponse
     {
         $category = QueryBuilder::for(Subcategory::class)
-        ->select(
-            'id', 
-            'category_id', 
-            'name'
-        )
-        ->with(['category' => function($q) {
-            $q->select('id', 'name');
-        }])
+        ->select('subcategories.*')
+        ->join('categories', 'categories.id', '=', 'subcategories.category_id') 
+        ->with(['category:id,name'])
         ->allowedIncludes('category')
         ->allowedFilters([
             AllowedFilter::custom('keyword', new FilterSubcategory)
+        ])
+        ->allowedSorts([
+            'name', 
+            AllowedSort::field('category_name', 'categories.name'), 
         ])
         ->paginate(5)
         ->appends($keyword);
