@@ -20,6 +20,9 @@ const columns = [
     },
 ];
 
+let typingTimer;
+const typingDelay = 1000;
+
 const search = async (keyword = '') => {
     categoryStore.keyword = keyword;
 
