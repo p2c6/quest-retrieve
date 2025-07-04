@@ -4,10 +4,9 @@ import { useCategoryStore } from '@/stores/category';
 import DynamicTable from '@/components/DynamicTable.vue';
 
 const categoryStore = useCategoryStore();
-
-const createRoute = { name: 'category.create' };
-const editRoute = 'category.edit'
-const resource = 'Category'
+const resource = 'category'
+const createRoute = { name: `${resource}.create` };
+const editRoute = `${resource}.edit`
 
 const columns = [
     {

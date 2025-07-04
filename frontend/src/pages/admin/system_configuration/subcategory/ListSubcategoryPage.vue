@@ -5,9 +5,9 @@ import DynamicTable from '@/components/DynamicTable.vue';
 
 const subcategoryStore = useSubcategoryStore();
 
-const createRoute = { name: 'category.create' };
-const editRoute = 'category.edit'
-const resource = 'Subcategory'
+const resource = 'subcategory'
+const createRoute = { name: `${resource}.create` };
+const editRoute = `${resource}.edit`
 
 const columns = [
     {
