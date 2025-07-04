@@ -4,6 +4,7 @@ import { reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 
 const props = defineProps({
+    resource: String,
     columns: Array,            
     data: Object,            
     isLoading: Boolean,
@@ -18,19 +19,19 @@ const props = defineProps({
 });
 
 const isModalOpen = ref(false);
-const categoryId = ref(null);
+const resourceId = ref(null);
 
 const formData = reactive({
     'keyword': '',
     'column': ''
 })
 
-const openDeleteCategoryConfirmation = (id) => {
+const openDeleteResourceConfirmation = (id) => {
     isModalOpen.value = true;
-    categoryId.value = id;
+    resourceId.value = id;
 }
 
-const confirmDeleteCategory = (id) => {
+const confirmDeleteResource = (id) => {
     props.onDelete(id)
     isModalOpen.value = false;
 }
@@ -67,11 +68,11 @@ function getNestedValue(obj, keyPath, fallback = '-') {
                 <div id="modal-body" class="flex items-center justify-center px-4">
                     <div class="flex-1">
                         <div class="flex flex-col justify-center gap-2">
-                            <p class="font-semibold text-md text-primary">Delete category?</p>
-                            <p class="text-xs text-gray-400">You are about to delete this category</p>
+                            <p class="font-semibold text-md text-primary">Delete {{ resource }}</p>
+                            <p class="text-xs text-gray-400">You are about to delete this {{ resource }}</p>
                             <div class="flex gap-1 mt-2">
                                 <button class="w-36 h-8 bg-gray-200 rounded text-sm" @click="closeModal">Cancel</button>
-                                <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeleteCategory(categoryId)">Yes,delete it</button>
+                                <button class="w-36 h-8 bg-secondary rounded text-white text-sm" @click="confirmDeleteResource(resourceId)">Yes,delete it</button>
                             </div>
                         </div>
                     </div>
@@ -84,8 +85,8 @@ function getNestedValue(obj, keyPath, fallback = '-') {
         <div class="overflow-x-auto w-full">
             <div class="flex flex-col gap-2 justify-between items-center md:flex-row">
                 <div class="text-center md:text-left">
-                    <p class="text-primary font-medium">Category List</p>
-                    <p class="text-tertiary text-xs md:text-sm">Listing of all categories.</p>
+                    <p class="text-primary font-medium">{{ resource }} List</p>
+                    <p class="text-tertiary text-xs md:text-sm">Listing of all {{ resource }}.</p>
                 </div>
                 <div class="w-full md:w-16">
                     <RouterLink :to="createRoute">
@@ -160,17 +161,17 @@ function getNestedValue(obj, keyPath, fallback = '-') {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="data.data.length > 0" v-for="category in data.data" :key="category.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                            <tr v-if="data.data.length > 0" v-for="resource in data.data" :key="resource.id" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <td v-for="column in columns" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <span v-if="column.key !== 'actions'">
-                                        {{ getNestedValue(category, column.key) }}
+                                        {{ getNestedValue(resource, column.key) }}
                                     </span>
                                     <span v-else>
                                         <div class="flex gap-2">
-                                            <RouterLink :to="{name: editRoute, params:{ id: category.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                            <RouterLink :to="{name: editRoute, params:{ id: resource.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                 <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
                                             </RouterLink>
-                                            <div class="text-red-500 cursor-pointer" @click="openDeleteCategoryConfirmation(category.id)">
+                                            <div class="text-red-500 cursor-pointer" @click="openDeleteResourceConfirmation(resource.id)">
                                                 <i class="text-red-500 pi pi-trash text-gray-500 cursor-pointer"> </i> Delete
                                             </div>
                                         </div>

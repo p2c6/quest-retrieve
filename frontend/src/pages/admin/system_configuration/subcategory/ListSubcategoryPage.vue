@@ -7,6 +7,7 @@ const subcategoryStore = useSubcategoryStore();
 
 const createRoute = { name: 'category.create' };
 const editRoute = 'category.edit'
+const resource = 'Subcategory'
 
 const columns = [
     {
@@ -52,6 +53,7 @@ onBeforeUnmount(() => {
 
 <template>
     <DynamicTable
+        :resource="resource"
         :columns="columns" 
         :isLoading="subcategoryStore.isLoading"
         :on-delete="subcategoryStore.deleteSubcategory"
