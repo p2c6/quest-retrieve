@@ -19,12 +19,13 @@ class RoleService
      * @param App\Models\Role $role The model of the role which needs to be retrieved.
      * @return Illuminate\Http\JsonResponse
      */
-    public function index($keyword): JsonResponse
+    public function index($request): JsonResponse
     {
         $roles = QueryBuilder::for(Role::class)
+        ->allowedSorts($request->query('sort'))
         ->allowedFilters('name')
         ->paginate(5)
-        ->appends($keyword);
+        ->appends($request->query('keyword'));
 
         return response()->json($roles);
     }

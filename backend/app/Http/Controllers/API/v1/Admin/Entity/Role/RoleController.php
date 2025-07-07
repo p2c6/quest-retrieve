@@ -44,7 +44,7 @@ class RoleController extends Controller
             return response()->json(['message' => 'You are not allowed to access this action'], 403);
         }
         
-        return $this->service->index($request->query('keyword'));
+        return $this->service->index($request);
     }
 
     /**

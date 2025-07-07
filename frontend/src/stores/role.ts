@@ -12,12 +12,15 @@ export const useRoleStore = defineStore('role', () => {
     const message = ref(null);
     const keyword = ref(null);
     const rolesDropdown = ref(null);
+    const column = ref<string | null>(null);
+    const currentColumn = ref('name');
+    const currentDirection = ref('asc');
 
     const getAllRoles = async(page = 1) => {
         isLoading.value = true;
 
         try {
-            const response = await apiClient.get(`/roles?page=${page}&filter[name]=${keyword.value ?? ""}`);
+            const response = await apiClient.get(`/roles?page=${page}&sort=${column.value ?? ""}&filter[name]=${keyword.value ?? ""}`);
             
             roles.value =  response.data;
 
@@ -45,6 +48,18 @@ export const useRoleStore = defineStore('role', () => {
         } finally {
             isLoading.value = null;
         }
+    }
+
+    const sort = async(columnName:string) => {
+        if (currentColumn.value === columnName) {
+            currentDirection.value = currentDirection.value === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentColumn.value = columnName;
+            currentDirection.value = 'asc';
+        }
+
+        const prefix = currentDirection.value === 'desc' ? '-' : '';
+        column.value = `${prefix}${columnName}`;
     }
 
     const getRole = async(id: GetRole) => {
@@ -143,12 +158,14 @@ export const useRoleStore = defineStore('role', () => {
         isLoading,
         keyword,
         rolesDropdown,
+        column,
 
         getAllRoles,
         getRole,
         storeRole,
         updateRole,
         deleteRole,
-        getAllRolesDropdown
+        getAllRolesDropdown,
+        sort
     }
 });
