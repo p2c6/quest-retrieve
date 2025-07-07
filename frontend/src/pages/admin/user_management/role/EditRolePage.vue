@@ -3,6 +3,11 @@ import Card from '@/components/Card.vue';
 import { useRoleStore } from '@/stores/role';
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
+import * as yup from 'yup';
+
+let schema = yup.object({
+    name: yup.string().required('role name is required.'),
+})
 
 const roleStore = useRoleStore();
 const route = useRoute();
@@ -15,6 +20,25 @@ const formData = reactive({
 });
 
 const id = route.params?.id;
+
+const yupErrors = reactive({});
+
+const updateRole = async(formData) => {
+    yupErrors.name = '';
+    roleStore.errors = null;
+
+    try {
+        await schema.validate(formData, {abortEarly: false })
+        roleStore.updateRole(formData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+    }
+}
+
 
 onMounted(async() => {
     if (id) {
@@ -50,11 +74,12 @@ onUnmounted(() => {
                     </div>
                 </div>
                 <div class="mt-5">
-                    <form @submit.prevent="roleStore.updateRole(formData)">
+                    <form @submit.prevent="updateRole(formData)">
                         <div>
                             <label class="text-primary text-sm font-medium">Role Name</label>
                             <input type="text" v-model="formData.name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
-                            <p v-if="roleStore.errors && roleStore.errors.name" class="text-red-500 text-xs">{{ roleStore.errors.name[0] }}</p>
+                            <p v-if="yupErrors.name" class="text-red-500 text-xs">{{ yupErrors.name }}</p>
+                            <p v-else-if="roleStore.errors && roleStore.errors.name" class="text-red-500 text-xs">{{ roleStore.errors.name[0] }}</p>
                         </div>
                         <button class="bg-secondary rounded-lg px-6 py-1 text-white text-sm w-full mt-2 md:w-24">Update</button>
 
