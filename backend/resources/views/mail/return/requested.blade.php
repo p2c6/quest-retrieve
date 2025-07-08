@@ -13,7 +13,7 @@ On: {{ date("F d, Y", strtotime($when ))}}
 
 Returner's message: {{ $message }}
 
-<span style="color: red; font-size:1rem;">Note: make sure you validate the returner's identity and its answers.</span>
+<span style="color: red; font-size:1rem;">Note: make sure you validate the returner's identity and their answers.</span>
 
 
 </x-mail::message>
