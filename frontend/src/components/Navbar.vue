@@ -20,8 +20,9 @@ const collapseNav = () => collapse.value = !collapse.value;
                 <button class="mt-2 border-[1.7px] rounded border-indigo-800 px-2 py-1 md:hidden" @click="collapseNav" id="btnCollapseNav">
                     <i class="text-indigo-800 pi pi-bars"></i>
                 </button>
-
-                <img :src="logo" alt="QuestRetrieve Logo" width="150px">
+                <RouterLink :to="{name: 'home'}">
+                    <img :src="logo" alt="QuestRetrieve Logo" width="150px">
+                </RouterLink>
             </div>
         </div>
         <div :class="`bg-indigo-800`">
