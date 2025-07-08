@@ -22,7 +22,7 @@ const formData = reactive({
 });
 
 const term = computed(() => {
-    return route.params.type == "Found" ? {title: "Claim", person: "Claimer's"} : {title: "Return", person: "Returner's"};
+    return route.params.type == "Found" ? {title: "Claim", owner: "Claimer's"} : {title: "Return", owner: "Returner's"};
 });
 
 onBeforeUnmount(() => {
@@ -44,7 +44,7 @@ onBeforeUnmount(() => {
                             </div>
                         </div>
                         <div>
-                            <label class="text-primary text-sm">{{ term.person }} name</label>
+                            <label class="text-primary text-sm">{{ term.owner }} name</label>
                             <input  v-model="formData.full_name" type="text" :class="`h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded`">
                             <p v-if="postStore.errors && postStore.errors.full_name" class="text-red-500 text-xs">{{ postStore.errors.full_name[0] }}</p>
                         </div>
