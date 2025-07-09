@@ -10,6 +10,8 @@ class Profile extends Model
 {
     use HasFactory;
 
+    protected $appends = ['full_name'];
+
     protected $fillable = [
         'user_id',
         'last_name',
