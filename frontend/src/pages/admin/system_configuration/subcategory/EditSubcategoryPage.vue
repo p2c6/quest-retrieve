@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
                     <form @submit.prevent="updateSubcategory(formData)">
                         <div>
                             <label class="text-primary text-sm font-medium">Category</label>
-                            <select v-model="formData.category_id"  class="h-10 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                            <select v-model="formData.category_id"  :class="`h-auto w-full border-[1.1px] border-${yupErrors.category_id || (subcategoryStore.errors && subcategoryStore.errors.category_id) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                 <option disabled value="">Please select category</option>
                                 <option v-for="category in categoryStore.categoriesDropdown" :value="category.id">{{  category.name }}</option>
                             </select>
@@ -94,7 +94,7 @@ onBeforeUnmount(() => {
                         </div>
                         <div>
                             <label class="text-primary text-sm font-medium">Subcategory Name</label>
-                            <input type="text" v-model="formData.name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                            <input type="text" v-model="formData.name" :class="`h-auto w-full border-[1.1px] border-${yupErrors.name || (subcategoryStore.errors && subcategoryStore.errors.name) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                             <p v-if="yupErrors.name" class="text-red-500 text-xs">{{ yupErrors.name }}</p>
                             <p v-else-if="subcategoryStore.errors && subcategoryStore.errors.name" class="text-red-500 text-xs">{{ subcategoryStore.errors.name[0] }}</p>
                         </div>

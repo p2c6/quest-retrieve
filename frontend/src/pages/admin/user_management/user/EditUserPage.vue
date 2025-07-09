@@ -127,13 +127,13 @@ onUnmounted(() => {
                             <div class="flex gap-y-0.5 flex-col md:flex-row gap-5">
                                 <div class="w-full md:w-1/2">
                                     <label class="text-primary text-sm font-medium">Last Name</label>
-                                    <input type="text" v-model="formData.last_name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                                    <input type="text" v-model="formData.last_name" :class="`h-8 w-full border-[1.1px] border-${yupErrors.last_name || (userStore.errors && userStore.errors.last_name) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                     <p v-if="yupErrors.last_name" class="text-red-500 text-xs">{{ yupErrors.last_name }}</p>
                                     <p v-else-if="userStore.errors && userStore.errors.last_name" class="text-red-500 text-xs">{{ userStore.errors.last_name[0] }}</p>
                                 </div>
                                 <div class="w-full md:w-1/2">
                                     <label class="text-primary text-sm font-medium">First Name</label>
-                                    <input type="text" v-model="formData.first_name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                                    <input type="text" v-model="formData.first_name" :class="`h-8 w-full border-[1.1px] border-${yupErrors.first_name || (userStore.errors && userStore.errors.first_name) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                     <p v-if="yupErrors.first_name" class="text-red-500 text-xs">{{ yupErrors.first_name }}</p>
                                     <p v-else-if="userStore.errors && userStore.errors.first_name" class="text-red-500 text-xs">{{ userStore.errors.first_name[0] }}</p>
                                 </div>
@@ -141,37 +141,37 @@ onUnmounted(() => {
                             <div>
                                 <label class="text-primary text-sm font-medium">Date of birth</label>
                                 <br>
-                                <input type="date" v-model="formData.birthday" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded"  />
+                                <input type="date" v-model="formData.birthday" :class="`h-8 w-full border-[1.1px] border-${yupErrors.birthday || (userStore.errors && userStore.errors.birthday) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`"  />
                                 <p v-if="yupErrors.birthday" class="text-red-500 text-xs">{{ yupErrors.birthday }}</p>
                                 <p v-else-if="userStore.errors && userStore.errors.birthday" class="text-red-500 text-xs">{{ userStore.errors.birthday[0] }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Contact Number</label>
-                                <input type="text" v-model="formData.contact_no" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                                <input type="text" v-model="formData.contact_no" :class="`h-8 w-full border-[1.1px] border-${yupErrors.contact_no || (userStore.errors && userStore.errors.contact_no) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                 <p v-if="yupErrors.contact_no" class="text-red-500 text-xs">{{ yupErrors.contact_no }}</p>
                                 <p v-else-if="userStore.errors && userStore.errors.contact_no" class="text-red-500 text-xs">{{ userStore.errors.contact_no[0] }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Email</label>
-                                <input type="text" v-model="formData.email" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                                <input type="text" v-model="formData.email" :class="`h-8 w-full border-[1.1px] border-${yupErrors.email || (userStore.errors && userStore.errors.email) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                 <p v-if="yupErrors.email" class="text-red-500 text-xs">{{ yupErrors.email }}</p>
                                 <p v-else-if="userStore.errors && userStore.errors.email" class="text-red-500 text-xs">{{ userStore.errors.email[0] }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Password</label>
-                                <input type="password" v-model="formData.password" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                                <input type="password" v-model="formData.password" :class="`h-8 w-full border-[1.1px] border-${yupErrors.password || (userStore.errors && userStore.errors.password) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                 <p v-if="yupErrors.password" class="text-red-500 text-xs">{{ yupErrors.password }}</p>
                                 <p v-else-if="userStore.errors && userStore.errors.password" class="text-red-500 text-xs">{{ userStore.errors.password[0] }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Confirm Password</label>
-                                <input type="password" v-model="formData.password_confirmation" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                                <input type="password" v-model="formData.password_confirmation" :class="`h-8 w-full border-[1.1px] border-${yupErrors.password_confirmation || (userStore.errors && userStore.errors.password_confirmation) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                 <p v-if="yupErrors.password_confirmation" class="text-red-500 text-xs">{{ yupErrors.password_confirmation }}</p>
                                 <p v-else-if="userStore.errors && userStore.errors.password" class="text-red-500 text-xs">{{ userStore.errors.password[0] }}</p>
                             </div>
                             <div>
                             <label class="text-primary text-sm font-medium">Role</label>
-                            <select v-model="formData.role_id"  class="h-10 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                            <select v-model="formData.role_id"  :class="`h-10 w-full border-[1.1px] border-${yupErrors.role_id || (userStore.errors && userStore.errors.role_id) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                                 <option disabled value="">Please select role</option>
                                 <option v-for="role in roleStore.rolesDropdown" :value="role.id">{{  role.name }}</option>
                             </select>

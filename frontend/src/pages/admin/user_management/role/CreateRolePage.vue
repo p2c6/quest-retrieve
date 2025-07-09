@@ -56,7 +56,7 @@ const storeRole = async(formData) => {
                     <form @submit.prevent="storeRole(formData)">
                         <div>
                             <label class="text-primary text-sm font-medium">Role Name</label>
-                            <input type="text" v-model="formData.name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                            <input type="text" v-model="formData.name" :class="`h-8 w-full border-[1.1px] border-${yupErrors.name || (roleStore.errors && roleStore.errors.name) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
                             <p v-if="yupErrors.name" class="text-red-500 text-xs">{{ yupErrors.name }}</p>
                             <p v-else-if="roleStore.errors && roleStore.errors.role_id" class="text-red-500 text-xs">{{ roleStore.errors.name[0] }}</p>
                         </div>
