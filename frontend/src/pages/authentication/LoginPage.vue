@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router';
 import logo from "@/assets/qr-logo.png";
 import home from "@/assets/home.png";
 import { useAuthStore } from "@/stores/auth";
-import { reactive } from 'vue';
+import { onBeforeUnmount, reactive } from 'vue';
 
 
 const authStore = useAuthStore();
@@ -12,6 +12,10 @@ const credentials = reactive({
     email: '',
     password: ''
 });
+
+onBeforeUnmount(() => {
+    authStore.errors = null;
+})
 </script>
 
 <template>
