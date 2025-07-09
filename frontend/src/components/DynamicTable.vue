@@ -153,7 +153,7 @@ const sort = async (columnName) => {
                                     ]"
                                     >
                                     <i class="pi pi-sort-alt" v-if="column.sortable"></i>
-                                    <span @click="sort(column.key.replace('.', '_'))">{{ column.label }}</span>
+                                    <span @click="sort(column.key)">{{ column.label }}</span>
                                     </div>
                                 </th>
                             </tr>

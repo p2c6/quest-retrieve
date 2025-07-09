@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Post;
 use App\Models\User;
 use App\Services\UserProfile\UserProfileService;
+use App\Sorts\SortByFullName;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
@@ -44,10 +45,9 @@ class UserService
         }])
         ->allowedFilters([AllowedFilter::custom('keyword', new FilterUser)])
         ->allowedSorts([
-            AllowedSort::field('last_name', 'profiles.last_name'), 
-            AllowedSort::field('first_name', 'profiles.first'), 
-            AllowedSort::field('first_name', 'profiles.first'), 
-            AllowedSort::field('birthday', 'profiles.birthday'), 
+            'email',
+            AllowedSort::custom('full_name', new SortByFullName),
+            AllowedSort::field('birthday', 'profiles.birthday'),  
             AllowedSort::field('contact_no', 'profiles.contact_no'), 
         ])
         ->paginate(5)

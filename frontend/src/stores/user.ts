@@ -12,12 +12,15 @@ export const useUserStore = defineStore('user', () => {
     const message = ref(null);
     const keyword = ref(null);
     const rolesDropdown = ref(null);
+    const column = ref<string | null>(null);
+    const currentColumn = ref('category_name');
+    const currentDirection = ref('asc');
 
     const getAllUsers = async(page = 1) => {
         isLoading.value = true;
 
         try {
-            const response = await apiClient.get(`/users?page=${page}&filter[keyword]=${keyword.value ?? ""}`);
+            const response = await apiClient.get(`/users?page=${page}&sort=${column.value ?? ""}&filter[keyword]=${keyword.value ?? ""}`);
             
             users.value =  response.data;
 
@@ -30,7 +33,19 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-     const getUser = async(id: any) => {
+    const sort = async(columnName: string) => {
+        if (currentColumn.value === columnName) {
+            currentDirection.value = currentDirection.value === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentColumn.value = columnName;
+            currentDirection.value = 'asc';
+        }
+
+        const prefix = currentDirection.value === 'desc' ? '-' : '';
+        column.value = `${prefix}${columnName}`;
+    }
+
+    const getUser = async(id: any) => {
             isLoading.value = true;
     
             try {
@@ -133,6 +148,7 @@ export const useUserStore = defineStore('user', () => {
         message,
         keyword,
         isLoading,
+        column,
 
         /*
             @Functions
@@ -142,5 +158,6 @@ export const useUserStore = defineStore('user', () => {
         getUser,
         updateUser,
         deleteUser,
+        sort,
     }
 });
