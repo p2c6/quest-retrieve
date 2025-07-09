@@ -4,7 +4,7 @@ import logo from "@/assets/qr-logo.png";
 import people from "@/assets/people.png";
 import Input from '@/components/Input.vue';
 import { useAuthStore } from '@/stores/auth';
-import { reactive } from 'vue';
+import { onBeforeUnmount, reactive } from 'vue';
 
 const authStore = useAuthStore();
 
@@ -16,6 +16,10 @@ const formData = reactive({
     birthday: '',
     contact_no: '',
 });
+
+onBeforeUnmount(() => {
+    authStore.errors = null;
+})
 
 </script>
 
