@@ -148,7 +148,7 @@ export const useAuthStore = defineStore('auth', () => {
             const response = await webClient.post('/api/forgot-password', payload);
 
             if (response.status === 200) {
-                console.log('response', response.data);
+                message.value = response.data.message;
             }
         } catch (error: any) {
             if (error.status === 422) {
