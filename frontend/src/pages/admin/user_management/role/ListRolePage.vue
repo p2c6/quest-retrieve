@@ -37,8 +37,17 @@ const search = async (keyword = '') => {
     }, typingDelay);
 };
 
+const accessRelatedColumn = (parent) => {
+    const segment =  parent.split(".")
+
+    const lastItem = segment[segment.length - 1];
+
+    return lastItem;
+    
+}
+
 const sort = async (columnName) => {
-    await roleStore.sort(columnName);
+    await roleStore.sort(accessRelatedColumn(columnName));
     await roleStore.getAllRoles(roleStore.roles.current_page || 1);
 }
 

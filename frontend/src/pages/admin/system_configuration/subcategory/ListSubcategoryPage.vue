@@ -38,8 +38,17 @@ const search = async (keyword = '') => {
     }, typingDelay);
 };
 
+const accessRelatedColumn = (parent) => {
+    const segment =  parent.split(".")
+
+    const lastItem = segment[segment.length - 1];
+
+    return lastItem;
+    
+}
+
 const sort = async (columnName) => {
-    await subcategoryStore.sort(columnName);
+    await subcategoryStore.sort(accessRelatedColumn(columnName));
     await subcategoryStore.getAllSubcategories(subcategoryStore.subcategories.current_page || 1);
 }
 
