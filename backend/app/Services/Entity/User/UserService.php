@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Services\UserProfile\UserProfileService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -31,21 +32,15 @@ class UserService
     /**
      * List of all users.
      * 
-     * @return Illuminate\Http\JsonResponse
+     * @return Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index($keyword): JsonResponse
+    public function index($keyword): AnonymousResourceCollection
     {
         $users = QueryBuilder::for(User::class)
         ->select('users.*')
         ->join('profiles', 'profiles.user_id', '=', 'users.id') 
-        ->with(['profile' => function($q) {
-            $q->select(
-                'user_id', 
-                'last_name', 
-                'first_name', 
-                DB::raw('DATE_FORMAT(birthday, "%b %d, %Y") as birthday'),
-                'contact_no'
-            );
+        ->with(['profile' => function ($q) {
+            $q->select('id', 'user_id', 'first_name', 'last_name', 'birthday', 'contact_no');
         }])
         ->allowedFilters([AllowedFilter::custom('keyword', new FilterUser)])
         ->allowedSorts([
@@ -58,7 +53,7 @@ class UserService
         ->paginate(5)
         ->appends($keyword);
                 
-        return response()->json($users);
+        return UserResource::collection($users);
     }
 
     /**

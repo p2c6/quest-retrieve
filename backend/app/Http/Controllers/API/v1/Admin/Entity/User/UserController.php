@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\Entity\User\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
@@ -39,9 +40,9 @@ class UserController extends Controller
      * 
      * @param App\Models\User $user The model of the user which needs to be retrieved.
      * 
-     * @return Illuminate\Http\JsonResponse
+     * @return Illuminate\Http\Resources\Json\AnonymousResourceCollection|Illuminate\Http\JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request):  AnonymousResourceCollection|JsonResponse
     {
         if(Gate::denies('viewAny', User::class)) {
             return response()->json(['message' => 'You are not allowed to access this action'], 403);
