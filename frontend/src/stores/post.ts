@@ -228,7 +228,7 @@ export const usePostStore = defineStore('post', () => {
     }
 
     const requestClaimOrReturnPost = async(payload: any) => {
-        isLoading.value = false;
+        isLoading.value = true;
 
         try {
             let url = `/public/posts/${payload.id}/claim`;
@@ -245,6 +245,8 @@ export const usePostStore = defineStore('post', () => {
                 router.push({name: 'home'});
             }
 
+            isLoading.value = false;
+
         } catch(error: any) {
             if (error.status == 422) {
                 console.log('Validation error', error);
@@ -253,6 +255,8 @@ export const usePostStore = defineStore('post', () => {
             }
 
             console.log("Error on requesting claim or return post: ", error)
+        } finally {
+            isLoading.value = null;
         }
 
     }
