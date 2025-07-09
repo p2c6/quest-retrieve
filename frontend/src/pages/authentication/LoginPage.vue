@@ -4,7 +4,17 @@ import logo from "@/assets/qr-logo.png";
 import home from "@/assets/home.png";
 import { useAuthStore } from "@/stores/auth";
 import { onBeforeUnmount, reactive } from 'vue';
+import * as yup from 'yup';
 
+let schema = yup.object({
+    email: yup
+        .string()
+        .email('invalid e-mail format.')
+        .required('e-mail is required.'),
+    password: yup
+        .string()
+        .required('password is required.'),
+})
 
 const authStore = useAuthStore();
 
@@ -12,6 +22,24 @@ const credentials = reactive({
     email: '',
     password: ''
 });
+
+const yupErrors = reactive({})
+
+const login = async(credentials) => {
+    yupErrors.email = '';
+    yupErrors.password = '';
+
+    try {
+        await schema.validate(credentials, {abortEarly: false })
+        authStore.login(credentials)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+    }
+}
 
 onBeforeUnmount(() => {
     authStore.errors = null;
@@ -56,20 +84,22 @@ onBeforeUnmount(() => {
                             <p class="text-primary text-xs">Please Wait...</p>
                         </div>
                     </div>
-                    <form @submit.prevent="authStore.login(credentials)" v-else>
+                    <form @submit.prevent="login(credentials)" v-else>
                         <div>
                             <div class="mb-8">
                                 <h1 class="text-primary font-medium text-lg">Log in to your account</h1>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">E-mail address</label>
-                                <input type="text" v-model="credentials.email" class="h-8 w-full border-[1.1px] border-primary mt-2 mb-2 p-2 rounded">
-                                <p v-if="authStore.errors && authStore.errors.email" class="text-red-500 text-xs">{{ authStore.errors.email[0] }}</p>
+                                <input type="text" v-model="credentials.email"  :class="`h-8 w-full border-[1.1px] border-${yupErrors.email || (authStore.errors && authStore.errors.email) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
+                                <p v-if="authStore.errors && authStore.errors?.email" class="text-red-500 text-xs">{{ authStore.errors.email[0] }}</p>
+                                <p v-else="yupErrors.email" class="text-red-500 text-xs">{{ yupErrors.email }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Password</label>
-                                <input type="password" v-model="credentials.password" class="h-8 w-full border-[1.1px] border-primary mt-2 mb-2 p-2 rounded">
-                                <p v-if="authStore.errors && authStore.errors.password" class="text-red-500 text-xs">{{ authStore.errors.password[0] }}</p>
+                                <input type="password" v-model="credentials.password"  :class="`h-8 w-full border-[1.1px] border-${yupErrors.password || (authStore.password && authStore.errors.password) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
+                                <p v-if="authStore.errors && authStore.errors?.password" class="text-red-500 text-xs">{{ authStore.errors.password[0] }}</p>
+                                <p v-else="yupErrors.password" class="text-red-500 text-xs">{{ yupErrors.password }}</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-5"></div>
                             <div class="mt-4 flex flex-row items-center gap-1 text-xs">
