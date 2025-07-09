@@ -3,7 +3,7 @@ import { RouterLink, useRoute } from 'vue-router';
 import logo from "@/assets/qr-logo.png";
 import help from "@/assets/help.png";
 import { useAuthStore } from "@/stores/auth";
-import { onBeforeMount, onBeforeUnmount, onMounted, reactive } from 'vue';
+import { onBeforeMount, onBeforeUnmount, reactive } from 'vue';
 
 
 const authStore = useAuthStore();

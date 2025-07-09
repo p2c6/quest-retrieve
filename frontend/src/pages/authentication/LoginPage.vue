@@ -2,9 +2,8 @@
 import { RouterLink } from 'vue-router';
 import logo from "@/assets/qr-logo.png";
 import home from "@/assets/home.png";
-import Input from '@/components/Input.vue';
 import { useAuthStore } from "@/stores/auth";
-import { onBeforeUnmount, onMounted, reactive } from 'vue';
+import { reactive } from 'vue';
 
 
 const authStore = useAuthStore();
