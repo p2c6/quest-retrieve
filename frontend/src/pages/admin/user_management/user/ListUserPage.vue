@@ -1,6 +1,5 @@
 <script setup>
-import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, } from 'vue';
 import { useUserStore } from '@/stores/user';
 import DynamicTable from '@/components/DynamicTable.vue';
 
