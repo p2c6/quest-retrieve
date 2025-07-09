@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserService
@@ -35,7 +36,8 @@ class UserService
     public function index($keyword): JsonResponse
     {
         $users = QueryBuilder::for(User::class)
-        ->select('id', 'email')
+        ->select('users.*')
+        ->join('profiles', 'profiles.user_id', '=', 'users.id') 
         ->with(['profile' => function($q) {
             $q->select(
                 'user_id', 
@@ -46,6 +48,13 @@ class UserService
             );
         }])
         ->allowedFilters([AllowedFilter::custom('keyword', new FilterUser)])
+        ->allowedSorts([
+            AllowedSort::field('last_name', 'profiles.last_name'), 
+            AllowedSort::field('first_name', 'profiles.first'), 
+            AllowedSort::field('first_name', 'profiles.first'), 
+            AllowedSort::field('birthday', 'profiles.birthday'), 
+            AllowedSort::field('contact_no', 'profiles.contact_no'), 
+        ])
         ->paginate(5)
         ->appends($keyword);
                 
