@@ -13,6 +13,7 @@ const formData = reactive({
 });
 
 onBeforeUnmount(() => {
+    authStore.message = null;
     authStore.errors = null;
 })
 
