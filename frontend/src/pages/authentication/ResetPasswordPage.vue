@@ -5,6 +5,9 @@ import help from "@/assets/help.png";
 import { useAuthStore } from "@/stores/auth";
 import { onBeforeMount, onBeforeUnmount, reactive } from 'vue';
 import * as yup from 'yup';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 let schema = yup.object({
     email: yup
@@ -57,9 +60,11 @@ const formData = reactive({
 onBeforeMount(() => {
     const token = route.query.token ?? null;
 
-    if (token) {
-        formData.token = token;
+    if (!token) {
+        router.push({name: "password.forgot"})
     }
+
+    formData.token = token;
 })
 
 
