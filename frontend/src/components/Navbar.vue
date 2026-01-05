@@ -38,9 +38,12 @@ const collapseNav = () => collapse.value = !collapse.value;
                         </div>
                     </div>
                     <div class="flex flex-col md:flex-row justify-end gap-2">
-                        <div class="hover:cursor-pointer">
-                            {{ store.user?.profile?.first_name }}  {{ store.user?.profile?.last_name }}
-                        </div>
+                        
+                        <RouterLink :to="{name: 'account.edit'}">
+                            <div class="hover:cursor-pointer">
+                                {{ store.user?.profile?.first_name }}  {{ store.user?.profile?.last_name }}
+                            </div>
+                        </RouterLink>
                         <div class="hover:cursor-pointer" @click="store.logout">
                             Logout
                         </div>
