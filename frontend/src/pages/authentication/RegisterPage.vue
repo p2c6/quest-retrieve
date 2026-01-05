@@ -5,6 +5,36 @@ import people from "@/assets/people.png";
 import { useAuthStore } from '@/stores/auth';
 import { onBeforeUnmount, reactive } from 'vue';
 
+import * as yup from 'yup';
+
+let schema = yup.object({
+    last_name: yup
+        .string()
+        .required('last name is required.'),
+    first_name: yup
+        .string()
+        .required('first name is required.'),
+    contact_no: yup
+        .string()
+        .required('contact number is required.')
+        .matches(/^[0-9]+$/, {
+            message: 'contact number must be digits only',
+            excludeEmptyString: true,
+        }),
+    birthday: yup
+        .string()
+        .required('date of birth is required.'),
+    email: yup
+        .string()
+        .email('invalid e-mail format.')
+        .required('e-mail is required.'),
+    password: yup
+        .string()
+        .required('password is required.'),
+})
+
+const yupErrors = reactive({})
+
 const authStore = useAuthStore();
 
 const formData = reactive({
@@ -15,6 +45,28 @@ const formData = reactive({
     birthday: '',
     contact_no: '',
 });
+
+const register = async(formData) => {
+    yupErrors.email = '';
+    yupErrors.password = '';
+    yupErrors.last_name = '';
+    yupErrors.first_name = '';
+    yupErrors.birthday = '';
+    yupErrors.contact_no = '';
+
+    try {
+        await schema.validate(formData, {abortEarly: false })
+        authStore.register(formData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+
+        console.log('yuperrors', yupErrors)
+    }
+}
 
 onBeforeUnmount(() => {
     authStore.errors = null;
@@ -36,7 +88,7 @@ onBeforeUnmount(() => {
                 </div>
 
                 <div class="container mx-auto w-auto mt-10">
-                    <form @submit.prevent="authStore.register(formData)">
+                    <form @submit.prevent="register(formData)">
                         <div>
                             <div class="mb-5">
                                 <h1 class="text-primary font-medium text-lg">Create your account</h1>
@@ -47,11 +99,13 @@ onBeforeUnmount(() => {
                                 <label class="text-primary text-sm font-medium">Last Name</label>
                                 <input type="text" v-model="formData.last_name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.last_name" class="text-red-500 text-xs">{{ authStore.errors.last_name[0] }}</p>
+                                <p v-else="yupErrors.last_name" class="text-red-500 text-xs">{{ yupErrors.last_name }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">First Name</label>
                                 <input type="text" v-model="formData.first_name" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.first_name" class="text-red-500 text-xs">{{ authStore.errors.first_name[0] }}</p>
+                                <p v-else="yupErrors.first_name" class="text-red-500 text-xs">{{ yupErrors.first_name }}</p>
                             </div>
                         </div>
 
@@ -59,22 +113,26 @@ onBeforeUnmount(() => {
                                 <label class="text-primary text-sm font-medium">Contact Number</label>
                                 <input type="text" v-model="formData.contact_no" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.contact_no" class="text-red-500 text-xs">{{ authStore.errors.contact_no[0] }}</p>
+                                <p v-else="yupErrors.contact_no" class="text-red-500 text-xs">{{ yupErrors.contact_no }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Date of birth</label>
                                 <br>
                                 <input type="date" v-model="formData.birthday" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded"  />
                                 <p v-if="authStore.errors && authStore.errors.birthday" class="text-red-500 text-xs">{{ authStore.errors.birthday[0] }}</p>
+                                <p v-else="yupErrors.birthday" class="text-red-500 text-xs">{{ yupErrors.birthday }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Email</label>
                                 <input type="text" v-model="formData.email" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.email" class="text-red-500 text-xs">{{ authStore.errors.email[0] }}</p>
+                                <p v-else="yupErrors.email" class="text-red-500 text-xs">{{ yupErrors.email }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Password</label>
                                 <input type="password" v-model="formData.password" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.password" class="text-red-500 text-xs">{{ authStore.errors.password[0] }}</p>
+                                <p v-else="yupErrors.password" class="text-red-500 text-xs">{{ yupErrors.password }}</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-2"></div>
                             <div class="mt-2 flex flex-row items-center gap-1">
