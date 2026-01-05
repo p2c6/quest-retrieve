@@ -30,6 +30,8 @@ let schema = yup.object({
         .required('e-mail is required.'),
     password: yup
         .string()
+        .min(8, 'password is too short.')
+        .max(15, 'password is too long.')
         .required('password is required.'),
     password_confirmation: yup
         .string()
