@@ -4,6 +4,44 @@ import logo from "@/assets/qr-logo.png";
 import help from "@/assets/help.png";
 import { useAuthStore } from "@/stores/auth";
 import { onBeforeMount, onBeforeUnmount, reactive } from 'vue';
+import * as yup from 'yup';
+
+let schema = yup.object({
+    email: yup
+        .string()
+        .email('invalid e-mail format.')
+        .required('e-mail is required.'),
+    password: yup
+        .string()
+        .min(8, 'password is too short.')
+        .max(15, 'password is too long.')
+        .required('password is required.'),
+    password_confirmation: yup
+        .string()
+        .required('password is required.')
+        .oneOf([yup.ref('password')], 'Your passwords do not match.'),
+})
+
+const yupErrors = reactive({})
+
+const resetPassword = async(formData) => {
+    yupErrors.email = '';
+    yupErrors.password = '';
+    yupErrors.password_confirmation = '';
+
+    try {
+        await schema.validate(formData, {abortEarly: false })
+        authStore.resetPassword(formData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+
+        console.log('yuperrors', yupErrors)
+    }
+}
 
 
 const authStore = useAuthStore();
@@ -64,7 +102,7 @@ onBeforeUnmount(() => {
                             </div>
                         </div>
                     </div>
-                    <form @submit.prevent="authStore.resetPassword(formData)">
+                    <form @submit.prevent="resetPassword(formData)">
                         <div>
                             <div class="mb-6">
                                 <h1 class="text-primary font-medium text-lg">Reset Password</h1>
@@ -73,16 +111,19 @@ onBeforeUnmount(() => {
                                 <label class="text-primary text-sm font-medium">E-mail address</label>
                                 <input type="text" v-model="formData.email" class="h-8 w-full border-[1.1px] border-primary mt-2 mb-2 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.email" class="text-red-500 text-xs">{{ authStore.errors.email[0] }}</p>
+                                <p v-else="yupErrors.email" class="text-red-500 text-xs">{{ yupErrors.email }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">New Password</label>
                                 <input type="password" v-model="formData.password" class="h-8 w-full border-[1.1px] border-primary mt-2 mb-2 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.password" class="text-red-500 text-xs">{{ authStore.errors.password[0] }}</p>
+                                <p v-else="yupErrors.password" class="text-red-500 text-xs">{{ yupErrors.password }}</p>
                             </div>
                             <div>
                                 <label class="text-primary text-sm font-medium">Confirm New Password</label>
                                 <input type="password" v-model="formData.password_confirmation" class="h-8 w-full border-[1.1px] border-primary mt-2 mb-2 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.password_confirmation" class="text-red-500 text-xs">{{ authStore.errors.email[0] }}</p>
+                                <p v-else="yupErrors.password_confirmation" class="text-red-500 text-xs">{{ yupErrors.password_confirmation }}</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-5"></div>
                             <button v-if="authStore.isLoading" class="bg-secondary rounded-lg px-6 py-1 text-white mt-10 text-sm opacity-50 cursor-not-allowed" disabled>

@@ -4,6 +4,14 @@ import logo from "@/assets/qr-logo.png";
 import help from "@/assets/help.png";
 import { useAuthStore } from "@/stores/auth";
 import { onBeforeUnmount, reactive } from 'vue';
+import * as yup from 'yup';
+
+let schema = yup.object({
+    email: yup
+        .string()
+        .email('invalid e-mail format.')
+        .required('e-mail is required.'),
+})
 
 
 const authStore = useAuthStore();
@@ -11,6 +19,23 @@ const authStore = useAuthStore();
 const formData = reactive({
     email: '',
 });
+
+const yupErrors = reactive({})
+
+const forgotPassword = async(credentials) => {
+    yupErrors.email = '';
+
+    try {
+        await schema.validate(credentials, {abortEarly: false })
+        authStore.forgotPassword(formData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                yupErrors[err.path] = err.message;
+            });
+        }
+    }
+}
 
 onBeforeUnmount(() => {
     authStore.message = null;
@@ -48,7 +73,7 @@ onBeforeUnmount(() => {
                     </div>
 
                 <div class="container mx-auto w-auto md:w-96 mt-16">
-                    <form @submit.prevent="authStore.forgotPassword(formData)">
+                    <form @submit.prevent="forgotPassword(formData)">
                         <div>
                             <div class="mb-6">
                                 <h1 class="text-primary font-medium text-lg">Forgot Password</h1>
@@ -57,6 +82,7 @@ onBeforeUnmount(() => {
                                 <label class="text-primary text-sm font-medium">E-mail address</label>
                                 <input type="text" v-model="formData.email" class="h-8 w-full border-[1.1px] border-primary mt-2 mb-2 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.email" class="text-red-500 text-xs">{{ authStore.errors.email[0] }}</p>
+                                <p v-else="yupErrors.email" class="text-red-500 text-xs">{{ yupErrors.email }}</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-5"></div>
                             <p class="mt-1 text-red-400 text-xs">Note: If you do not receive the e-mail within a few minutes, click the button below to send reset password link to your e-mail again.</p>
