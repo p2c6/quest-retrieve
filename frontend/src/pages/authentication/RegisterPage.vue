@@ -31,6 +31,10 @@ let schema = yup.object({
     password: yup
         .string()
         .required('password is required.'),
+    password_confirmation: yup
+        .string()
+        .required('password is required.')
+        .oneOf([yup.ref('password')], 'Your passwords do not match.'),
 })
 
 const yupErrors = reactive({})
@@ -44,6 +48,7 @@ const formData = reactive({
     first_name: '',
     birthday: '',
     contact_no: '',
+    password_confirmation: ''
 });
 
 const register = async(formData) => {
@@ -53,6 +58,7 @@ const register = async(formData) => {
     yupErrors.first_name = '';
     yupErrors.birthday = '';
     yupErrors.contact_no = '';
+    yupErrors.password_confirmation = '';
 
     try {
         await schema.validate(formData, {abortEarly: false })
@@ -133,6 +139,11 @@ onBeforeUnmount(() => {
                                 <input type="password" v-model="formData.password" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
                                 <p v-if="authStore.errors && authStore.errors.password" class="text-red-500 text-xs">{{ authStore.errors.password[0] }}</p>
                                 <p v-else="yupErrors.password" class="text-red-500 text-xs">{{ yupErrors.password }}</p>
+                            </div>
+                            <div>
+                                <label class="text-primary text-sm font-medium">Confirm Password</label>
+                                <input type="password" v-model="formData.password_confirmation" class="h-8 w-full border-[1.1px] border-primary mt-1 mb-1 p-2 rounded">
+                                <p v-if="yupErrors.password_confirmation" class="text-red-500 text-xs">{{ yupErrors.password_confirmation }}</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-2"></div>
                             <div class="mt-2 flex flex-row items-center gap-1">
