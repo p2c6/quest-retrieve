@@ -177,6 +177,9 @@ onUnmounted(() => {
   if (previewUrl.value?.startsWith('blob:')) {
     URL.revokeObjectURL(previewUrl.value)
   }
+  
+  profileStore.message = null;
+  profileStore.errors = null;
 })
 
 const nameInitial = computed(() => {
