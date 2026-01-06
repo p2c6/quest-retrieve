@@ -1,12 +1,11 @@
 import { defineStore } from "pinia"
-import { apiClient, webClient } from "@/config/http";
-import type { User, UserForgotPassword, UserLogin, UserRegistration, UserResetPassword } from "@/types";
-import { computed, ref } from "vue";
+import { apiClient } from "@/config/http";
+import type { User} from "@/types";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 
 export const useFileUploadStore = defineStore('file-upload', () => {
-    const router = useRouter();
     const user = ref<User | null>(null);
     const isLoading = ref<boolean | null>(null);
     const errors = ref<any | null>(null);
@@ -64,53 +63,6 @@ export const useFileUploadStore = defineStore('file-upload', () => {
         }
     }
 
-    const register = async(payload: UserRegistration): Promise<any> => {
-        isLoading.value = true;
-        errors.value = null;
-
-        try { 
-            const response = await apiClient.post('/authentication/register', payload);
-
-            if (response.status === 201) {
-                router.push({name: 'email.verification'})
-            }
-
-        } catch(error: any) {
-            if (error.status === 422) {
-                console.log('Validation error', error);
-                errors.value = error.response.data.errors;
-                return;
-            }
-            
-            console.log("Login error: " , error);
-        } finally {
-            isLoading.value = false;
-        }
-    }
-
-    const logout = async(): Promise<void> => {
-        isLoading.value = true;
-
-        try { 
-            const response = await apiClient.post('/authentication/logout');
-
-            if (response.status === 200) {
-                user.value = null;
-                router.push({name: 'home'});
-            }
-
-        } catch(error: any) {
-            if (error.status === 422) {
-                console.log('validation error');
-                return;
-            }
-            
-            console.log("Login error: " , error);
-        } finally {
-            isLoading.value = false;
-        }
-    }
-
     return {
         /*
             @Variables
@@ -124,8 +76,6 @@ export const useFileUploadStore = defineStore('file-upload', () => {
             @Functions
         */
         uploadTemporaryFile,
-        register,
-        logout,
         getUser,
     }
 })

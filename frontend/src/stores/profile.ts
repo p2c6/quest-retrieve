@@ -1,8 +1,6 @@
 import { apiClient } from "@/config/http";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-
 
 export const useProfileStore = defineStore('profile', () => {
     const users = ref<object>({});
