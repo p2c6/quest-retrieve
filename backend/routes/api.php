@@ -73,6 +73,7 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
         //User Profile
         Route::put('/profile/{user}', [UserProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password/{user}', [UserProfileController::class, 'updatePassword'])->name('profile.password.update');
 
         //Temporary File Upload
         Route::prefix('temporary-file')->name('temporary-file.')->group(function() {
