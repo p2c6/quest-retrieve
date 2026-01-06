@@ -26,7 +26,6 @@ export const useProfileStore = defineStore('profile', () => {
 
             if (response.status === 200) {
                 message.value = response.data.message;
-                // router.push({name: 'users.list'});
             }
 
         } catch(error: any) {
@@ -45,21 +44,16 @@ export const useProfileStore = defineStore('profile', () => {
 
     try {
 
-        if (!payload.password || payload.length === 0 || payload.password === '') {
-            delete payload.password;
-        }
-
-        const response = await apiClient.put(`/users/${payload.id}`, payload)
+        const response = await apiClient.put(`/profile/password/${payload.id}`, payload)
 
         if (response.status === 200) {
             message.value = response.data.message;
-            router.push({name: 'users.list'});
         }
 
     } catch(error: any) {
         if (error.status == 422) {
             console.log('Validation error', error);
-            errors.value = error.response.data.errors;
+            errors.value = { current_password: error.response.data.message }
             return;
         }
 

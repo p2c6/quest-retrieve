@@ -101,11 +101,61 @@ const onFileChange = async(event) => {
   formData.avatar = fileUploadStore.fileName;
 }
 
+let changePasswordSchema = yup.object({
+    current_password: yup.string().required('current password is required.'),
+    password: yup
+        .string()
+        .required('password is required.')
+        .transform((value) => (value === '' ? undefined : value)) 
+        .min(8, 'password is too short.')
+        .max(15, 'password is too long.'),
+    password_confirmation: yup
+        .string()
+        .when('password', {
+            is: (val) => val && val.trim().length > 0,
+            then: (changePasswordSchema) =>
+            changePasswordSchema
+                .required('password confirmation is required.')
+                .oneOf([yup.ref('password')], 'Your passwords do not match.'),
+            otherwise: (changePasswordSchema) => changePasswordSchema.notRequired(),
+        }),
+})
+
+const passwordFormData = reactive({
+    id: '',
+    current_password: '',
+    password: '',
+    password_confirmation: '',
+});
+
+
+const changePasswordYupErrors = reactive({})
+
+const updatePassword = async(passwordFormData) => {
+    changePasswordYupErrors.current_password = '';
+    changePasswordYupErrors.password = '';
+    changePasswordYupErrors.password_confirmation = '';
+    profileStore.errors = null;
+
+    try {
+        await changePasswordSchema.validate(passwordFormData, {abortEarly: false })
+        await profileStore.updateProfilePassword(passwordFormData)
+    } catch(validationError) {
+        if (validationError.inner) {
+            validationError.inner.forEach(err => {
+                changePasswordYupErrors[err.path] = err.message;
+            });
+        }
+    }
+}
+
 onMounted(async () => {
   await authStore.getUser()
   if (!currentUser.value) return
 
   const profile = currentUser.value.profile
+
+  passwordFormData.id = currentUser.value.id
 
   formData.id = currentUser.value.id
   formData.email = currentUser.value.email
@@ -138,11 +188,10 @@ const resolveAvatar = (path) => {
   if (!path) return null
   return `${import.meta.env.VITE_API_URL}/storage/${path}`
 }
-
 </script>
 
 <template>
-        <div class="mt-5 md:mt-5">
+        <div class="my-2 md:mt-5">
             <div class="container mx-auto grid grid-cols-1 place-items-start w-auto md:w-[620px]">
                 <div v-if="profileStore.message" class="w-full bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mb-5" role="alert">
                         <div class="flex">
@@ -236,6 +285,48 @@ const resolveAvatar = (path) => {
                                     <div>
                                 </div>
                                     <button class="bg-secondary rounded-lg w-full py-1 text-white mt-5 text-sm md:w-20">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+            
+            <div class="container my-2 mx-auto grid grid-cols-1 place-items-start w-auto md:w-[620px]">
+                <Card class="p-5 flex flex-row mt-2">
+                    <div class="overflow-x-auto w-full">
+                        <div class="flex flex-col gap-2 justify-between items-center md:flex-row">
+                            <div class="text-center md:text-left">
+                                <p class="md:text-left text-primary font-medium">Settings</p>
+                                <p class="text-tertiary md:text-left text-xs md:text-sm">Update your password.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <form @submit.prevent="updatePassword(passwordFormData)">
+                                <div>
+                                    <div>
+                                            <div>
+                                                <label class="text-primary text-sm font-medium">Current Password</label>
+                                                <input type="password" v-model="passwordFormData.current_password" :class="`h-8 w-full border-[1.1px] border-${changePasswordYupErrors.current_password || (profileStore.errors && profileStore.errors.current_password) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
+                                                <p v-if="changePasswordYupErrors.current_password" class="text-red-500 text-xs">{{ changePasswordYupErrors.current_password }}</p>
+                                                <p v-else-if="profileStore.errors && profileStore.errors.current_password" class="text-red-500 text-xs">{{ profileStore.errors.current_password }}</p>
+                                            </div>
+                                            <div>
+                                                <label class="text-primary text-sm font-medium">New Password</label>
+                                                <input type="password" v-model="passwordFormData.password" :class="`h-8 w-full border-[1.1px] border-${changePasswordYupErrors.password || (profileStore.errors && profileStore.errors.password) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
+                                                <p v-if="changePasswordYupErrors.password" class="text-red-500 text-xs">{{ changePasswordYupErrors.password }}</p>
+                                                <p v-else-if="profileStore.errors && profileStore.errors.password" class="text-red-500 text-xs">{{ profileStore.errors.password[0] }}</p>
+                                            </div>
+                                            <div>
+                                                <label class="text-primary text-sm font-medium">Confirm Password</label>
+                                                <input type="password" v-model="passwordFormData.password_confirmation" :class="`h-8 w-full border-[1.1px] border-${changePasswordYupErrors.password_confirmation || (profileStore.errors && profileStore.errors.password_confirmation) ? 'red-500' : 'primary' } mt-1 mb-1 p-2 rounded`">
+                                                <p v-if="changePasswordYupErrors.password_confirmation" class="text-red-500 text-xs">{{ changePasswordYupErrors.password_confirmation }}</p>
+                                                <p v-else-if="profileStore.errors && profileStore.errors.password_confirmation" class="text-red-500 text-xs">{{ profileStore.errors.password_confirmation[0] }}</p>
+                                            </div>
+                                    </div>
+                                    <div>
+                                </div>
+                                    <button class="bg-secondary rounded-lg w-full py-1 text-white mt-5 text-sm md:w-20">Update</button>
                                 </div>
                             </form>
                         </div>
