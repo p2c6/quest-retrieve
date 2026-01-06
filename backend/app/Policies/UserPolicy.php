@@ -37,7 +37,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->role_id === UserType::ADMINISTRATOR;
+        return $user->role_id === UserType::ADMINISTRATOR || $user->id === $model->id;
     }
 
     /**
