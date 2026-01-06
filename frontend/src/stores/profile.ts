@@ -16,8 +16,6 @@ export const useProfileStore = defineStore('profile', () => {
     const updateProfileDetails = async(payload: any) => {
         isLoading.value = false;
 
-        console.log(payload);
-
         try {
 
             if (!payload.password || payload.length === 0 || payload.password === '') {
@@ -28,7 +26,7 @@ export const useProfileStore = defineStore('profile', () => {
 
             if (response.status === 200) {
                 message.value = response.data.message;
-                router.push({name: 'users.list'});
+                // router.push({name: 'users.list'});
             }
 
         } catch(error: any) {

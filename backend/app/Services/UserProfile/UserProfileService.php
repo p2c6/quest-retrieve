@@ -4,10 +4,13 @@ namespace App\Services\UserProfile;
 
 use App\Models\Profile;
 use App\Models\User;
+use App\Services\FileUpload\PermanentFileUploadService;
 use Illuminate\Validation\ValidationException;
 
 class UserProfileService
 {
+    public function __construct(protected PermanentFileUploadService $service) {}
+
     /**
      * Store user profile upon registration.
      * 
@@ -57,6 +60,7 @@ class UserProfileService
                     'first_name' => $request->first_name,
                     'birthday' => $request->birthday,
                     'contact_no' => $request->contact_no,
+                    'avatar' => $this->service->movePermanentFile($request->id, $request->avatar)
                 ]
             );
 

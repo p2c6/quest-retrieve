@@ -11,6 +11,7 @@ export const useFileUploadStore = defineStore('file-upload', () => {
     const isLoading = ref<boolean | null>(null);
     const errors = ref<any | null>(null);
     const message = ref(null);
+    const fileName = ref<Object | null>(null);
 
     const getUser = async():Promise<void> => {
         isLoading.value = true;
@@ -39,10 +40,7 @@ export const useFileUploadStore = defineStore('file-upload', () => {
             });
 
             if (response.status === 200) {
-                console.log(response);
-                // await getUser();
-                
-                // router.push({name: 'public-user.home'});
+                fileName.value = response.data.file_path;
             }
 
         } catch(error: any) {
@@ -113,96 +111,15 @@ export const useFileUploadStore = defineStore('file-upload', () => {
         }
     }
 
-    const verifyEmail = async(url: string): Promise<any> => {
-        isLoading.value = true;
-
-        try {
-            const response = await webClient.get(url);
-
-            if (response.status === 200) {
-                await getUser();
-            }
-        } catch(error) {
-            console.log(error)
-        } finally {
-            isLoading.value = false;
-        }
-        
-    }
-
-    const resendEmailVerificationLink = async():Promise<any> => {
-        isLoading.value = true;
-
-        try {
-            const response = await webClient.post('/api/verification/email/verification-notification');
-
-            if (response.status === 200) {
-                console.log('response', response.data);
-            }
-        } catch (error) {
-            console.log("Resend email verification error: " , error)
-        } finally {
-            isLoading.value = false;
-        }
-    }
-
-    const forgotPassword = async(payload: UserForgotPassword):Promise<any> => {
-        isLoading.value = true;
-
-        try {
-            const response = await webClient.post('/api/forgot-password', payload);
-
-            if (response.status === 200) {
-                message.value = response.data.message;
-            }
-        } catch (error: any) {
-            if (error.status === 422) {
-                console.log('Validation error', error);
-                errors.value = error.response.data.errors;
-                return;
-            }
-
-            console.log("Forgot password error: " , error)
-        } finally {
-            isLoading.value = false;
-        }
-    }
-
-    const resetPassword = async(payload: UserResetPassword):Promise<any> => {
-        isLoading.value = true;
-
-        try {
-            const response = await webClient.post('/api/reset-password', payload);
-
-            if (response.status === 200) {
-                message.value = response.data.message;
-            }
-        } catch (error: any) {
-            if (error.status === 422) {
-                console.log('Validation error', error);
-                errors.value = error.response.data.errors ?? error.response.data;
-                return;
-            }
-
-            console.log("Reset password error: " , error)
-        } finally {
-            isLoading.value = false;
-        }
-    }
-
-    const fullName = computed(() => {
-        return user.value ? user.value.profile?.first_name.concat(" ", user.value.profile?.last_name) : '';
-    })
-
     return {
         /*
             @Variables
         */
         user,
-        fullName,
         isLoading,
         message,
         errors,
+        fileName,
         /*
             @Functions
         */
@@ -210,9 +127,5 @@ export const useFileUploadStore = defineStore('file-upload', () => {
         register,
         logout,
         getUser,
-        verifyEmail,
-        resendEmailVerificationLink,
-        forgotPassword,
-        resetPassword,
     }
 })
