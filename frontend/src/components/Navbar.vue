@@ -28,9 +28,11 @@ const collapseNav = () => collapse.value = !collapse.value;
         <div :class="`bg-indigo-800`">
                 <div :class="`${collapse ? 'block' : 'hidden'} mx-6 text-white p-2 gap-1 md:flex flex-row justify-between`" v-if="store.user?.email_verified_at && store.user?.profile?.first_name">
                     <div class="flex flex-col md:flex-row gap-2">
-                        <div>
-                            Home
-                        </div>
+                           <RouterLink :to="{name: 'home'}">
+                               <div>
+                                   Home
+                                </div>
+                            </RouterLink>
                         <div>
                             <RouterLink :to="{name: 'posts.list'}">
                                 Posts
