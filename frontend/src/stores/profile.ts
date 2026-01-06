@@ -5,7 +5,6 @@ import { useRouter } from "vue-router";
 
 
 export const useProfileStore = defineStore('profile', () => {
-    const router = useRouter();
     const users = ref<object>({});
     const isLoading = ref<boolean | null>(null);
     const errors = ref<any | null>(null);

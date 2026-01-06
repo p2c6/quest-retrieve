@@ -5,7 +5,7 @@ import { useFileUploadStore } from '@/stores/file-upload';
 import { useAuthStore } from '@/stores/auth';
 import { useProfileStore } from '@/stores/profile';
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink } from 'vue-router';
 import * as yup from 'yup';
 
 let schema = yup.object({
