@@ -5,6 +5,7 @@ namespace App\Services\UserProfile;
 use App\Models\Profile;
 use App\Models\User;
 use App\Services\FileUpload\PermanentFileUploadService;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserProfileService
@@ -74,6 +75,40 @@ class UserProfileService
             info("Error on user register: " . $th->getMessage());
             return response()->json([
                 'message' => 'An error occurred during user profile update.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Update password on user profile.
+     * 
+     * @param App\Models\User $user The user profile needs to be updated.
+     * @param \Illuminate\Http\Request $request The HTTP request object containing user data.
+     * @return mixed
+     */
+    public function updatePassword(User $user, $request): mixed
+    {
+        try {
+            $hashedPassword = $user->password;
+
+            if (! Hash::check($request->current_password, $hashedPassword)) {
+                return response()->json(['message' => 'Current password is incorrect. Please try again.'], 422);
+            }
+
+            $user->update([
+                'password' => bcrypt($request->password)
+            ]);
+
+            return response()->json([
+                'message' => 'Successfully Password Updated.'
+            ], 200);
+        } catch (ValidationException $validationException) {
+            info("Validation Error on user profile password update: " . $validationException->getMessage());
+            return response()->json(['errors' => $validationException->errors()], 422);
+        } catch (\Throwable $th) {
+            info("Error on user register: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during user profile password update.'
             ], 500);
         }
     }
