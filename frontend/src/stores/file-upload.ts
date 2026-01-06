@@ -2,8 +2,6 @@ import { defineStore } from "pinia"
 import { apiClient } from "@/config/http";
 import type { User} from "@/types";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-
 
 export const useFileUploadStore = defineStore('file-upload', () => {
     const user = ref<User | null>(null);

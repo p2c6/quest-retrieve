@@ -1,5 +1,4 @@
 import { apiClient } from "@/config/http";
-import type { DeleteCategory, GetCategory, StoreCategory, UpdateCategory } from "@/types/category-types";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -13,7 +12,7 @@ export const useSubcategoryStore = defineStore('subcategory', () => {
     const keyword = ref(null);
     const subcategoriesDropdown = ref(null);
     const column = ref<string | null>(null);
-    const currentColumn = ref('name');
+    const currentColumn = ref('category_name');
     const currentDirection = ref('asc');
 
     const getAllSubcategories = async(page = 1) => {

@@ -77,7 +77,6 @@ const fileUploadStore = useFileUploadStore()
 
 const currentUser = computed(() => authStore.user)
 
-
 const triggerFileInput = () => {
   fileInput.value?.click()
 }
@@ -127,7 +126,6 @@ const passwordFormData = reactive({
     password: '',
     password_confirmation: '',
 });
-
 
 const changePasswordYupErrors = reactive({})
 
