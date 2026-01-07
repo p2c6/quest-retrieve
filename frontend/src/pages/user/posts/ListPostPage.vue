@@ -204,7 +204,7 @@ onBeforeUnmount(() => {
                                         <div v-show="post.status === 'On Processing'" class="text-primary cursor-pointer" @click="openMarkAsDonePostConfirmation(post.id)">
                                             <i class="text-primary pi pi-check-circle text-gray-500 cursor-pointer"> </i> Mark As Done
                                         </div>
-                                        <div  v-show="post.status !== 'On Processing'" class="flex flex-col gap-2 md:flex-row">
+                                        <div v-if="!['On Processing', 'Finished'].includes(post.status)" class="flex flex-col gap-2 md:flex-row">
                                             <RouterLink :to="{name: 'posts.edit', params:{ id: post.id } }" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                 <i class="text-primary pi pi-pen-to-square cursor-pointer"> Edit</i>
                                             </RouterLink>
