@@ -65,7 +65,9 @@ class UserService
      */
     public function show(User $user): UserResource
     {
-        return new UserResource(User::findOrFail($user->id));
+        $userWithProfile = User::with('profile')->findOrFail($user->id);
+
+        return new UserResource($userWithProfile);
     }
     
     /**
@@ -90,6 +92,11 @@ class UserService
             $this->userProfileService->storeUserProfile($user->id, $request);
 
             DB::commit();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($user)
+                ->log('Admin created user');
 
             return response()->json(['message' => 'Successfully User Created.'], 201);
 
@@ -118,11 +125,34 @@ class UserService
         try {
             DB::beginTransaction();
 
+            $oldData = (object) [
+                'email' => $user->email,
+                'role_id' => $user->role_id,
+                ...$user->profile->only(['last_name', 'first_name', 'contact_no', 'birthday']),
+            ];
+
             $user->update($request->validated());
 
             $this->userProfileService->update($user, $request);
 
+            $user->refresh(); 
+
+            $newData = (object) [
+                'email' => $user->email,
+                'role_id' => $user->role_id,
+                ...$user->profile->only(['last_name', 'first_name', 'contact_no', 'birthday']),
+            ];
+
             DB::commit();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($user)
+                ->withProperties([
+                    'old' => $oldData,
+                    'new' => $newData
+                ])
+                ->log('Admin updated a user');
             
             return response()->json(['message' => 'Successfully User Updated.'], 200);
             
@@ -152,9 +182,22 @@ class UserService
                 return response()->json(['message' => 'Cannot delete user. There are posts associated with this user.'], 409);
             }
 
+            $deletedData = (object) [
+                'email' => $user->email,
+                ...$user->profile->makeHidden('full_name')->toArray(),
+            ];
+
             $user->profile()->delete();
             
             $user->delete();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($user)
+                ->withProperties([
+                    'deleted' => $deletedData,
+                ])
+                ->log("Admin deleted user '{$user->profile->full_name}'");
     
             return response()->json(['message' => 'Successfully User Deleted.'], 200);
         } catch (\Throwable $th) {

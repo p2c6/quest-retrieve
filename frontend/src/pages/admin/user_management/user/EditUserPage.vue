@@ -89,10 +89,10 @@ onMounted(async() => {
 
         formData.id = id;
         formData.email = user.value.email;
-        formData.last_name = user.value.last_name;
-        formData.first_name = user.value.first_name;
-        formData.birthday = user.value.birthday;
-        formData.contact_no = user.value.contact_no;
+        formData.last_name = user.value.profile.last_name;
+        formData.first_name = user.value.profile.first_name;
+        formData.birthday = user.value.profile.birthday.original;
+        formData.contact_no = user.value.profile.contact_no;
         formData.role_id = user.value.role_id;
     }
 })
