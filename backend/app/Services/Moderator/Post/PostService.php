@@ -55,6 +55,11 @@ class PostService
                 'status' => PostStatus::ON_PROCESSING
             ]);
 
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($post)
+                ->log("Moderator approved a post");
+
             return response()->json(['message' => 'Successfully Post Approved'], 200);
         } catch(\Throwable $th) {
             info("Error on post approve: " . $th->getMessage());
@@ -76,6 +81,11 @@ class PostService
             $post->update([
                 'status' => PostStatus::REJECT
             ]);
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($post)
+                ->log("Moderator rejected a post");
 
             return response()->json(['message' => 'Successfully Post Rejected'], 200);
         } catch(\Throwable $th) {
