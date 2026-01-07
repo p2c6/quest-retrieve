@@ -16,7 +16,7 @@ const columns = [
         sortable: true
     },
     {
-        key: "profile.birthday",
+        key: "profile.birthday.for_human",
         label: "Birthday",
         sortable: true
     },
