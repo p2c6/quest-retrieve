@@ -39,6 +39,10 @@ class ResetPasswordService implements ResetPasswordInterface
             });
 
             if ($status === Password::PASSWORD_RESET) {
+                activity()
+                    ->performedOn($request->user())
+                    ->log('User password reset');
+
                 return response()->json(['message' => __($status)], 200);
             }
 

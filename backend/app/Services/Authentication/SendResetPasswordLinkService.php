@@ -2,6 +2,7 @@
 
 namespace App\Services\Authentication;
 
+use App\Models\User;
 use App\Services\Contracts\Authentication\SendResetPasswordLinkInterface;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
@@ -21,9 +22,16 @@ class SendResetPasswordLinkService implements SendResetPasswordLinkInterface
             $status = Password::sendResetLink(
                 $request->only('email')
             );
-    
-    
+
+            $user = User::query()->where('email', $request->email)->first();
+
             if ($status === Password::RESET_LINK_SENT) {
+                
+                activity()
+                ->causedBy($user)
+                ->performedOn($user)
+                ->log('User request reset password link');
+
                 return response()->json(['message' => __($status)], 200);
             }
 

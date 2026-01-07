@@ -18,6 +18,10 @@ class EmailVerificationService implements EmailVerificationInterface
         try {
             $request->user()->sendEmailVerificationNotification();
 
+            activity()
+                ->performedOn($request->user())
+                ->log('User request verification link');
+
             return response()->json(['message' => 'Verification link sent. Please check your e-mail.'], 200);
         } catch(\Throwable $th) {
             info("Error on sending email verification notification: " . $th->getMessage());

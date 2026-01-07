@@ -22,10 +22,15 @@ class LoginService implements LoginInterface
             if (Auth::attempt($request->validated())) {
                 $request->session()->regenerate();
 
+                activity()
+                    ->causedBy($request->user())
+                    ->performedOn($request->user())
+                    ->log('User logged in');
+
                 return response()->json([
                     'user' => $request->user(),
                     'message' => 'Successfully logged in.'
-                ], 200);
+                ], 200);        
             }
 
             return response()->json([

@@ -22,6 +22,11 @@ class LogoutService implements LogoutInterface
 
             $request->session()->invalidate(); 
             $request->session()->regenerateToken();
+
+            activity()
+                ->causedBy($request->user())
+                ->performedOn($request->user())
+                ->log('User logged out');
             
             return response()->json([
                 'message' => 'Successfully logged out.'

@@ -29,6 +29,10 @@ class VerifyService implements VerifyInterface
 
             DB::commit();
 
+            activity()
+                ->performedOn($request->user())
+                ->log('User request verification link');
+
             return response()->json(['message' => 'Successfully Verified.'], 200);
         } catch(\Throwable $th) {
             DB::rollBack();

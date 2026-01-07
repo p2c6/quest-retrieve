@@ -56,6 +56,10 @@ class RegisterService implements RegisterInterface
 
             Auth::login($user);
             
+            activity()
+                ->performedOn($user)
+                ->log('User registered');
+            
             return response()->json([
                 'message' => 'Successfully registered an account.'
             ], 201);
