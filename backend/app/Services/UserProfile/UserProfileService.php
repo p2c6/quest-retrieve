@@ -89,12 +89,6 @@ class UserProfileService
     public function updatePassword(User $user, $request): mixed
     {
         try {
-            $hashedPassword = $user->password;
-
-            if (! Hash::check($request->current_password, $hashedPassword)) {
-                return response()->json(['message' => 'Current password is incorrect. Please try again.'], 422);
-            }
-
             $user->update([
                 'password' => bcrypt($request->password)
             ]);
