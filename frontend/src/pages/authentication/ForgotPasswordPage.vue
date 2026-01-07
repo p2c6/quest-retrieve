@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
                             <div>
                                 <label class="text-primary text-sm font-medium">E-mail address</label>
                                 <input type="text" v-model="formData.email" class="h-8 w-full border-[1.1px] border-primary mt-2 mb-2 p-2 rounded">
-                                <p v-if="authStore.errors && authStore.errors.email" class="text-red-500 text-xs">{{ authStore.errors.email[0] }}</p>
+                                <p v-if="authStore.errors && authStore.errors.email" class="text-red-500 text-xs">{{ authStore.errors.email }}</p>
                                 <p v-else="yupErrors.email" class="text-red-500 text-xs">{{ yupErrors.email }}</p>
                             </div>
                             <div class="border-t-[1.1px] border-gray w-full mt-5"></div>

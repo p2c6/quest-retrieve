@@ -153,7 +153,7 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (error: any) {
             if (error.status === 422) {
                 console.log('Validation error', error);
-                errors.value = error.response.data.errors;
+                errors.value = { email: error.response.data.message }
                 return;
             }
 

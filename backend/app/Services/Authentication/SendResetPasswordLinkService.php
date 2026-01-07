@@ -25,6 +25,12 @@ class SendResetPasswordLinkService implements SendResetPasswordLinkInterface
 
             $user = User::query()->where('email', $request->email)->first();
 
+            if (! $user) {
+                return response()->json([
+                    'message' => 'E-mail not registered. Please try again.'
+                ], 422);
+            }
+
             if ($status === Password::RESET_LINK_SENT) {
                 
                 activity()
