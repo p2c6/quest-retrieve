@@ -63,7 +63,12 @@ class RoleService
     public function store($request)
     {
         try {
-            Role::create(['name' => $request->name]);
+            $role = Role::create(['name' => $request->name]);
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($role)
+                ->log('Admin created a role');
 
             return response()->json(['message' => 'Successfully Role Created.'], 201);
 
@@ -89,7 +94,20 @@ class RoleService
     public function update($role, $request)
     {
         try {
+            $oldData = $role->only('name');
+
             $role->update(['name' => $request->name]);
+
+            $newData = $role->only('name');
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($role)
+                ->withProperties([
+                    'old' => $oldData,
+                    'new' => $newData
+                ])
+                ->log('Admin updated a role');
 
             return response()->json(['message' => 'Successfully Role Updated.'], 200);
             
@@ -116,8 +134,18 @@ class RoleService
             if (User::where('role_id', $role->id)->exists()) {
                 return response()->json(['message' => 'Cannot delete role. There are users associated with this role.'], 409);
             }
+
+            $deletedData = $role->only(['id', 'name']);
             
             $role->delete();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($role)
+                    ->withProperties([
+                    'deleted' => $deletedData
+                ])
+                ->log("Admin deleted role '{$role->name}'");
     
             return response()->json(['message' => 'Successfully Role Deleted.'], 200);
         } catch (\Throwable $th) {

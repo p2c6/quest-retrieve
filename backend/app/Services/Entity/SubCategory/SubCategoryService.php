@@ -81,7 +81,12 @@ class SubCategoryService
                 return response()->json(['message' => 'Cannot store subcategory. Category not found.'], 404);
             }
 
-            Subcategory::create(['category_id' => $request->category_id, 'name' => $request->name]);
+            $subCategory = Subcategory::create(['category_id' => $request->category_id, 'name' => $request->name]);
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($subCategory)
+                ->log('Admin created a subcategory');
 
             return response()->json(['message' => 'Successfully Subcategory Created.'], 201);
 
@@ -111,7 +116,20 @@ class SubCategoryService
                 return response()->json(['message' => 'Cannot update subcategory. Category not found.'], 404);
             }
 
+            // $oldData = $subCategory->only(['category_id', 'name']);
+
             $subCategory->update(['category_id' => $request->category_id, 'name' => $request->name]);
+
+            // $newData = $subCategory->only(['category_id', 'name']);
+
+            // activity()
+            //     ->causedBy(auth()->user())
+            //     ->performedOn($subCategory)
+            //     ->withProperties([
+            //         'old' => $oldData,
+            //         'new' => $newData
+            //     ])
+            //     ->log('Admin updated a subcategory');
 
             return response()->json(['message' => 'Successfully Subcategory Updated.'], 200);
             
@@ -140,8 +158,18 @@ class SubCategoryService
                     'message' => 'Cannot delete subcategory. There are posts associated with this subcategory.'
                 ], 409);
             }
+
+            $deletedData = $subCategory->only(['id', 'category_id', 'name']);
         
             $subCategory->delete();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($subCategory)
+                 ->withProperties([
+                    'deleted' => $deletedData
+                ])
+                ->log("Admin deleted subcategory '{$subCategory->name}'");
         
             return response()->json([
                 'message' => 'Successfully Subcategory Deleted.'

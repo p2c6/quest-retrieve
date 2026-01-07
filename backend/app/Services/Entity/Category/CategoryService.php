@@ -63,7 +63,12 @@ class CategoryService
     public function store($request)
     {
         try {
-            Category::create(['name' => $request->name]);
+            $category = Category::create(['name' => $request->name]);
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($category)
+                ->log('Admin created a category');
 
             return response()->json(['message' => 'Successfully Category Created.'], 201);
 
@@ -86,10 +91,20 @@ class CategoryService
      * 
      * @return mixed
      */
-    public function update($Category, $request)
+    public function update($category, $request)
     {
         try {
-            $Category->update(['name' => $request->name]);
+            $oldData = $category->only('name');
+
+            $category->update(['name' => $request->name]);
+
+            $newData = $category->only('name');
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($category)
+                ->withProperties(['old' => $oldData, 'new' => $newData])
+                ->log('Admin updated a category');
 
             return response()->json(['message' => 'Successfully Category Updated.'], 200);
             
@@ -116,8 +131,18 @@ class CategoryService
             if ($this->categoryHasRecord($category->id)) {
                 return response()->json(['message' => 'Cannot delete category. There are subcategories associated with this category.'], 409);
             }
+
+            $deletedData = $category->only(['id', 'name']);
             
             $category->delete();
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($category)
+                    ->withProperties([
+                    'deleted' => $deletedData
+                ])
+                ->log("Admin deleted category '{$category->name}'");
     
             return response()->json(['message' => 'Successfully Category Deleted.'], 200);
         } catch (\Throwable $th) {
