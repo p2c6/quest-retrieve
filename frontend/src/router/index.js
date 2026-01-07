@@ -111,6 +111,7 @@ router.beforeEach(async (to, from, next) => {
 
   const publicUserRoutes = [
     'public-user.home',
+    'account.edit',
     'posts.list',
     'posts.create',
     'posts.edit',
