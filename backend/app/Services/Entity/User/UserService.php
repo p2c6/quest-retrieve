@@ -7,6 +7,7 @@ use App\Http\Requests\Entity\User\StoreUserRequest;
 use App\Http\Requests\Entity\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Post;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\UserProfile\UserProfileService;
 use App\Sorts\SortByFullName;
@@ -128,7 +129,7 @@ class UserService
             $oldData = (object) [
                 'email' => $user->email,
                 'role_id' => $user->role_id,
-                ...$user->profile->only(['last_name', 'first_name', 'contact_no', 'birthday']),
+                ...$user->profile->only(['last_name', 'first_name', 'contact_no', 'birthday', 'avatar']),
             ];
 
             $user->update($request->validated());
@@ -140,10 +141,12 @@ class UserService
             $newData = (object) [
                 'email' => $user->email,
                 'role_id' => $user->role_id,
-                ...$user->profile->only(['last_name', 'first_name', 'contact_no', 'birthday']),
+                ...$user->profile->only(['last_name', 'first_name', 'contact_no', 'birthday', 'avatar']),
             ];
 
             DB::commit();
+
+            $role = Role::query()->where('id', $user->role_id)->first()?->name;
 
             activity()
                 ->causedBy(auth()->user())
@@ -152,7 +155,7 @@ class UserService
                     'old' => $oldData,
                     'new' => $newData
                 ])
-                ->log('Admin updated a user');
+                ->log("{$role} updated profile");
             
             return response()->json(['message' => 'Successfully User Updated.'], 200);
             

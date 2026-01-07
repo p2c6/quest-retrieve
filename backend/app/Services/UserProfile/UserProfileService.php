@@ -99,6 +99,11 @@ class UserProfileService
                 'password' => bcrypt($request->password)
             ]);
 
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($user)
+                ->log('Public user updated password via profile');
+
             return response()->json([
                 'message' => 'Successfully Password Updated.'
             ], 200);

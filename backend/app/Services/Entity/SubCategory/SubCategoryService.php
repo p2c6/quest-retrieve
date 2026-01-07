@@ -116,20 +116,20 @@ class SubCategoryService
                 return response()->json(['message' => 'Cannot update subcategory. Category not found.'], 404);
             }
 
-            // $oldData = $subCategory->only(['category_id', 'name']);
+            $oldData = $subCategory->only(['category_id', 'name']);
 
             $subCategory->update(['category_id' => $request->category_id, 'name' => $request->name]);
 
-            // $newData = $subCategory->only(['category_id', 'name']);
+            $newData = $subCategory->only(['category_id', 'name']);
 
-            // activity()
-            //     ->causedBy(auth()->user())
-            //     ->performedOn($subCategory)
-            //     ->withProperties([
-            //         'old' => $oldData,
-            //         'new' => $newData
-            //     ])
-            //     ->log('Admin updated a subcategory');
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($subCategory)
+                ->withProperties([
+                    'old' => $oldData,
+                    'new' => $newData
+                ])
+                ->log('Admin updated a subcategory');
 
             return response()->json(['message' => 'Successfully Subcategory Updated.'], 200);
             

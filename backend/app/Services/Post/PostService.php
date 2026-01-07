@@ -84,6 +84,11 @@ class PostService
             ]);
 
             Mail::to(auth()->user()->email)->send(new PostCreated($post));
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($post)
+                ->log("User created a post");
             
             return response()->json([
                 'message' => 'Successfully Post Created.'
@@ -113,12 +118,25 @@ class PostService
     {
         try {
             if ($this->isStillPending($post->status)) {
+                $oldData = $post->only(['type', 'subcategory_id', 'incident_location', 'incident_date', 'status']);
+
                 $post->update([
                     'type' => $request->type,
                     'subcategory_id' => $request->subcategory_id,
                     'incident_location' => $request->incident_location,
                     'incident_date' => $request->incident_date,
                 ]);
+
+                $newData = $post->only(['type', 'subcategory_id', 'incident_location', 'incident_date', 'status']);
+
+                activity()
+                    ->causedBy(auth()->user())
+                    ->performedOn($post)
+                    ->withProperties([
+                        'old' => $oldData,
+                        'new' => $newData
+                    ])
+                    ->log("User updated a post");
 
                 return response()->json([
                     'message' => 'Successfully Post Updated.'
@@ -153,8 +171,18 @@ class PostService
     {
         try {
             if ($this->isStillPending($post->status)) {
+                $deletedData = $post->only(['type', 'subcategory_id', 'incident_location', 'incident_date', 'status']);
+
                 $post->delete();
-        
+
+                activity()
+                    ->causedBy(auth()->user())
+                    ->performedOn($post)
+                    ->withProperties([
+                        'deleted' => $deletedData,
+                    ])
+                    ->log("User deleted a post");
+
                 return response()->json([
                     'message' => 'Successfully Post Deleted.'
                 ], 200);
@@ -223,6 +251,11 @@ class PostService
             $post->update([
                 'status' => PostStatus::FINISHED
             ]);
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($post)
+                ->log("User mark post as done");
 
             return response()->json([
             'message' => 'Successfully Post Mark As Done.'
