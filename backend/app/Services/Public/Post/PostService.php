@@ -76,6 +76,11 @@ class PostService
             }
 
             Mail::to($post->user->email)->send(new ClaimRequested($post, $request));
+
+            activity()
+                ->performedOn($post)
+                ->withProperties(['post' => $request])
+                ->log("Public user inquired claim to a post");
             
             return response()->json([
                 'message' => 'Successfully Claim Requested.'
@@ -106,6 +111,11 @@ class PostService
             }
             
             Mail::to($post->user->email)->send(new ReturnRequested($post, $request));
+
+            activity()
+                ->performedOn($post)
+                ->withProperties(['post' => $request])
+                ->log("Public user inquired return to a post");
             
             return response()->json([
                 'message' => 'Successfully Return Requested.'
