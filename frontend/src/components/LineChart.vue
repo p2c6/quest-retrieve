@@ -11,10 +11,23 @@
   Chart.register(LineController, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
   
   const chartData = reactive({
-    labels: ['January', 'February', 'March', 'April', 'May'],
+    labels: [
+      'January', 
+      'February', 
+      'March', 
+      'April', 
+      'May', 
+      'June', 
+      'July', 
+      'August', 
+      'September', 
+      'October', 
+      'November', 
+      'December'
+    ],
     datasets: [
       {
-        label: 'Sales',
+        label: 'Registered Users',
         data: [10, 50, 25, 70, 40],
         borderColor: '#42A5F5',
         backgroundColor: 'rgba(66, 165, 245, 0.2)',

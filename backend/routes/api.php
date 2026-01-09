@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\API\v1\Admin\Entity\Category\CategoryController;
 use App\Http\Controllers\API\v1\Admin\Entity\Role\RoleController;
 use App\Http\Controllers\API\v1\Admin\Entity\SubCategory\SubCategoryController;
@@ -87,6 +88,14 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
                 Route::get('/', [PostPostController::class, 'index'])->name('index');
                 Route::put('/{post}/approve', [PostPostController::class, 'approve'])->name('approve');
                 Route::put('/{post}/reject', [PostPostController::class, 'reject'])->name('reject');
+            });
+        });
+
+        //Admin Dashboard
+        Route::prefix('admin/dashboard')->name('users.')->group(function() {
+            Route::middleware('not_public_user')->group(function() {
+                Route::get('/users/count-per-month', [DashboardController::class, 'getUsersPerMonth'])->name('count-per-month');
+                Route::get('/users/count-verified', [DashboardController::class, 'getVerifiedUsers'])->name('verified');
             });
         });
     });
