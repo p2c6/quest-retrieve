@@ -8,22 +8,21 @@
   import { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
   
   
-  const prop = defineProps({
-      data: Array
+  const props = defineProps({
+      data: Array,
+      labels: Array,
+      dataSetLabel: String,
   });
 
   // Register necessary components
   Chart.register(LineController, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
   
   const chartData = computed(() => ({
-    labels: [
-      'January','February','March','April','May','June',
-      'July','August','September','October','November','December'
-    ],
+    labels: props.labels,
     datasets: [
       {
-        label: 'Registered Users',
-        data: prop.data ?? [],
+        label: props.dataSetLabel,
+        data: props.data ?? [],
         borderColor: '#42A5F5',
         backgroundColor: 'rgba(66, 165, 245, 0.2)',
         fill: true,
