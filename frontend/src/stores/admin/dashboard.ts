@@ -3,7 +3,7 @@ import { apiClient } from "@/config/http";
 import { ref } from "vue";
 
 
-export const useDashboardStore = defineStore('dashboard', () => {
+export const useDashboardStore = defineStore('admin-dashboard', () => {
     const userCountPerMonthData = ref<number[]>([]);
     const verifiedCountData = ref<number[]>([]);
     const isLoading = ref<boolean | null>(null);

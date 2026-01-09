@@ -5,7 +5,7 @@ import PieChart from '@/components/PieChart.vue';
 import LineChart from '@/components/LineChart.vue';
 import Card from '@/components/Card.vue';
 import { onMounted } from "vue";
-import { useDashboardStore } from "@/stores/dashboard";
+import { useDashboardStore } from "@/stores/admin/dashboard";
 
 const dashboardStore = useDashboardStore();
 const pieLabels = ['Verified', 'Not Yet Verified'];
