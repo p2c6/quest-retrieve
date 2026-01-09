@@ -4,6 +4,15 @@ import explore from "@/assets/explore.png";
 import PieChart from '@/components/PieChart.vue';
 import LineChart from '@/components/LineChart.vue';
 import Card from '@/components/Card.vue';
+import { onMounted } from "vue";
+import { useDashboardStore } from "@/stores/dashboard";
+
+const dashboardStore = useDashboardStore();
+
+onMounted(async() => {
+    await dashboardStore.getUserCountPerMonth();
+})
+
 </script>
 
 <template>
@@ -35,7 +44,7 @@ import Card from '@/components/Card.vue';
                     </div>
                     <Card class="p-2 mb-5 pb-15 flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
                         <div class="w-full md:w-72 lg:w-[300px]">
-                            <LineChart />
+                            <LineChart :data="dashboardStore.data" />
                         </div>
                         <div class="w-full md:w-40 lg:w-72">
                             <PieChart />

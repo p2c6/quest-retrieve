@@ -1,44 +1,49 @@
 <template>
-      <LineChart :chart-data="chartData" :options="chartOptions" />
+      <VueLineChart  :chart-data="chartData" :options="chartOptions" />
   </template>
   
   <script setup>
-  import { reactive } from 'vue';
-  import { LineChart } from 'vue-chart-3';
+  import { computed, reactive } from 'vue';
+  import { LineChart as VueLineChart } from 'vue-chart-3';
   import { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
   
+  
+  const prop = defineProps({
+      data: Array
+  });
+
   // Register necessary components
   Chart.register(LineController, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
   
-  const chartData = reactive({
+  const chartData = computed(() => ({
     labels: [
-      'January', 
-      'February', 
-      'March', 
-      'April', 
-      'May', 
-      'June', 
-      'July', 
-      'August', 
-      'September', 
-      'October', 
-      'November', 
-      'December'
+      'January','February','March','April','May','June',
+      'July','August','September','October','November','December'
     ],
     datasets: [
       {
         label: 'Registered Users',
-        data: [10, 50, 25, 70, 40],
+        data: prop.data ?? [],
         borderColor: '#42A5F5',
         backgroundColor: 'rgba(66, 165, 245, 0.2)',
         fill: true,
       },
     ],
-  });
+  }));
   
   const chartOptions = reactive({
     responsive: true,
     maintainAspectRatio: true, // Ensures the chart maintains its aspect ratio
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          precision: 0,      // ✅ removes decimals
+          stepSize: 1,       // ✅ 0,1,2,3...
+          callback: (value) => Math.round(value), // extra safety
+        },
+      },
+    },
     aspectRatio: 1, // Width is twice the height (adjust as needed)
     plugins: {
       legend: {
