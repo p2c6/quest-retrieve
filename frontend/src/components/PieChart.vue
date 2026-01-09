@@ -10,16 +10,18 @@ import { Chart, PieController, ArcElement, Tooltip, Legend } from 'chart.js';
 // Register necessary chart components
 Chart.register(PieController, ArcElement, Tooltip, Legend);
 
-const prop = defineProps({
-    data: Array
+const props = defineProps({
+    data: Array,
+    labels: Array,
+    backgroundColors: Array,
 });
 
 const chartData = reactive({
-  labels: ['Verified', 'Not Yet Verified'],
+  labels: props.labels,
   datasets: [
     {
-      data: prop.data,
-      backgroundColor: ['#36A2EB', '#FFCE56'],
+      data: props.data,
+      backgroundColor: props.backgroundColors,
     },
   ],
 });
