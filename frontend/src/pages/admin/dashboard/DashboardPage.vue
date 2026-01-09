@@ -50,22 +50,27 @@ onMounted(async() => {
                         <h1 class="text-primary font-bold">Summary</h1>
                         <p class="text-tertiary">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     </div>
-                    <Card class="p-2 mb-5 pb-15 flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
-                        <div class="w-full md:w-72 lg:w-[300px]">
-                            <LineChart 
-                                v-if="dashboardStore.userCountPerMonthData?.length"
-                                :data="dashboardStore.userCountPerMonthData"
-                                :labels="lineLabels"
-                                :dataSetLabel="datasetLabel" 
-                            />
+                    <Card class="p-2 mb-5 pb-15">
+                        <div v-if="dashboardStore.isLoading" class="flex justify-around items-center h-72">
+                            Loading...
                         </div>
-                        <div class="w-full md:w-40 lg:w-72">
-                            <PieChart 
-                            v-if="dashboardStore.verifiedCountData?.length"
-                            :data="dashboardStore.verifiedCountData" 
-                            :labels="pieLabels" 
-                            :backgroundColors="backgroundColors"
-                            />
+                        <div v-else class="flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
+                            <div class="w-full md:w-72 lg:w-[300px]">
+                                <LineChart 
+                                    v-if="dashboardStore.userCountPerMonthData?.length"
+                                    :data="dashboardStore.userCountPerMonthData"
+                                    :labels="lineLabels"
+                                    :dataSetLabel="datasetLabel" 
+                                />
+                            </div>
+                            <div class="w-full md:w-40 lg:w-72">
+                                <PieChart 
+                                v-if="dashboardStore.verifiedCountData?.length"
+                                :data="dashboardStore.verifiedCountData" 
+                                :labels="pieLabels" 
+                                :backgroundColors="backgroundColors"
+                                />
+                            </div>
                         </div>
                     </Card>
                 </div>
