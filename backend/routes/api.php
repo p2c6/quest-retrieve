@@ -101,6 +101,12 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
 
              //Moderator Dashboard
             Route::prefix('moderator/dashboard')->name('moderator.dashboard.')->group(function() {
+                    Route::get('/posts/count-per-month', [ModeratorDashboardController::class, 'getPostsPerMonth'])
+                        ->name('count-per-month');
+
+                    Route::get('/posts/count-per-status', [ModeratorDashboardController::class, 'getPostCountPerStatus'])
+                        ->name('count-per-status');
+
                     Route::get('/posts/count-total-post', [ModeratorDashboardController::class, 'getTotalPost'])
                         ->name('count-per-month');
                     Route::get('/posts/count-pending-post', [ModeratorDashboardController::class, 'getTotalPendingPost'])

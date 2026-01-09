@@ -5,8 +5,44 @@ use App\Enums\PostStatus;
 use App\Enums\PostType;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class DashboardService {
+    /**
+     * Get total posts count per month.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function getPostsPerMonth(): JsonResponse
+    {
+        try {
+        $rawData = Post::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('COUNT(*) as total')
+        )
+        ->whereYear('created_at', now()->year)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+        $monthlyPosts = array_fill(0, 12, 0);
+
+        foreach ($rawData as $row) {
+            $monthlyPosts[$row->month - 1] = $row->total;
+        }
+
+        return response()->json([
+            'message' => 'Posts per month count successfully retrieved.',
+            'data' => $monthlyPosts
+        ], 200);
+        } catch(\Throwable $th) {
+            info("Error on retrieving monthly posts count: " . $th->getMessage());
+            return response()->json([
+                'message' => 'An error occurred during retrieving of monthly posts count.'
+            ], 500);
+        }
+    }
+
     /**
      * Get total posts count.
      * 
@@ -123,5 +159,28 @@ class DashboardService {
                 'message' => 'An error occurred during retrieval of total completed posts count.'
             ], 500);
         }
+    }
+
+    /**
+     * Get verified & not yet verified users count.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function getPostCountPerStatus(): JsonResponse
+    {
+        $counts = Post::query()
+        ->selectRaw('status, COUNT(*) as total')
+        ->groupBy('status')
+        ->pluck('total', 'status');
+
+        return response()->json([
+            'message' => 'Post summary retrieved successfully.',
+            'data' => [
+                $counts[PostStatus::PENDING] ?? 0,
+                $counts[PostStatus::ON_PROCESSING] ?? 0,
+                $counts[PostStatus::REJECT] ?? 0,
+                $counts[PostStatus::FINISHED] ?? 0,
+            ]
+        ], 200);
     }
 }

@@ -16,6 +16,26 @@ class DashboardController extends Controller
     public function __construct(protected DashboardService $service) { }
 
     /**
+     * Get total posts count per month.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function getPostsPerMonth(): JsonResponse
+    {
+        return $this->service->getPostsPerMonth();
+    }
+    
+    /**
+     * Get total posts count per month.
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function getPostCountPerStatus(): JsonResponse
+    {
+        return $this->service->getPostCountPerStatus();
+    }
+
+    /**
      * Get total posts count.
      * 
      * @return Illuminate\Http\JsonResponse
