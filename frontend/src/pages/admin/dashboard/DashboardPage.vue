@@ -8,6 +8,8 @@ import { onMounted } from "vue";
 import { useDashboardStore } from "@/stores/dashboard";
 
 const dashboardStore = useDashboardStore();
+const pieLabels = ['Verified', 'Not Yet Verified'];
+const backgroundColors = ['#36A2EB', '#FFCE56'];
 
 onMounted(async() => {
     await dashboardStore.getUserCountPerMonth();
@@ -48,7 +50,11 @@ onMounted(async() => {
                             <LineChart :key="dashboardStore.userCountPerMonthData.length" :data="dashboardStore.userCountPerMonthData" />
                         </div>
                         <div class="w-full md:w-40 lg:w-72">
-                            <PieChart :key="dashboardStore.verifiedCountData.length" :data="dashboardStore.verifiedCountData" />
+                            <PieChart :key="dashboardStore.verifiedCountData.length" 
+                            :data="dashboardStore.verifiedCountData" 
+                            :labels="pieLabels" 
+                            :backgroundColors="backgroundColors"
+                            />
                         </div>
                     </Card>
                 </div>
