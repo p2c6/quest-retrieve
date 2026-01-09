@@ -8,6 +8,11 @@ import { useModeratorDashboardStore } from '@/stores/moderator/dashboard';
 const dashboardStore = useModeratorDashboardStore();
 const pieLabels = ['Pending', 'Approved', 'Rejected', 'Completed'];
 const backgroundColors = ['#e5eb36','#36eb78', '#eb3636', '#3694eb'];
+const lineLabels = [
+    'January','February','March','April','May','June',
+    'July','August','September','October','November','December'
+] ;
+const datasetLabel = 'Monthly Posts'
 
 onMounted(async() => {
     await dashboardStore.getPostLineData();
@@ -94,7 +99,12 @@ onMounted(async() => {
                         </div>
                         <Card class="p-2 mb-5 pb-15 flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
                             <div class="w-full md:w-72 lg:w-[300px]">
-                            <LineChart :key="dashboardStore.postLineData.length" :data="dashboardStore.postLineData" />
+                            <LineChart 
+                                :key="dashboardStore.postLineData.length" 
+                                :data="dashboardStore.postLineData"
+                                :labels="lineLabels"
+                                :dataSetLabel="datasetLabel" 
+                            />
                             </div>
                             <div class="w-full md:w-40 lg:w-72">
                                 <PieChart 

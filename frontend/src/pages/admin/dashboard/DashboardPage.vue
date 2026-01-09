@@ -10,6 +10,11 @@ import { useDashboardStore } from "@/stores/dashboard";
 const dashboardStore = useDashboardStore();
 const pieLabels = ['Verified', 'Not Yet Verified'];
 const backgroundColors = ['#36A2EB', '#FFCE56'];
+const lineLabels = [
+    'January','February','March','April','May','June',
+    'July','August','September','October','November','December'
+] ;
+const datasetLabel = 'Registered Users'
 
 onMounted(async() => {
     await dashboardStore.getUserCountPerMonth();
@@ -47,7 +52,12 @@ onMounted(async() => {
                     </div>
                     <Card class="p-2 mb-5 pb-15 flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
                         <div class="w-full md:w-72 lg:w-[300px]">
-                            <LineChart :key="dashboardStore.userCountPerMonthData.length" :data="dashboardStore.userCountPerMonthData" />
+                            <LineChart 
+                                :key="dashboardStore.userCountPerMonthData.length" 
+                                :data="dashboardStore.userCountPerMonthData"
+                                :labels="lineLabels"
+                                :dataSetLabel="datasetLabel" 
+                            />
                         </div>
                         <div class="w-full md:w-40 lg:w-72">
                             <PieChart :key="dashboardStore.verifiedCountData.length" 
