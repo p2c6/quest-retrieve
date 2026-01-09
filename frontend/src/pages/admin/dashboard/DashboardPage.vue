@@ -53,14 +53,15 @@ onMounted(async() => {
                     <Card class="p-2 mb-5 pb-15 flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
                         <div class="w-full md:w-72 lg:w-[300px]">
                             <LineChart 
-                                :key="dashboardStore.userCountPerMonthData.length" 
+                                v-if="dashboardStore.userCountPerMonthData?.length"
                                 :data="dashboardStore.userCountPerMonthData"
                                 :labels="lineLabels"
                                 :dataSetLabel="datasetLabel" 
                             />
                         </div>
                         <div class="w-full md:w-40 lg:w-72">
-                            <PieChart :key="dashboardStore.verifiedCountData.length" 
+                            <PieChart 
+                            v-if="dashboardStore.verifiedCountData?.length"
                             :data="dashboardStore.verifiedCountData" 
                             :labels="pieLabels" 
                             :backgroundColors="backgroundColors"

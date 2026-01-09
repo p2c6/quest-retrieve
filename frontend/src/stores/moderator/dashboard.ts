@@ -3,7 +3,7 @@ import { apiClient } from "@/config/http";
 import { ref } from "vue";
 
 
-export const useModeratorDashboardStore = defineStore('dashboard', () => {
+export const useModeratorDashboardStore = defineStore('moderator-dashboard', () => {
     const postLineData = ref<number>(0);
     const totalPostCountData = ref<number>(0);
     const totalApprovedCountData = ref<number>(0);

@@ -100,7 +100,7 @@ onMounted(async() => {
                         <Card class="p-2 mb-5 pb-15 flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
                             <div class="w-full md:w-72 lg:w-[300px]">
                             <LineChart 
-                                :key="dashboardStore.postLineData.length" 
+                                v-if="dashboardStore.postLineData?.length" 
                                 :data="dashboardStore.postLineData"
                                 :labels="lineLabels"
                                 :dataSetLabel="datasetLabel" 
@@ -108,7 +108,7 @@ onMounted(async() => {
                             </div>
                             <div class="w-full md:w-40 lg:w-72">
                                 <PieChart 
-                                    :key="dashboardStore.postPieData.length" 
+                                    v-if="dashboardStore.postPieData?.length" 
                                     :data="dashboardStore.postPieData" 
                                     :labels="pieLabels"
                                     :backgroundColors="backgroundColors" 
