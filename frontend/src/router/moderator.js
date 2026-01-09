@@ -1,5 +1,5 @@
 import ModeratorLayout from '@/components/layouts/ModeratorLayout.vue';
-import DashboardPage from "@/pages/admin/dashboard/DashboardPage.vue";
+import DashboardPage from '@/pages/moderator/dashboard/DashboardPage.vue';
 import ListPostPage from '@/pages/moderator/posts/ListPostPage.vue';
 import PostPage from '@/pages/moderator/posts/PostPage.vue';
 
