@@ -13,6 +13,7 @@ use App\Http\Controllers\API\v1\Authentication\SendEmailVerificationController;
 use App\Http\Controllers\API\v1\Authentication\SendResetPasswordLinkController;
 use App\Http\Controllers\API\v1\Authentication\VerifyController;
 use App\Http\Controllers\API\v1\FileUpload\TemporaryFileUploadController;
+use App\Http\Controllers\API\v1\Moderator\Dashboard\DashboardController as ModeratorDashboardController;
 use App\Http\Controllers\API\v1\Moderator\Post\PostController as PostPostController;
 use App\Http\Controllers\API\v1\Public\Post\PostController as PublicPostController;
 use App\Http\Controllers\API\v1\User\Post\PostController;
@@ -91,11 +92,25 @@ Route::prefix('/v1')->name('api.v1.')->group(function() {
             });
         });
 
-        //Admin Dashboard
-        Route::prefix('admin/dashboard')->name('users.')->group(function() {
-            Route::middleware('not_public_user')->group(function() {
+        Route::middleware('not_public_user')->group(function() {
+            //Admin Dashboard
+            Route::prefix('admin/dashboard')->name('admin.dashboard.')->group(function() {
                 Route::get('/users/count-per-month', [DashboardController::class, 'getUsersPerMonth'])->name('count-per-month');
                 Route::get('/users/count-verified', [DashboardController::class, 'getVerifiedUsers'])->name('verified');
+            });
+
+             //Moderator Dashboard
+            Route::prefix('moderator/dashboard')->name('moderator.dashboard.')->group(function() {
+                    Route::get('/posts/count-total-post', [ModeratorDashboardController::class, 'getTotalPost'])
+                        ->name('count-per-month');
+                    Route::get('/posts/count-pending-post', [ModeratorDashboardController::class, 'getTotalPendingPost'])
+                        ->name('pending');
+                    Route::get('/posts/count-approved-post', [ModeratorDashboardController::class, 'getApprovedPost'])
+                        ->name('approved');
+                    Route::get('/posts/count-rejected-post', [ModeratorDashboardController::class, 'getRejectedPost'])
+                        ->name('rejected');
+                    Route::get('/posts/count-completed-post', [ModeratorDashboardController::class, 'getCompletedPost'])
+                        ->name('completed');
             });
         });
     });
