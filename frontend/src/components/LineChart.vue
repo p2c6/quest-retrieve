@@ -38,9 +38,9 @@
       y: {
         beginAtZero: true,
         ticks: {
-          precision: 0,      // ✅ removes decimals
-          stepSize: 1,       // ✅ 0,1,2,3...
-          callback: (value) => Math.round(value), // extra safety
+          precision: 0,      
+          stepSize: 1,      
+          callback: (value) => Math.round(value),
         },
       },
     },

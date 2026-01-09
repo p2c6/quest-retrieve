@@ -48,10 +48,8 @@ class DashboardService {
      */
     public function getVerifiedUsers(): JsonResponse
     {
-        $user = User::query();
-
-        $verified = $user->whereNotNull('email_verified_at')->count();
-        $notYetVerified = $user->whereNull('email_verified_at')->count();
+        $verified = User::query()->whereNotNull('email_verified_at')->count();
+        $notYetVerified = User::query()->whereNull('email_verified_at')->count();
 
         return response()->json([
             'message' => 'Verified & Unverified users count successfully retrieved.',

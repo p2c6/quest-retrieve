@@ -4,7 +4,8 @@ import { ref } from "vue";
 
 
 export const useDashboardStore = defineStore('dashboard', () => {
-    const data = ref<number[]>([]);
+    const userCountPerMonthData = ref<number[]>([]);
+    const verifiedCountData = ref<number[]>([]);
     const isLoading = ref<boolean | null>(null);
     const errors = ref<any | null>(null);
     const message = ref(null);
@@ -13,10 +14,10 @@ export const useDashboardStore = defineStore('dashboard', () => {
         isLoading.value = true;
 
         try {
-            const { data:res } = await apiClient.get('/admin/dashboard/users/count-per-month')
-            data.value = res.data
+            const { data:response } = await apiClient.get('/admin/dashboard/users/count-per-month')
+            userCountPerMonthData.value = response.data
         } catch(error) {
-            data.value = [];
+            userCountPerMonthData.value = [];
             console.log('Getting user count per month error: ', error)
         } finally {
             isLoading.value = false;
@@ -27,10 +28,10 @@ export const useDashboardStore = defineStore('dashboard', () => {
         isLoading.value = true;
 
         try {
-            const { data } = await apiClient.get('/admin/dashboard/users/count-verified')
-            data.value = data
+            const { data:response } = await apiClient.get('/admin/dashboard/users/count-verified')
+            verifiedCountData.value = response.data
         } catch(error) {
-            data.value = [];
+            verifiedCountData.value = [];
             console.log('Getting verified user count error: ', error)
         } finally {
             isLoading.value = false;
@@ -41,7 +42,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
         /*
             @Variables
         */
-        data,
+        userCountPerMonthData,
+        verifiedCountData,
         isLoading,
         message,
         errors,

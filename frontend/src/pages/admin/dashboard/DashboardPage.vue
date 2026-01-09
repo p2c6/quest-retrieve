@@ -11,6 +11,7 @@ const dashboardStore = useDashboardStore();
 
 onMounted(async() => {
     await dashboardStore.getUserCountPerMonth();
+    await dashboardStore.getVerifiedUserCount();
 })
 
 </script>
@@ -28,14 +29,14 @@ onMounted(async() => {
                 </Card>
             </div>
             <div class="mt-2 p-2 flex flex-col md:flex-row gap-5">
-                <Card class="p-2 mb-5 text-white flex flex-col justify-center items-center gap-5 w-full md:w-96" bg="bg-primary">
+                <!-- <Card class="p-2 mb-5 text-white flex flex-col justify-center items-center gap-5 w-full md:w-96" bg="bg-primary">
                     <img :src="explore" alt="" class="w-40 md:w-60  ">
                     <div class="text-center text-xs md:text-xs">
                         <h1 class="text-white font-bold">Check Records</h1>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut posuere hendrerit risus, eget ullamcorper tortor.</p>
                         <button class=" mt-2 mb-2 px-4 py-2 bg-secondary rounded-full">Explore</button>
                     </div>
-                </Card>
+                </Card> -->
                 
                 <div class="text-md md:text-sm w-full">
                     <div class="text-center md:text-left mb-2">
@@ -44,10 +45,10 @@ onMounted(async() => {
                     </div>
                     <Card class="p-2 mb-5 pb-15 flex flex-col md:flex-row md:justify-around md:items-center md:gap-10 lg:gap-20">
                         <div class="w-full md:w-72 lg:w-[300px]">
-                            <LineChart :data="dashboardStore.data" />
+                            <LineChart :data="dashboardStore.userCountPerMonthData" />
                         </div>
                         <div class="w-full md:w-40 lg:w-72">
-                            <PieChart />
+                            <PieChart  :data="dashboardStore.verifiedCountData" />
                         </div>
                     </Card>
                 </div>
