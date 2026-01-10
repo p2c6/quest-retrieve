@@ -1,6 +1,6 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, onMounted, reactive, ref } from 'vue';
 import { useSubcategoryStore } from '@/stores/subcategory';
 import { usePostStore } from '@/stores/post';
 import { useRoute } from 'vue-router';

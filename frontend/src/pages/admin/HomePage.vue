@@ -1,5 +1,4 @@
 <script setup>
-import Navbar from "@/components/Navbar.vue";
 import Filter from "@/components/Filter.vue";
 import CardList from "@/components/CardList.vue";
 import Card from "@/components/Card.vue";

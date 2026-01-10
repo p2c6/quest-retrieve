@@ -1,5 +1,4 @@
 <script setup>
-import Input from '@/components/Input.vue';
 import Card from '@/components/Card.vue';
 import { useRoute } from 'vue-router';
 import { computed, onBeforeUnmount, reactive } from 'vue';

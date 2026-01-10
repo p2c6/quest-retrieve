@@ -1,6 +1,6 @@
 <script setup>
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, reactive, ref } from 'vue';
 import { TailwindPagination } from 'laravel-vue-pagination';
 import { usePostStore } from '@/stores/post';
 import DialogBox from '@/components/DialogBox.vue';

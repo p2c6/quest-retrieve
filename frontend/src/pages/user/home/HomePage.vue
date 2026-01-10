@@ -4,7 +4,7 @@ import Card from "@/components/Card.vue";
 import NoItems from "@/components/NoItems.vue";
 import Post from "@/components/Post.vue";
 import { usePostStore } from "@/stores/post";
-import { onBeforeMount, onBeforeUnmount, reactive, watch } from "vue";
+import { onBeforeMount, onBeforeUnmount, reactive } from "vue";
 import { TailwindPagination } from 'laravel-vue-pagination';
 
 const postStore = usePostStore();

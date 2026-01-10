@@ -1,7 +1,6 @@
 <script setup>
-import Input from '@/components/Input.vue';
 import Card from '@/components/Card.vue';
-import { onBeforeMount, onBeforeUnmount, reactive } from 'vue';
+import { onBeforeMount, reactive } from 'vue';
 import { useSubcategoryStore } from '@/stores/subcategory';
 import { usePostStore } from '@/stores/post';
 
