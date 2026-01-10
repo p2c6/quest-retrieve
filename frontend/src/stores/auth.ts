@@ -93,7 +93,7 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (response.status === 200) {
                 user.value = null;
-                router.push({name: 'home'});
+                router.push({name: 'login'});
             }
 
         } catch(error: any) {
